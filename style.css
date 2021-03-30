@@ -13,6 +13,10 @@ html, body {
     text-align: justify;
 }
 
+a {
+    color: #888;
+}
+
 h4 {
     text-align: center;
     font-size: 1.1em;

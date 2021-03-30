@@ -56,8 +56,8 @@ val mainDBreplacements = arrayOf(
         Regex("""<img src="|=w[0-9]+\-h[0-9]+" style="[^"]+"/>""") to "", // img head and trail
         Regex("""</td>""") to "¤",
         Regex("""</tr></tbody></table>""") to "", // footer
-        Regex("""\n[0-9]+¤{9,}(FALSE)?¤+\n""") to "", // null entries
-        Regex("""\n[0-9]+¤{9,}FALSE¤+""") to "" // the very last line, do NOT merge with above term
+        Regex("""\n[0-9]+¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n""") to "\n", // null entries
+        Regex("""\n[0-9]+¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤FALSE¤¤¤¤""") to "" // null entries
 )
 
 fun makeDSV(raw: String): String = mainDBreplacements.foldIndexed(raw) { i, str, (k, v) ->
@@ -97,7 +97,7 @@ fun generateCell(record: List<String>, action: String): String? {
         value.replace("?", "")
     else if ("actor_name_raw" == action)
         if (value.startsWith("(갤럼)")) ""
-        else value.substringBefore('/')
+        else value
     else if ("creator_name_raw" == action)
         value.substringBefore("/자작")
     else if ("actor_link_raw" == action)

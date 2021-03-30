@@ -15,8 +15,6 @@ function loadJSON(jsonPath, isAsync, callback) {
 
 var furdb = {};
 
-// 이 오브젝트의 키값은 무조건 소문자로만 받고 공백이 있어서는 안 됨
-// key of this object must be lowercase and contains no space char
 const creatorThesaurus = {
     "bluefox":"블루폭스",
     "atoama":"아토아마",
@@ -45,7 +43,19 @@ const creatorThesaurus = {
     "blackon":"내장",
     "미니미":"Ohiya",
     "minimi":"Ohiya",
-    "소지":"Sozi",
+    "sozi":"소지",
+    "루쳇":"뻐꾹",
+    "lucet":"뻐꾹",
+    "도그마":"개만두",
+    "dogma":"개만두",
+    "루프탑":"세논",
+    "rooftop":"세논",
+    "하이픈":"도운",
+    "hiphen":"도운",
+    "hyphen":"도운",
+    "그렌":"도운",
+    "gren":"도운",
+    "grensuit":"도운",
     
     "diy":"자작",
     "selfmade":"자작"
@@ -53,8 +63,7 @@ const creatorThesaurus = {
 
 const tagDocumentation = {
     "creator_name":{"ko":"퍼슈트의 제작자를 나타냅니다. 자작 퍼슈트의 경우 '자작'을 사용하십시오","en":"Creator of the fursuit. Use 'DIY' for DIY suits"},
-    "name_ko":{"ko":"퍼슈트 캐릭터의 이름 (한국어)","en":"Name of the character in Korean"},
-    "name_en":{"ko":"퍼슈트 캐릭터의 이름 (영어)","en":"Name of the character in English"},
+    "name":{"ko":"퍼슈트 캐릭터의 이름 (한/영)","en":"Name of the character in Korean/English"},
     "actor_name":{"ko":"퍼슈트 오너의 이름 (한국어)","en":"Name of the actor in Korean"},
     "species_ko":{"ko":"퍼슈트 캐릭터의 종 (한국어)","en":"Species of the character in Korean"},
     "style":{"ko":"퍼슈트 캐릭터의 스타일 (Real, Real Toon, Kemo, Kemo Toon, Semi)","en":"Style of the character (Real, Real Toon, Kemo, Kemo Toon, Semi)"},
@@ -63,10 +72,6 @@ const tagDocumentation = {
     "birthday_from":{"ko":"생일 검색에서 가장 이른 날짜. 해당 날짜를 포함함 (yyyymmdd)","en":"Earliest day in birthday search, inclusive (yyyymmdd)"},
     "birthday_to":{"ko":"생일 검색에서 가장 늦은 날짜. 해당 날짜를 포함함 (yyyymmdd)","en":"Latest day in birthday search, inclusive (yyyymmdd)"}
 }
-
-const specialSearchTags = [
-    "birthday_from", "birthday_to"
-]
 
 const i18n = {
     "ko": {
@@ -173,21 +178,34 @@ function makeOutput(searchResults) {
     searchResults.forEach(it => {
         let displayFurName = (it.name_ko + " " + it.name_en).trim();
         if (displayFurName == "") displayFurName = "???";
-        let displayActorName = (it.actor_name).trim();
+              
+        let displayFurNameJa = it.name_ja.trim();
+                          
+        let furAliases = (it.aliases).trim();
+                          
+        let actorName = (it.actor_name).trim();
+                          
+        let displayActorName = actorName.split("/").shift();
         if (displayActorName == "") displayActorName = "???";
-        let displayActorLink = (it.actor_link.includes(":") ? "" : "@") + it.actor_link;
-        if (displayActorLink == "@") displayActorLink = "???";
+                          
+        let displayActorLinkHref = (it.actor_link.includes(":") ? "" : "@") + it.actor_link;
+        if (displayActorLinkHref == "@") displayActorLinkHref = "???";
+                          
+        let displayActorLinkName = displayActorLinkHref.split("/").pop();
+                          
         let displayCreatorName = (it.creator_name).trim().replace("/자작", "");
         if (displayCreatorName == "자작") displayCreatorName = displayActorName;
         if (displayCreatorName == "") displayCreatorName = "???";
                           
-        output += "<div class=\"furBox\">" +
-        "<div class=\"imgBox\"><img class=\"furimg\" src=\"" + it.photo + "\"></div>" +
-        "<div chass=\"infoBox\">" +
-        "<h4>" + displayFurName + "</h4>" +
-        "<h5>" + displayActorName + "<br />" + displayActorLink + "</h5>" +
-        "<h5>" + i18n[lang].MadeBy + displayCreatorName + "</h5>" +        
-        "</div></div>";
+        let displayCreatorLinkHref = it.creator_link;
+                          
+        output += `<div class="furBox">` +
+        `<div class="imgBox"><img class="furimg" src="${it.photo}"></div>` +
+        `<div chass="infoBox">` +
+        `<h4 title="${(furAliases.length == 0) ? `${displayFurName} ${displayFurNameJa}`.trim() : `${displayFurName} ${displayFurNameJa} (${furAliases})`}">${displayFurName}</h4>` +
+        `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}">${displayActorLinkName}</a></h5>` +
+        `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}">${displayCreatorName}</a>`)}</h5>` +
+        `</div></div>`;
     });
     
     document.getElementById("searchResults").innerHTML = output;
@@ -245,6 +263,9 @@ function parseSearchTags(searchstrr) {
         // example tag: "creator:DIY"
         // split key-value
         let kvpair = v.split(':');
+        
+        if (kvpair[0].startsWith("name_")) kvpair[0] = "name"; // 이름 언어 구분 제거
+        
         searchFilter[kvpair[0]] = kvpair[1];
     });
 
@@ -282,6 +303,9 @@ filter = {
 exactMatch가 참일 경우 문자열이 정확히 일치하는지를 검사, 그렇지 않으면 필터키값이 DB값의 일부인지 검사함
 
  */
+const nameSearchAliases = ["name_ko", "name_en", "name_ja", "aliases"];
+const pseudoCriteria = ["name"];
+const specialSearchTags = ["birthday_from", "birthday_to"];
 function performSearch(searchFilter, exactMatch) {
     let isSearchTagEmpty = searchFilter === undefined;
     let foundFurs = [];
@@ -298,17 +322,21 @@ function performSearch(searchFilter, exactMatch) {
     
     for (const furid in furdb) {
         let searchMatches = true;
-        
+                
         // do not check for conditions if search term is empty -> will put every fursuits onto foundFurs
         // 검색 태그가 비어있으면 조건 검사를 하지 않음 -> searchMatches의 초기값이 참이기 때문에 모든 털들을 foundFurs에 집어넣게 됨
         if (!isSearchTagEmpty) {
             for (const searchCriterion in searchFilter) {
 
                 try {
+                    //console.log(`searchCriterion = ${searchCriterion}`);
                     // check if the tag is valid
                     // 태그가 올바른지 검사
-                    if (searchCriterion in furdb[furid]) {
+                    if (searchCriterion in furdb[furid] || pseudoCriteria.find(it => it == searchCriterion) !== undefined) {
                         const arraySearchMode = Array.isArray(searchFilter[searchCriterion]);
+                        
+                        //console.log(`arraySearchMode = ${arraySearchMode}`);
+    
                         
                         // 검색어 sanitise
                         let searchTerm = undefined;
@@ -340,7 +368,17 @@ function performSearch(searchFilter, exactMatch) {
                             searchMatches &= partialMatch;
                         }
                         else {
-                            searchMatches &= (exactMatch) ? (furdb[furid][searchCriterion].babostr() == searchTerm) : furdb[furid][searchCriterion].babostr().includes(searchTerm);
+                            // 이름은 한/영/일/이명에 대해서도 검색해야 함
+                            if (searchCriterion == "name") {
+                                let partialMatch = false;
+                                nameSearchAliases.forEach(it => {
+                                    partialMatch |= furdb[furid][it].babostr().includes(searchTerm);
+                                });
+                                searchMatches &= partialMatch;
+                            }
+                            else {
+                                searchMatches &= (exactMatch) ? (furdb[furid][searchCriterion].babostr() == searchTerm) : furdb[furid][searchCriterion].babostr().includes(searchTerm);
+                            }
                         }
                         
                         // 위 대입 식이 searchMatches에 AND하기 때문에 모든 조건을 만족해야만 searchMatches가 최종적으로 true가 됨
@@ -348,13 +386,15 @@ function performSearch(searchFilter, exactMatch) {
                     }
                     // display error message if the tag is not valid
                     // 올바르지 않은 태그면 에러창 띄움
-                    else if (!searchCriterion in specialSearchTags) {
+                    else if (!(searchCriterion in specialSearchTags)) {
+                        //console.log(i18n[lang].TagSyntaxError + searchCriterion);
                         alert(i18n[lang].TagSyntaxError + searchCriterion);
                         return undefined;
                     }
                 }
                 catch (e) {
-                    console.log(e);
+                    //console.log(e);
+                    //console.log(e.stack);
                 }
             }
             
