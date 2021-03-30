@@ -1,0 +1,83 @@
+<meta charset = "UTF-8" />
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>
+        Fursuit Roaster with Filter Demo
+    </title>
+</head>
+<body onload="pageinit();">
+    <script src="script.js"></script>
+    <section id="languages">
+        <form onsubmit="return false;" method="post" name="langselect">
+            <label>Language:</label>
+            <input type="radio" id="lang_ko" name="lang" checked="checked" onclick="setLangKo();">
+            <label for="lang_ko">한국어</label>
+            <input type="radio" id="lang_en" name="lang" onclick="setLangEn();">
+            <label for="lang_en">English</label>
+        </form>
+    </section>
+    <section id="simplesearch">
+        <h3 id="simplesearch_header"></h3>
+        <form onsubmit="return false;" method="post" name="simplesearchform">
+            <label for="simplesearch_input_creatorname" id="simplesearch_input_creatorname_string">Creator: </label>
+            <input type="search" id="simplesearch_input_creatorname" name="simplesearch_input_creatorname">
+            <br />
+            <label for="simplesearch_input_furname_ko" id="simplesearch_input_furname_ko_string">Name (한국어): </label>
+            <input type="search" id="simplesearch_input_furname_ko" name="simplesearch_input_furname_ko">
+            <br />
+            <label for="simplesearch_input_furname_en" id="simplesearch_input_furname_en_string">Name (영어): </label>
+            <input type="search" id="simplesearch_input_furname_en" name="simplesearch_input_furname_en">
+            <br />
+            <label for="simplesearch_input_bday_from" id="simplesearch_input_bday_title_string">Birthday (yyyymmdd): </label>
+            <input type="search" id="simplesearch_input_bday_from" name="simplesearch_input_bday_from">
+            <label> &mdash; </label>
+            <input type="search" id="simplesearch_input_bday_to" name="simplesearch_input_bday_to">
+            <br />
+            <label for="simplesearch_dropdown_species" id="simplesearch_dropdown_species_string">Species: </label>
+            <select name="simplesearch_dropdown_species" id="simplesearch_dropdown_species">
+                <option value="dont_care">&mdash;</option>
+                <option value="literal_dog">개 Dog</option>
+                <option value="literal_wolf">늑대 Wolf</option>
+                <option value="literal_cat">고양이 Cat</option>
+                <option value="group_felidae">고양이과 Big Cat</option>
+                <option value="literal_fox">여우 Fox</option>
+                <option value="literal_rabbit">토끼 Rabbit and Hare</option>
+                <option value="group_aves">조류 Birds</option>
+                <option value="group_pisces">어류 Fish</option>
+                <option value="literal_dragon">드래곤 Dragon</option>
+                <option value="literal_deer">사슴/노루 Deer</option>
+                <option value="group_raccoons">레서판다/라쿤/너구리 Red Panda/Raccon</option>
+            </select>
+            <br />
+            <label for="simplesearch_input_is_partial" id="simplesearch_input_is_partial_string">Partial? </label>
+            <select name="simplesearch_input_is_partial" id="simplesearch_input_is_partial">
+                <option value="dont_care">&mdash;</option>
+                <option value="TRUE">TRUE</option>
+                <option value="FALSE">FALSE</option>
+            </select>
+            <br />
+            <input type="submit" value="Submit" id="simple_submit_button" onclick="simplequery()" />
+        </form>
+    </section>
+    <hr>
+    <section id="searchform">
+        <h3 id="searchform_header"></h3>
+        <form onsubmit="return false;" method="post" name="searchtagsform">
+            <label for="searchtags" id="searchtags_string">Search tags</label>
+            <input type="search" id="searchtags" name="searchtags">
+            <input type="checkbox" id="exactmatch" name"exactmatch">
+            <label for="exactmatch" id="exactmatch_string">Exact Match?</label>
+            <input type="submit" value="Submit" id="submit_button" onclick="query()" />
+        </form>
+    </section>
+    <section id="tagdoc">
+            
+    </section>
+    <hr>
+    <section id="searchResults">
+
+    </section>
+</body>
+</html>

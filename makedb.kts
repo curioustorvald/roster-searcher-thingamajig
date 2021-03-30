@@ -16,8 +16,8 @@ val inColumns = arrayOf( // name of the operations
         "birthday",
         "actor_name_raw",
         "actor_link_raw",
-        "char_gender",
-        "char_style",
+        "gender",
+        "style",
         "is_partial",
         "is_done",
         "desc_raw",
@@ -36,11 +36,11 @@ val outColumns = arrayOf( // name of the property that goes directy onto the JSO
         "birthday",
         "actor_name",
         "actor_link",
-        "char_gender",
-        "char_style",
+        "gender",
+        "style",
         "is_partial",
         "is_done",
-        "species",
+        "species_ko",
         "is_34partial",
         "is_hidden",
         "aliases"
@@ -130,8 +130,8 @@ mainTable.forEach { record ->
     val mainPhoto = photoTable[id-1][6].replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
     val refSheet = photoTable[id-1][8].replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
 
-    outJson.append(",\"photo\":\"${if (mainPhoto.isNotBlank()) "images/$mainPhoto.jpg" else ""}\"" +
-                   ",\"ref_sheet\":\"${if (refSheet.isNotBlank()) "images/$refSheet.jpg" else ""}\"},")
+    outJson.append(",\"photo\":\"${if (mainPhoto.isNotBlank()) "images/$mainPhoto" else ""}\"" +
+                   ",\"ref_sheet\":\"${if (refSheet.isNotBlank()) "images/$refSheet" else ""}\"},")
 }
 
 outJson.set(outJson.lastIndex, '}') // replace last trailing , with }
