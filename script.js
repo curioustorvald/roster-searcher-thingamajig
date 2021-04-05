@@ -15,6 +15,18 @@ function loadJSON(jsonPath, isAsync, callback) {
 
 var furdb = {};
 
+function template(strings, ...keys) {
+    return (function(...values) {
+        let dict = values[values.length - 1] || {};
+        let result = [strings[0]];
+        keys.forEach(function(key, i) {
+            let value = Number.isInteger(key) ? values[key] : dict[key];
+            result.push(value, strings[i + 1]);
+        });
+        return result.join('');
+    });
+}
+
 const creatorThesaurus = {
     "bluefox":"블루폭스",
     "atoama":"아토아마",
@@ -89,7 +101,8 @@ const i18n = {
         "SimpleSearchBirthday": "생일 (yyyymmdd): ",
         "SimpleSearchSpecies": "종: ",
         "SimpleSearchIsPartial": "파셜 여부: ",
-        "MadeBy": "제작: "
+        "MadeBy": "제작: ",
+        "ThisManySearchResults": template`${0}개의 검색 결과:`
     },
     "en": {
         "TagSyntaxError": "Entered tag is malformed: ",
@@ -106,7 +119,8 @@ const i18n = {
         "SimpleSearchBirthday": "Birthday (yyyymmdd): ",
         "SimpleSearchSpecies": "Species: ",
         "SimpleSearchIsPartial": "Partial? ",
-        "MadeBy": "Made by "
+        "MadeBy": "Made by ",
+        "ThisManySearchResults": template`Showing ${0} search results:`
     }
 }
 
@@ -173,7 +187,7 @@ function setLangEn() {
 }
 
 function makeOutput(searchResults) {
-    let output = "";
+    let output = `<p>${i18n[lang].ThisManySearchResults(searchResults.length)}</p>`;
     
     searchResults.forEach(it => {
         let displayFurName = (it.name_ko + " " + it.name_en).trim();
@@ -198,7 +212,7 @@ function makeOutput(searchResults) {
         if (displayCreatorName == "") displayCreatorName = "???";
                           
         let displayCreatorLinkHref = it.creator_link;
-                          
+                                  
         output += `<div class="furBox">` +
         `<div class="imgBox"><img class="furimg" src="${it.photo}"></div>` +
         `<div chass="infoBox">` +
