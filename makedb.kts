@@ -50,7 +50,7 @@ val mainDBraw = File(dbFileName).readText(Charsets.UTF_8).replace("\n", "")
 val picturesraw = File(photoFileName).readText(Charsets.UTF_8).replace("\n", "")
 
 val mainDBreplacements = arrayOf(
-        Regex("""<meta [^\n]+style="line-height: [0-9]{2,3}px">3</div></th><td class="s[26]">""") to "", // header
+        Regex("""<meta [^\n]+style="line-height: [0-9]{2,3}px">3</div></th><td class="s[0-9]">""") to "", // header
         Regex("""</td></tr><tr[^\n>]+><th[^\n>]+><div[^\n>]+>[0-9]+</div></th><td[^\n>]+>""") to "\n", // newline separation
         Regex("""<div[^\n>]+>|</div>|<td[^\n>]+>|<a[^\n>]+>|</a>|<span[^\n>]+>|</span>""") to "", // kill divs, td headers (but not closing td), a and spans
         Regex("""<img src="|=w[0-9]+\-h[0-9]+" style="[^"]+"/>""") to "", // img head and trail
