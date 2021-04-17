@@ -96,8 +96,7 @@ const i18n = {
         "AdvancedSearch": "고급 검색",
         "SimpleSearch": "쉬운 검색",
         "SimpleSearchCreator": "제작자: ",
-        "SimpleSearchNameKo": "이름 (한국어): ",
-        "SimpleSearchNameEn": "이름 (영어): ",
+        "SimpleSearchName": "이름 (한/영): ",
         "SimpleSearchBirthday": "생일 (yyyymmdd): ",
         "SimpleSearchSpecies": "종: ",
         "SimpleSearchIsPartial": "파셜 여부: ",
@@ -114,8 +113,7 @@ const i18n = {
         "AdvancedSearch": "Advanced Search",
         "SimpleSearch": "Easy Search",
         "SimpleSearchCreator": "Creator: ",
-        "SimpleSearchNameKo": "Name (Korean): ",
-        "SimpleSearchNameEn": "Name (English): ",
+        "SimpleSearchName": "Name (Korean/English): ",
         "SimpleSearchBirthday": "Birthday (yyyymmdd): ",
         "SimpleSearchSpecies": "Species: ",
         "SimpleSearchIsPartial": "Partial? ",
@@ -163,8 +161,7 @@ function reloadI18n() {
     // 검색폼 다국어화
     document.getElementById("simplesearch_header").innerText = i18n[lang].SimpleSearch;
     document.getElementById("simplesearch_input_creatorname_string").innerText = i18n[lang].SimpleSearchCreator;
-    document.getElementById("simplesearch_input_furname_ko_string").innerText = i18n[lang].SimpleSearchNameKo;
-    document.getElementById("simplesearch_input_furname_en_string").innerText = i18n[lang].SimpleSearchNameEn;
+    document.getElementById("simplesearch_input_furname_string").innerText = i18n[lang].SimpleSearchName;
     document.getElementById("simplesearch_input_bday_title_string").innerText = i18n[lang].SimpleSearchBirthday;
     document.getElementById("simplesearch_dropdown_species_string").innerText = i18n[lang].SimpleSearchSpecies;
     document.getElementById("simplesearch_input_is_partial_string").innerText = i18n[lang].SimpleSearchIsPartial;
@@ -228,10 +225,8 @@ function makeOutput(searchResults) {
 function simplequery() {
     let creatorName = document.getElementById("simplesearch_input_creatorname").value;
     if (creatorName == "") creatorName = undefined;
-    let furNameKo = document.getElementById("simplesearch_input_furname_ko").value;
-    if (furNameKo == "") furNameKo = undefined;
-    let furNameEn = document.getElementById("simplesearch_input_furname_en").value;
-    if (furNameEn == "") furNameEn = undefined;
+    let furName = document.getElementById("simplesearch_input_furname").value;
+    if (furName == "") furNameKo = undefined;
     let birthdayFrom = document.getElementById("simplesearch_input_bday_from").value;
     if (birthdayFrom == "") birthdayFrom = undefined;
     let birthdayTo = document.getElementById("simplesearch_input_bday_to").value;
@@ -244,8 +239,7 @@ function simplequery() {
     let searchFilter = {};
     
     if (creatorName !== undefined) searchFilter.creator_name = creatorName;
-    if (furNameKo !== undefined) searchFilter.name_ko = furNameKo;
-    if (furNameEn !== undefined) searchFilter.name_en = furNameEn;
+    if (furName !== undefined) searchFilter.name = furName;
     if (birthdayFrom !== undefined) searchFilter.birthday_from = birthdayFrom;
     if (birthdayTo !== undefined) searchFilter.birthday_to = birthdayTo;
     if (isPartial !== undefined) searchFilter.is_partial = isPartial;
