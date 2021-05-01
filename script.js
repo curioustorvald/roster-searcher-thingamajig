@@ -96,10 +96,13 @@ const i18n = {
         "WillShowAllOnEmptySearch": "입력 칸을 비우고 검색하면 모든 퍼슈트를 보여줍니다",
         "AdvancedSearch": "고급 검색",
         "SimpleSearch": "쉬운 검색",
+        "SimpleSearchActor": "소유자: ",
         "SimpleSearchCreator": "제작자: ",
         "SimpleSearchName": "이름 (한/영): ",
         "SimpleSearchBirthday": "생일 (yyyymmdd): ",
+        "SimpleSearchBirthday2": "생일: ",
         "SimpleSearchSpecies": "종: ",
+        "SimpleSearchStyle": "스타일: ",
         "SimpleSearchIsPartial": "파셜 여부: ",
         "MadeBy": "제작: ",
         "ThisManySearchResults": template`${0}개의 검색 결과:`
@@ -114,10 +117,13 @@ const i18n = {
         "WillShowAllOnEmptySearch": "Blank search tag will show all the fursuits",
         "AdvancedSearch": "Advanced Search",
         "SimpleSearch": "Easy Search",
+        "SimpleSearchActor": "Owner: ",
         "SimpleSearchCreator": "Creator: ",
         "SimpleSearchName": "Name (Korean/English): ",
-        "SimpleSearchBirthday": "Birthday (yyyymmdd): ",
+        "SimpleSearchBirthday": "Day of Birth (yyyymmdd): ",
+        "SimpleSearchBirthday2": "Day of Birth: ",
         "SimpleSearchSpecies": "Species: ",
+        "SimpleSearchStyle": "Style: ",
         "SimpleSearchIsPartial": "Partial? ",
         "MadeBy": "Made by ",
         "ThisManySearchResults": template`Showing ${0} search results:`
@@ -185,9 +191,78 @@ function setLangEn() {
     lang = "en";
     reloadI18n();
 }
-
+function textOrQos(s) {
+    return (s.trim().length === 0) ? "???" : s;
+}
 function showOverlay(id) {
-    console.log(id);
+    let prop = furdb[id];
+    
+    let displayFurName = textOrQos((prop.name_ko + " " + prop.name_en).trim());
+            
+    let displayFurNameJa = prop.name_ja.trim();
+                        
+    let furAliases = (prop.aliases).trim();
+                        
+    let actorName = (prop.actor_name).trim();
+                        
+    let displayActorName = textOrQos(actorName.split("/").shift());
+                        
+    let displayActorLinkHref = (prop.actor_link.includes(":") ? "" : "@") + prop.actor_link;
+    if (displayActorLinkHref == "@") displayActorLinkHref = "???";
+                        
+    let displayActorLinkName = displayActorLinkHref.split("/").pop();
+                        
+    let displayCreatorName = textOrQos((prop.creator_name).trim().replace("/자작", ""));
+    if (displayCreatorName == "자작") displayCreatorName = displayActorName;
+                        
+    let displayCreatorLinkHref = prop.creator_link;
+        
+    let tdtemplate = template`<tr><td style="text-align: right; color:#888">${0}</td><td style="padding-left: 0.5em; color:#333">${1}</td></tr>`
+    
+    let output = `<div class="dummyCenterWrapper"><div class="bigFurboxOuter" id="bigFurbox" onclick="hideOverlay()"><div class="bigFurboxContents">`
+    
+    output += `<div class="imgBoxLarge">`;
+    if (prop.photo)
+        output += `<img src="${prop.photo}">`;
+    else
+        output += `<p style="color:#AAA; text-align:center">(사진이 없어요)</p>`;
+    output += `</div>`;
+    
+    output += `<div class="parBoxLarge">`
+    output += `<div class="refsheetFlexWrapper">`
+        
+        output += `<div class="refsElem1">`
+        output += `<table>`
+        output += `<thead><tr><th colspan="2">`
+        output += `<h4 style="font-size: 20px">${displayFurName} ${displayFurNameJa}</h4>`
+        if (furAliases.length > 0)
+            output += `<h5>${furAliases.replaceAll('/', '<br />')}</h5>`
+        output += `</th></tr></thead>`;
+        output += tdtemplate(i18n[lang].SimpleSearchSpecies, prop.species_ko);
+        output += tdtemplate(i18n[lang].SimpleSearchStyle, prop.style.replaceAll('?',''));
+        output += tdtemplate(i18n[lang].SimpleSearchActor, displayActorName);
+        output += tdtemplate(i18n[lang].SimpleSearchCreator, displayCreatorName);
+        output += tdtemplate(i18n[lang].SimpleSearchBirthday2, prop.birthday);
+        output += `</table>`;
+        
+        output += `</div>`; // end of refsElem1
+        
+        if (prop.ref_sheet)
+            output += `<img class="refsElem2" src="${prop.ref_sheet}" />`; // refsElem2
+        else
+            output += `<p style="color:#AAA; text-align:center">(레퍼런스 시트가 없어요)</p>`;
+        
+    output += `</div>` // end of refsheetFlexWrapper
+    output += `</div>` // end of parBoxLarge
+    
+    output += `</div></div></div>`; // end of bigFurboxContents, bigFurboxOuter, dummyCenterWrapper
+    
+    document.getElementById("moreinfo_overlay").innerHTML = output;
+    document.getElementById("moreinfo_overlay").style.display = "block";
+}
+
+function hideOverlay() {
+    document.getElementById("moreinfo_overlay").style.display = "none";
 }
 
 function makeOutput(searchResults) {
@@ -197,36 +272,43 @@ function makeOutput(searchResults) {
         let id = it.id;
         let prop = it.prop;
         
-        let displayFurName = (prop.name_ko + " " + prop.name_en).trim();
-        if (displayFurName == "") displayFurName = "???";
-              
+        let displayFurName = textOrQos((prop.name_ko + " " + prop.name_en).trim());
+            
         let displayFurNameJa = prop.name_ja.trim();
-                          
+                            
         let furAliases = (prop.aliases).trim();
-                          
+        if (furAliases == "") furAliases = String.fromCharCode(0x3000);
+                            
         let actorName = (prop.actor_name).trim();
-                          
-        let displayActorName = actorName.split("/").shift();
-        if (displayActorName == "") displayActorName = "???";
-                          
+                            
+        let displayActorName = textOrQos(actorName.split("/").shift());
+                            
         let displayActorLinkHref = (prop.actor_link.includes(":") ? "" : "@") + prop.actor_link;
         if (displayActorLinkHref == "@") displayActorLinkHref = "???";
-                          
+                            
         let displayActorLinkName = displayActorLinkHref.split("/").pop();
-                          
-        let displayCreatorName = (prop.creator_name).trim().replace("/자작", "");
+                            
+        let displayCreatorName = textOrQos((prop.creator_name).trim().replace("/자작", ""));
         if (displayCreatorName == "자작") displayCreatorName = displayActorName;
-        if (displayCreatorName == "") displayCreatorName = "???";
-                          
+                            
         let displayCreatorLinkHref = prop.creator_link;
                                   
-        output += `<div class="furBox" onclick="showOverlay(${id})">` +
-        `<div class="imgBox"><img class="furimg" src="${prop.photo}"></div>` +
-        `<div class="infoBox">` +
-        `<h4 title="${(furAliases.length == 0) ? `${displayFurName} ${displayFurNameJa}`.trim() : `${displayFurName} ${displayFurNameJa} (${furAliases})`}">${displayFurName}</h4>` +
-        `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}">${displayActorLinkName}</a></h5>` +
-        `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}">${displayCreatorName}</a>`)}</h5>` +
-        `</div></div>`;
+        output += `<div class="furBox" onclick="showOverlay(${id})">`;
+        output += `<div class="imgBox">`;
+        
+        if (prop.photo)
+            output += `<img src="${prop.photo}" />`;
+        else if (prop.ref_sheet)
+            output += `<img src="${prop.ref_sheet}" />`;
+        else
+            output += `<img src="no-image-available.png" />`;
+            
+        output += `</div>`;
+        output += `<div class="infoBox">`;
+        output += `<h4 title="${(furAliases.length == 0) ? `${displayFurName} ${displayFurNameJa}`.trim() : `${displayFurName} ${displayFurNameJa} (${furAliases})`}">${displayFurName}</h4>`;
+        output += `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}">${displayActorLinkName}</a></h5>`;
+        output += `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}">${displayCreatorName}</a>`)}</h5>`;
+        output += `</div></div>`;
     });
     
     document.getElementById("searchResults").innerHTML = output;

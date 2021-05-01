@@ -1,5 +1,6 @@
 * {
     --img-height: 280px;
+    --gaps: 10px;
 }
 
 html, body {
@@ -70,4 +71,89 @@ h5 {
 .searchresults {
     margin: 1rem;
     background-color: #f9f9f9;
+}
+
+.dummyCenterWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 0; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+.bigFurboxOuter {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 0 0 16px 0;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    width: calc(min(900px,80vw));
+    height: 600px;
+    animation: smooth 1.5s backwards;
+    animation-delay: 0.40s;
+}
+
+.bigFurboxContents {
+    margin: var(--gaps);
+    width: calc(100% - 2 * var(--gaps));
+    height: calc(100% - 1 * var(--gaps));
+}
+
+
+.imgBoxLarge {
+    display: block;
+    float: left;
+    width: calc(50% - var(--gaps)/2);
+    height: inherit;
+    min-height: inherit;
+}
+
+.imgBoxLarge img {
+    object-fit: contain;
+    height: 100%;
+    width: 100%;
+}
+
+.parBoxLarge {
+    float: right;
+    width: calc(50% - 0.5 * var(--gaps));
+    height: calc(100% - var(--gaps));
+}
+
+.refsheetFlexWrapper {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+.refsElem1 {
+    display: flex;
+    width: 100%;
+    flex: 0 1 auto;
+    justify-content:center;
+}
+
+.refsElem1 table {
+    min-width: 330px;
+}
+
+.refsElem2 {
+    display: flex;
+    width: 100%;
+    height: inherit;
+    flex: 1 1 auto;
+    object-fit: contain;
 }

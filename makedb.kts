@@ -56,6 +56,7 @@ val mainDBreplacements = arrayOf(
         Regex("""<img src="|=w[0-9]+\-h[0-9]+" style="[^"]+"/>""") to "", // img head and trail
         Regex("""</td>""") to "¤",
         Regex("""</tr></tbody></table>""") to "", // footer
+        Regex("""</?(td|p)>""") to "", // crap
         Regex("""\n[0-9]+¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n""") to "\n", // null entries
         Regex("""\n[0-9]+¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤FALSE¤¤¤¤""") to "" // null entries
 )
