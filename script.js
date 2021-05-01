@@ -223,9 +223,9 @@ function showOverlay(id) {
     
     output += `<div class="imgBoxLarge">`;
     if (prop.photo)
-        output += `<img src="${prop.photo}">`;
+        output += `<img src="${prop.photo}" />`;
     else
-        output += `<p style="color:#AAA; text-align:center">(사진이 없어요)</p>`;
+        output += `<img src="no-image-available.png" />`;
     output += `</div>`;
     
     output += `<div class="parBoxLarge">`
