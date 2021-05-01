@@ -186,36 +186,43 @@ function setLangEn() {
     reloadI18n();
 }
 
+function showOverlay(id) {
+    console.log(id);
+}
+
 function makeOutput(searchResults) {
     let output = `<p>${i18n[lang].ThisManySearchResults(searchResults.length)}</p>`;
     
     searchResults.forEach(it => {
-        let displayFurName = (it.name_ko + " " + it.name_en).trim();
+        let id = it.id;
+        let prop = it.prop;
+        
+        let displayFurName = (prop.name_ko + " " + prop.name_en).trim();
         if (displayFurName == "") displayFurName = "???";
               
-        let displayFurNameJa = it.name_ja.trim();
+        let displayFurNameJa = prop.name_ja.trim();
                           
-        let furAliases = (it.aliases).trim();
+        let furAliases = (prop.aliases).trim();
                           
-        let actorName = (it.actor_name).trim();
+        let actorName = (prop.actor_name).trim();
                           
         let displayActorName = actorName.split("/").shift();
         if (displayActorName == "") displayActorName = "???";
                           
-        let displayActorLinkHref = (it.actor_link.includes(":") ? "" : "@") + it.actor_link;
+        let displayActorLinkHref = (prop.actor_link.includes(":") ? "" : "@") + prop.actor_link;
         if (displayActorLinkHref == "@") displayActorLinkHref = "???";
                           
         let displayActorLinkName = displayActorLinkHref.split("/").pop();
                           
-        let displayCreatorName = (it.creator_name).trim().replace("/자작", "");
+        let displayCreatorName = (prop.creator_name).trim().replace("/자작", "");
         if (displayCreatorName == "자작") displayCreatorName = displayActorName;
         if (displayCreatorName == "") displayCreatorName = "???";
                           
-        let displayCreatorLinkHref = it.creator_link;
+        let displayCreatorLinkHref = prop.creator_link;
                                   
-        output += `<div class="furBox">` +
-        `<div class="imgBox"><img class="furimg" src="${it.photo}"></div>` +
-        `<div chass="infoBox">` +
+        output += `<div class="furBox" onclick="showOverlay(${id})">` +
+        `<div class="imgBox"><img class="furimg" src="${prop.photo}"></div>` +
+        `<div class="infoBox">` +
         `<h4 title="${(furAliases.length == 0) ? `${displayFurName} ${displayFurNameJa}`.trim() : `${displayFurName} ${displayFurNameJa} (${furAliases})`}">${displayFurName}</h4>` +
         `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}">${displayActorLinkName}</a></h5>` +
         `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}">${displayCreatorName}</a>`)}</h5>` +
@@ -320,7 +327,7 @@ const pseudoCriteria = ["name"];
 const specialSearchTags = ["birthday_from", "birthday_to"];
 function performSearch(searchFilter, exactMatch, includeWIP) {
     let isSearchTagEmpty = searchFilter === undefined;
-    let foundFurs = [];
+    let foundFurs = []; // contains object in {id: (int), prop: (object)}
 
     let birthdayFrom = undefined;
     let birthdayTo = undefined;
@@ -427,7 +434,7 @@ function performSearch(searchFilter, exactMatch, includeWIP) {
         
         // do not return "hidden" furs /  hidden인 퍼슈트는 반환하지 않음
         if (searchMatches && !furdb[furid].is_hidden && (includeWIP || furdb[furid].is_done)) {
-            foundFurs.push(furdb[furid]);
+            foundFurs.push({id: furid, prop: furdb[furid]});
         }
     }
 
