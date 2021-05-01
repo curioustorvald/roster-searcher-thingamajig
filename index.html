@@ -64,9 +64,18 @@
         <form onsubmit="return false;" method="post" name="searchtagsform">
             <label for="searchtags" id="searchtags_string">Search tags</label>
             <input type="search" id="searchtags" name="searchtags">
-            <input type="checkbox" id="exactmatch" name="exactmatch">
-            <label for="exactmatch" id="exactmatch_string">Exact Match?</label>
             <input type="submit" value="Submit" id="submit_button" onclick="query()" />
+            <br />
+            <table><tr>
+            <td id="searchform_option_column1">
+                <input type="checkbox" id="exactmatch" name="exactmatch">
+                <label for="exactmatch" id="exactmatch_string"></label>
+            </td>
+            <td id="searchform_option_column2">
+                <input type="checkbox" id="includewip" name="includewip">
+                <label for="includewip" id="includewip_string"></label>
+            </td>
+            </tr></table>
         </form>
     </section>
     <section id="tagdoc">

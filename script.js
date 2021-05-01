@@ -91,6 +91,7 @@ const i18n = {
         "TagOptions": "태그 옵션:",
         "SearchTags": "검색어",
         "IsExactMatch": "검색어 정확히 매칭",
+        "IsIncludeWip": "미완성 퍼슈트 포함",
         "Submit": "검색",
         "WillShowAllOnEmptySearch": "입력 칸을 비우고 검색하면 모든 퍼슈트를 보여줍니다",
         "AdvancedSearch": "고급 검색",
@@ -108,6 +109,7 @@ const i18n = {
         "TagOptions": "Tag Options:",
         "SearchTags": "Search Tags",
         "IsExactMatch": "Exact Match?",
+        "IsIncludeWip": "Include Not Yet Completed?",
         "Submit": "Submit",
         "WillShowAllOnEmptySearch": "Blank search tag will show all the fursuits",
         "AdvancedSearch": "Advanced Search",
@@ -171,6 +173,7 @@ function reloadI18n() {
     document.getElementById("searchform_header").innerText = i18n[lang].AdvancedSearch;
     document.getElementById("searchtags_string").innerText = i18n[lang].SearchTags;
     document.getElementById("exactmatch_string").innerText = i18n[lang].IsExactMatch;
+    document.getElementById("includewip_string").innerText = i18n[lang].IsIncludeWip;
     document.getElementById("submit_button").setAttribute("value", i18n[lang].Submit);
 }
 
@@ -251,8 +254,9 @@ function simplequery() {
 function query() {
     let query = document.getElementById("searchtags").value;
     let exactMatch = document.getElementById("exactmatch").checked;
-
-    makeOutput(performSearch(parseSearchTags(query), exactMatch));
+    let includeWIP = document.getElementById("includewip").checked;
+    
+    makeOutput(performSearch(parseSearchTags(query), exactMatch, includeWIP));
 }
 
 /*
@@ -314,7 +318,7 @@ exactMatch가 참일 경우 문자열이 정확히 일치하는지를 검사, �
 const nameSearchAliases = ["name_ko", "name_en", "name_ja", "aliases"];
 const pseudoCriteria = ["name"];
 const specialSearchTags = ["birthday_from", "birthday_to"];
-function performSearch(searchFilter, exactMatch) {
+function performSearch(searchFilter, exactMatch, includeWIP) {
     let isSearchTagEmpty = searchFilter === undefined;
     let foundFurs = [];
 
@@ -422,7 +426,7 @@ function performSearch(searchFilter, exactMatch) {
 
         
         // do not return "hidden" furs /  hidden인 퍼슈트는 반환하지 않음
-        if (searchMatches && !furdb[furid].is_hidden) {
+        if (searchMatches && !furdb[furid].is_hidden && (includeWIP || furdb[furid].is_done)) {
             foundFurs.push(furdb[furid]);
         }
     }
