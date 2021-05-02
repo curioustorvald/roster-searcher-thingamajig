@@ -1,3 +1,5 @@
+
+
 // 외부 JSON 가져오기
 // Localhost에서 작동시킬 시 보안 문제로 로딩 안될 수 있음. 보안 설정을 잠깐 끄거나 서버에 올려서 돌리시오.
 function loadJSON(jsonPath, isAsync, callback) {   
@@ -219,7 +221,7 @@ function showOverlay(id) {
         
     let tdtemplate = template`<tr><td style="text-align: right; color:#888">${0}</td><td style="padding-left: 0.5em; color:#333">${1}</td></tr>`
     
-    let output = `<div class="dummyCenterWrapper"><div class="bigFurboxOuter" id="bigFurbox" onclick="hideOverlay()"><div class="bigFurboxContents">`
+    let output = `<div class="dummyCenterWrapper" id="dummyCenterWrapper"><div class="bigFurboxOuter" id="bigFurbox"><div class="bigFurboxContents">`
     
     output += `<div class="imgBoxLarge">`;
     if (prop.photo)
@@ -260,7 +262,6 @@ function showOverlay(id) {
     document.getElementById("moreinfo_overlay").innerHTML = output;
     document.getElementById("moreinfo_overlay").style.display = "block";
 }
-
 function hideOverlay() {
     document.getElementById("moreinfo_overlay").style.display = "none";
 }
@@ -293,8 +294,8 @@ function makeOutput(searchResults) {
                             
         let displayCreatorLinkHref = prop.creator_link;
                                   
-        output += `<div class="furBox" onclick="showOverlay(${id})">`;
-        output += `<div class="imgBox">`;
+        output += `<div class="furBox">`;
+        output += `<div class="imgBox" onclick="showOverlay(${id})">`;
         
         if (prop.photo)
             output += `<img src="${prop.photo}" />`;
@@ -306,8 +307,8 @@ function makeOutput(searchResults) {
         output += `</div>`;
         output += `<div class="infoBox">`;
         output += `<h4 title="${(furAliases.length == 0) ? `${displayFurName} ${displayFurNameJa}`.trim() : `${displayFurName} ${displayFurNameJa} (${furAliases})`}">${displayFurName}</h4>`;
-        output += `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}">${displayActorLinkName}</a></h5>`;
-        output += `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}">${displayCreatorName}</a>`)}</h5>`;
+        output += `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a></h5>`;
+        output += `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorName}</a>`)}</h5>`;
         output += `</div></div>`;
     });
     

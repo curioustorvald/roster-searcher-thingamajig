@@ -89,5 +89,15 @@
     <div class="overlay" id="moreinfo_overlay">
         
     </div>
+    <script>
+// event listener
+// close overlay box if outside of the box is clicked
+document.getElementById('moreinfo_overlay').addEventListener('click', function(event){
+    //console.log(event.target.id)
+    if (event.target.id == 'dummyCenterWrapper'){
+        hideOverlay();
+    }
+});
+    </script>
 </body>
 </html>
