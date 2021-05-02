@@ -208,20 +208,24 @@ function showOverlay(id) {
     let actorName = (prop.actor_name).trim();
                         
     let displayActorName = textOrQos(actorName.split("/").shift());
+    let displayCreatorName = textOrQos((prop.creator_name).trim().replace("/자작", ""));
+    if (displayCreatorName == "자작") displayCreatorName = displayActorName;
                         
     let displayActorLinkHref = (prop.actor_link.includes(":") ? "" : "@") + prop.actor_link;
     if (displayActorLinkHref == "@") displayActorLinkHref = "???";
                         
     let displayActorLinkName = displayActorLinkHref.split("/").pop();
                         
-    let displayCreatorName = textOrQos((prop.creator_name).trim().replace("/자작", ""));
-    if (displayCreatorName == "자작") displayCreatorName = displayActorName;
                         
     let displayCreatorLinkHref = prop.creator_link;
-        
+    let displayCreatorLinkName = (displayCreatorLinkHref == "") ? "" : ((displayCreatorLinkHref.startsWith("https://twitter.com/")) ? `@${displayCreatorLinkHref.split("/").pop()}` : `(링크)`)
+    
     let tdtemplate = template`<tr><td style="text-align: right; color:#888">${0}</td><td style="padding-left: 0.5em; color:#333">${1}</td></tr>`
     
     let output = `<div class="dummyCenterWrapper" id="dummyCenterWrapper"><div class="bigFurboxOuter" id="bigFurbox"><div class="bigFurboxContents">`
+    
+    let actorLinkFull = `<a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">@${displayActorLinkName}</a>`
+    let creatorLinkFull = (prop.creator_name == "자작") ? actorLinkFull : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorLinkName}</a>`
     
     output += `<div class="imgBoxLarge">`;
     if (prop.photo)
@@ -242,8 +246,8 @@ function showOverlay(id) {
         output += `</th></tr></thead>`;
         output += tdtemplate(i18n[lang].SimpleSearchSpecies, prop.species_ko);
         output += tdtemplate(i18n[lang].SimpleSearchStyle, prop.style.replaceAll('?',''));
-        output += tdtemplate(i18n[lang].SimpleSearchActor, displayActorName);
-        output += tdtemplate(i18n[lang].SimpleSearchCreator, displayCreatorName);
+        output += tdtemplate(i18n[lang].SimpleSearchActor, displayActorName + `&nbsp; ${actorLinkFull}`);
+        output += tdtemplate(i18n[lang].SimpleSearchCreator, displayCreatorName + `&nbsp; ${creatorLinkFull}`);
         output += tdtemplate(i18n[lang].SimpleSearchBirthday2, prop.birthday);
         output += `</table>`;
         
