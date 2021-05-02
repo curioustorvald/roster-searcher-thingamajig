@@ -212,9 +212,9 @@ function showOverlay(id) {
     if (displayCreatorName == "자작") displayCreatorName = displayActorName;
                         
     let displayActorLinkHref = (prop.actor_link.includes(":") ? "" : "@") + prop.actor_link;
-    if (displayActorLinkHref == "@") displayActorLinkHref = "???";
+    if (displayActorLinkHref == "@") displayActorLinkHref = "";
                         
-    let displayActorLinkName = displayActorLinkHref.split("/").pop();
+    let displayActorLinkName = (displayActorLinkHref == "") ? "" : ("@" + displayActorLinkHref.split("/").pop());
                         
                         
     let displayCreatorLinkHref = prop.creator_link;
@@ -224,7 +224,7 @@ function showOverlay(id) {
     
     let output = `<div class="dummyCenterWrapper" id="dummyCenterWrapper"><div class="bigFurboxOuter" id="bigFurbox"><div class="bigFurboxContents">`
     
-    let actorLinkFull = `<a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">@${displayActorLinkName}</a>`
+    let actorLinkFull = `<a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a>`
     let creatorLinkFull = (prop.creator_name == "자작") ? actorLinkFull : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorLinkName}</a>`
     
     output += `<div class="imgBoxLarge">`;

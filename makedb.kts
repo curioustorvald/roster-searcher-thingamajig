@@ -94,6 +94,12 @@ fun generateCell(record: List<String>, action: String): String? {
     
     return if ("is_hidden" == action)
         if (value.isNotBlank()) "TRUE" else "FALSE"
+    else if ("birthday" == action)
+        try {
+            value.toInt(); return value
+        } catch (e: NumberFormatException) {
+            return ""
+        }
     else if (!action.endsWith("_raw"))
         value.replace("?", "")
     else if ("actor_name_raw" == action)
