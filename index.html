@@ -3,13 +3,15 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <title>
-        Fursuit Roaster with Filter Demo
-    </title>
+    <title>퍼슈트검색체계 0.1.1-20210505</title>
+    <script src="searcher.js"></script>
+    <script src="panelnav.js"></script>
 </head>
-<body onload="pageinit();">
-    <script src="script.js"></script>
-    <section id="languages">
+<body onload="pageinit(), panelnavinit();">
+    <section id="panelnav">
+        <!-- TO BE FILLED BY THE COMPUTER LORD -->
+    </section>
+    <!--<section id="languages">
         <form onsubmit="return false;" method="post" name="langselect">
             <label>Language:</label>
             <input type="radio" id="lang_ko" name="lang" checked="checked" onclick="setLangKo();">
@@ -17,43 +19,47 @@
             <input type="radio" id="lang_en" name="lang" onclick="setLangEn();">
             <label for="lang_en">English</label>
         </form>
-    </section>
+    </section>-->
     <section id="simplesearch">
         <h3 id="simplesearch_header"></h3>
         <form onsubmit="return false;" method="post" name="simplesearchform">
-            <label for="simplesearch_input_creatorname" id="simplesearch_input_creatorname_string">Creator: </label>
-            <input type="search" id="simplesearch_input_creatorname" name="simplesearch_input_creatorname">
-            <br />
-            <label for="simplesearch_input_furname" id="simplesearch_input_furname_string">Name (한국어): </label>
-            <input type="search" id="simplesearch_input_furname" name="simplesearch_input_furname">
-            <br />
-            <label for="simplesearch_input_bday_from" id="simplesearch_input_bday_title_string">Birthday (yyyymmdd): </label>
-            <input type="search" id="simplesearch_input_bday_from" name="simplesearch_input_bday_from">
-            <label> &mdash; </label>
-            <input type="search" id="simplesearch_input_bday_to" name="simplesearch_input_bday_to">
-            <br />
-            <label for="simplesearch_dropdown_species" id="simplesearch_dropdown_species_string">Species: </label>
-            <select name="simplesearch_dropdown_species" id="simplesearch_dropdown_species">
-                <option value="dont_care">&mdash;</option>
-                <option value="literal_dog">개 Dog</option>
-                <option value="literal_wolf">늑대 Wolf</option>
-                <option value="literal_cat">고양이 Cat</option>
-                <option value="group_felidae">고양이과 Big Cat</option>
-                <option value="literal_fox">여우 Fox</option>
-                <option value="literal_rabbit">토끼 Rabbit and Hare</option>
-                <option value="group_aves">조류 Birds</option>
-                <option value="group_pisces">어류 Fish</option>
-                <option value="literal_dragon">드래곤 Dragon</option>
-                <option value="literal_deer">사슴/노루 Deer</option>
-                <option value="group_raccoons">레서판다/라쿤/너구리 Red Panda/Raccon</option>
-            </select>
-            <br />
-            <label for="simplesearch_input_is_partial" id="simplesearch_input_is_partial_string">Partial? </label>
-            <select name="simplesearch_input_is_partial" id="simplesearch_input_is_partial">
-                <option value="dont_care">&mdash;</option>
-                <option value="TRUE">TRUE</option>
-                <option value="FALSE">FALSE</option>
-            </select>
+            <table>
+            <tr>
+                <td class="tableFormLabel"><label for="simplesearch_input_creatorname" id="simplesearch_input_creatorname_string"></label></td>
+                <td><input type="search" id="simplesearch_input_creatorname" name="simplesearch_input_creatorname"></td>
+            </tr>
+            <tr>
+                <td class="tableFormLabel"><label for="simplesearch_input_furname" id="simplesearch_input_furname_string"></label></td>
+                <td><input type="search" id="simplesearch_input_furname" name="simplesearch_input_furname"></input>
+            </tr>
+            <tr>
+                <td class="tableFormLabel"><label for="simplesearch_input_bday_from" id="simplesearch_input_bday_title_string"></label></td>
+                <td><input type="search" id="simplesearch_input_bday_from" name="simplesearch_input_bday_from">
+                <label> &mdash; </label>
+                <input type="search" id="simplesearch_input_bday_to" name="simplesearch_input_bday_to"></input>
+            </tr>
+            <tr>
+                <td class="tableFormLabel"><label for="simplesearch_dropdown_species" id="simplesearch_dropdown_species_string"></label></td>
+                <td><select name="simplesearch_dropdown_species" id="simplesearch_dropdown_species">
+                    <!-- TO BE FILLED BY THE COMPUTER LORD -->
+                </select></td>
+            </tr>
+            <tr>
+                <td class="tableFormLabel"><label for="simplesearch_input_style" id="simplesearch_input_style_string"></label></td>
+                <td><select name="simplesearch_input_style" id="simplesearch_input_style">
+                    <!-- TO BE FILLED BY THE COMPUTER LORD -->
+                </select></td>
+            </tr>
+            <tr>
+                <td class="tableFormLabel"><label for="simplesearch_input_is_partial" id="simplesearch_input_is_partial_string"></label></td>
+                <td><select name="simplesearch_input_is_partial" id="simplesearch_input_is_partial">
+                    <option value="dont_care">&mdash;</option>
+                    <option value="TRUE">TRUE</option>
+                    <option value="FALSE">FALSE</option>
+                </select></td>
+            </tr>
+            </table>
+            
             <br />
             <input type="submit" value="Submit" id="simple_submit_button" onclick="simplequery()" />
         </form>
@@ -62,7 +68,7 @@
     <section id="searchform">
         <h3 id="searchform_header"></h3>
         <form onsubmit="return false;" method="post" name="searchtagsform">
-            <label for="searchtags" id="searchtags_string">Search tags</label>
+            <label for="searchtags" id="searchtags_string" class="tableFormLabel"></label>
             <input type="search" id="searchtags" name="searchtags">
             <input type="submit" value="Submit" id="submit_button" onclick="query()" />
             <br />
@@ -79,15 +85,16 @@
         </form>
     </section>
     <section id="tagdoc">
-            
+        <!-- TO BE FILLED BY THE COMPUTER LORD -->
     </section>
     <hr>
     <section id="searchResults">
         <p>&nbsp;</p>
-        <p style="text-align: center; font-style: oblique; color: #777">(검색 결과가 여기 표시됩니다)<br />(Search Results Will Be Displayed Here)</p>
+<!--         <p style="text-align: center; font-style: oblique; color: #777">(검색 결과가 여기 표시됩니다)<br />(Search Results Will Be Displayed Here)</p> -->
+        <p style="text-align: center; font-style: oblique; color: #777">(검색 결과가 여기 표시됩니다)</p>
     </section>
     <div class="overlay" id="moreinfo_overlay">
-        
+        <!-- TO BE FILLED BY THE COMPUTER LORD -->
     </div>
     <script>
 // event listener

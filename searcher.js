@@ -1,4 +1,27 @@
+const dropdownIdToDBname = {
+    "literal_dog":["개"],
+    "literal_wolf":["늑대"],
+    "literal_cat":["고양이"],
+    "group_felidae":["고양이과","고양잇과","사자","호랑이","표범","카라칼","퓨마","쿠거","마운틴라이언"],
+    "literal_fox":["여우"],
+    "literal_rabbit":["토끼"],
+    "group_aves":["새","조류","앵무","수리","올빼미","부엉이"],
+    "group_pisces":["어류","물고기","잉어"],
+    "literal_dragon":["드래곤"],
+    "literal_deer":["사슴","노루"],
+    "group_raccoons":["레서판다","라쿤","너구리"],
+    "literal_bear":["곰"],
+    "group_rodentia":["설치류","다람쥐","청설모","날다람쥐","쥐"],
+    "group_mustelidae":["족제비과","오소리","족제비"],
+    "group_bovidae":["소","염소","양","젖소"],
+    "group_camelidae":["낙타","알파카","라마"],
+    "literal_bat":["박쥐"],
+    "literal_fantasy_sergal":["세르갈"],
+    "literal_fantasy_protogen":["프로토겐"],
+    "literal_fantasy_henelsia":["헤넬시아","나비 고양이"]
+}
 
+const dropdownStyle = ["Cyber","Kemo","Kemo Toon","Toon","Semi","Real","Real Toon"]
 
 // 외부 JSON 가져오기
 // Localhost에서 작동시킬 시 보안 문제로 로딩 안될 수 있음. 보안 설정을 잠깐 끄거나 서버에 올려서 돌리시오.
@@ -134,20 +157,6 @@ const i18n = {
 
 var lang = "ko";
 
-const dropdownIdToDBname = {
-    "literal_dog":["개"],
-    "literal_wolf":["늑대"],
-    "literal_cat":["고양이"],
-    "group_felidae":["고양이과","고양잇과","사자","호랑이","표범","카라칼","퓨마","쿠거","마운틴라이언"],
-    "literal_fox":["여우"],
-    "literal_rabbit":["토끼"],
-    "group_aves":["새","조류","앵무","수리","올빼미","부엉이"],
-    "group_pisces":["어류","물고기","잉어"],
-    "literal_dragon":["드래곤"],
-    "literal_deer":["사슴","노루"],
-    "group_raccoons":["레서판다","라쿤","너구리"]
-}
-
 function pageinit() {
     // DB 로드
     loadJSON("furdb.json", true, response => {
@@ -155,6 +164,28 @@ function pageinit() {
     });
     // 선택된 언어로 문서 출력
     reloadI18n();
+    populateSpeciesSelection();
+    populateStyleSelection();
+}
+
+function populateSpeciesSelection() {
+    let output = `<option value="dont_care">&mdash;</option>`
+    Object.keys(dropdownIdToDBname).forEach(key => {
+        output += `<option value="${key}">`
+        output += dropdownIdToDBname[key][0]//.join('/')
+        output += `</option>`
+    })
+    document.getElementById("simplesearch_dropdown_species").innerHTML = output
+}
+
+function populateStyleSelection() {
+    let output = `<option value="dont_care">&mdash;</option>`
+    dropdownStyle.forEach(value => {
+        output += `<option value="${value}">`
+        output += value
+        output += `</option>`
+    })
+    document.getElementById("simplesearch_input_style").innerHTML = output
 }
 
 function reloadI18n() {    
@@ -175,8 +206,8 @@ function reloadI18n() {
     document.getElementById("simplesearch_input_bday_title_string").innerText = i18n[lang].SimpleSearchBirthday;
     document.getElementById("simplesearch_dropdown_species_string").innerText = i18n[lang].SimpleSearchSpecies;
     document.getElementById("simplesearch_input_is_partial_string").innerText = i18n[lang].SimpleSearchIsPartial;
+    document.getElementById("simplesearch_input_style_string").innerText = i18n[lang].SimpleSearchStyle;
     document.getElementById("simple_submit_button").setAttribute("value", i18n[lang].Submit);
-    
     
     document.getElementById("searchform_header").innerText = i18n[lang].AdvancedSearch;
     document.getElementById("searchtags_string").innerText = i18n[lang].SearchTags;
@@ -220,7 +251,7 @@ function showOverlay(id) {
     let displayCreatorLinkHref = prop.creator_link;
     let displayCreatorLinkName = (displayCreatorLinkHref == "") ? "" : ((displayCreatorLinkHref.startsWith("https://twitter.com/")) ? `@${displayCreatorLinkHref.split("/").pop()}` : `(링크)`)
     
-    let tdtemplate = template`<tr><td style="text-align: right; color:#888">${0}</td><td style="padding-left: 0.5em; color:#333">${1}</td></tr>`
+    let tdtemplate = template`<tr><td class="tableFormLabel" style="color:#888">${0}</td><td style="color:#333">${1}</td></tr>`
     
     let output = `<div class="dummyCenterWrapper" id="dummyCenterWrapper"><div class="bigFurboxOuter" id="bigFurbox"><div class="bigFurboxContents">`
     
@@ -332,6 +363,8 @@ function simplequery() {
     if (species == "dont_care") species = undefined;
     let isPartial = document.getElementById("simplesearch_input_is_partial").value;
     if (isPartial == "dont_care") isPartial = undefined;
+    let style = document.getElementById("simplesearch_input_style").value;
+    if (style == "dont_care") style = undefined;
     
     let searchFilter = {};
     
@@ -341,8 +374,11 @@ function simplequery() {
     if (birthdayTo !== undefined) searchFilter.birthday_to = birthdayTo;
     if (isPartial !== undefined) searchFilter.is_partial = isPartial;
     if (species !== undefined) searchFilter.species_ko = dropdownIdToDBname[species];
+    if (style !== undefined) searchFilter.style = style;
     
-    makeOutput(performSearch(searchFilter, false));
+    let includeWIP = document.getElementById("includewip").checked;
+    
+    makeOutput(performSearch(searchFilter, false, includeWIP));
 }
 
 function query() {
