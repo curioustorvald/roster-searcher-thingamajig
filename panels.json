@@ -1,0 +1,14 @@
+{
+    "index": {
+        "path": "index.html",
+        "label": "퍼슈트 검색"
+    },
+    "workshops": {
+        "path": "workshops.html",
+        "label": "제작자 정보"
+    },
+    "stats": {
+        "path": "statistics.html",
+        "label": "통계"
+    }
+}
