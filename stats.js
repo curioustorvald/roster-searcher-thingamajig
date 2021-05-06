@@ -245,11 +245,11 @@ function populateDiyTable() {
     let full = 0
     
     forEachFur(prop => {
-        if (prop.is_partial !== undefined) {
-            if (prop.is_partial) partial += 1
-            else full += 1
+        if (prop.is_partial !== "") {
+            if (prop.is_partial === true) partial += 1
+            else if (prop.is_partial === false) full += 1
         }
-        if (prop.creator_name) {
+        if (prop.creator_name !== "") {
             if (prop.creator_name.includes("자작")) diy += 1
             else bought += 1
         }
