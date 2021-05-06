@@ -177,7 +177,6 @@ function populateMarketshareTable() {
         out += `<td class="tableBarChartArea" style="width: 100vw">`
         Object.keys(workshopThemeCol).forEach(shop => {
             let col = workshopThemeCol[shop]
-            console.log(col)
             let lum = htmlColToLum(col)
             let count = record[shop] || 0
             let percentage = count * 100.0 / total
