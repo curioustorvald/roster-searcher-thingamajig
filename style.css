@@ -19,7 +19,8 @@ html {
 header {
     display: inline-block;
     height: 74px;
-    margin: 0 1em 0 1em;
+    width: calc(100% - 2em);
+    padding: 0 1em 0 1em;
 }
 
 contents {
@@ -41,6 +42,21 @@ overlay {
     cursor: pointer; /* Add a pointer on hover */
 }
 
+bannerimage {
+    display: block;
+    float: left;
+    width: 272px;
+    height: inherit;
+    background: no-repeat center/auto 90% url("header.png");
+}
+
+panelnavwrapper {
+    text-align: center;
+    float: right;
+    width: calc(100vw - 4em - 272px - 20px);
+    height: inherit;
+}
+
 .tableFormLabel {
     text-align: right;
     padding-right: 0.5em;
@@ -59,6 +75,15 @@ overlay {
     font-size: 90%;
 }
 
+.stackDataNumber {
+    font-weight: bold;
+    padding-left: 0.5em;
+    display: inline;
+    font-size: 90%;
+    display: table-cell;
+    color: #888;
+}
+
 .tableBarChartArea {
     padding-left: 0.5em;
 }
@@ -69,7 +94,7 @@ overlay {
     background: #444
 }
 
-.tableBarChartStack {
+tablebarchartstack {
     display: inline-block;
     margin: 3px 0 3px 0;
     padding: 0;
@@ -78,6 +103,16 @@ overlay {
     text-align: center;
     font-weight: bold;
     vertical-align: middle;
+}
+
+stacklabel {
+    display: table-cell;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    float: left;
+/*     font-size: ${fontSize}px; */
+/*     padding: ${padding}px 0 ${padding}px 0 */
 }
 
 a {
@@ -143,15 +178,15 @@ h5 {
 }
 
 .chart_container {
+    height: calc(100% - 20px);
     padding: 0.1px 20px 20px 20px;
     border-radius: 0 0 16px 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-    background: rgba(249,249,249,0.95);
+    background: rgba(251,251,252,0.94); /* will make the chartbox coloured to be #FAFAFA */
 }
 
 .chart_bgimg {
     padding: 10px;
-    flex: 1 0;
     background: no-repeat center/80% url("header.png");
 }
 

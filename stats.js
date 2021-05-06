@@ -90,6 +90,7 @@ function statsinit() {
         populateBirthdayStatTable()
         populateStyleStatTable()
         populateMarketshareTable()
+        populateDiyTable()
     })
 }
 
@@ -140,7 +141,7 @@ function populateStyleStatTable() {
 }
 
 function populateMarketshareTable() {
-    let barHeight = 48
+    let barHeight = 42
     let fontSize = 14
     let padding = (barHeight - fontSize - 6) / 2
     
@@ -174,7 +175,7 @@ function populateMarketshareTable() {
         let record = data[""+year]
         let total = Object.values(record).reduce((a,i) => a+i, 0)
         
-        out += `<td class="tableBarChartArea" style="width: 100vw">`
+        out += `<td class="tableBarChartArea" style="width:100vw">`
         Object.keys(workshopThemeCol).forEach(shop => {
             let col = workshopThemeCol[shop]
             let lum = htmlColToLum(col)
@@ -182,15 +183,14 @@ function populateMarketshareTable() {
             let percentage = count * 100.0 / total
             
             if (count > 0) {
-                out += `<div class="tableBarChartStack" style="width:${percentage}%; background:${col}; color: ${(lum > 0.6215) ? "#444" : "#F9F9F9"};     height:${barHeight}px" title="${shop} (${((percentage * 10)|0) / 10}%)">`
-                //out += `${count}`
-                out += `<div style="display:table-cell; width:100%; height:100%; text-align:center; float:left; font-size: ${fontSize}px; padding:${padding}px 0 ${padding}px 0">${count}</div>`
-                out += `</div>`
+                out += `<tablebarchartstack style="width:${percentage}%; background:${col}; color:${(lum > 0.6215) ? "#444" : "#F9F9F9"}; height:${barHeight}px" title="${shop} (${Math.round(percentage * 10) / 10}%)">`
+                out += `<stacklabel style="font-size:${fontSize}px; padding:${padding}px 0 ${padding}px 0">${count}</stacklabel>`
+                out += `</tablebarchartstack>`
             }
         })
         out += `</td>`
         // total number
-        out += `<td class="tableDataNumber" style="display: table-cell; color: #888">${total}</td>`
+        out += `<td class="stackDataNumber">${total}</td>`
         
         out += `</tr>`
     }
@@ -205,4 +205,60 @@ function populateMarketshareTable() {
     out += `</idiv>`
     
     document.getElementById("market_share_stat_table_legend").innerHTML = out
+}
+
+function populateDiyTable() {
+    let barHeight = 36
+    let fontSize = 14
+    let padding = (barHeight - fontSize - 8) / 2
+    
+    
+    let out = ``
+    
+    let diy = 0
+    let bought = 0
+    let partial = 0
+    let full = 0
+    
+    forEachFur(prop => {
+        if (prop.is_partial !== undefined) {
+            if (prop.is_partial) partial += 1
+            else full += 1
+        }
+        if (prop.creator_name) {
+            if (prop.creator_name.includes("자작")) diy += 1
+            else bought += 1
+        }
+    })
+        
+    let diyperc = 100.0 * diy / (diy + bought)
+    let partialperc = 100.0 * partial / (partial + full)
+    
+    out += `<tr>`
+    out += `<td class="tableBarChartArea" style="width:100vw">`
+    out += `<tablebarchartstack style="width:${diyperc}%; background:#8AF; height:${barHeight}" title="${diy}/${diy+bought}">`
+    out += `<stacklabel style="font-size:${fontSize}px; padding:${padding}px 0 ${padding}px 0">자작 ${Math.round(diyperc * 10) / 10}%</stacklabel>`
+    out += `</tablebarchartstack>`
+    out += `<tablebarchartstack style="width:${100 - diyperc}%; background:#FA8; height:${barHeight}" title="${bought}/${diy+bought}">`
+    out += `<stacklabel style="font-size:${fontSize}px; padding:${padding}px 0 ${padding}px 0">수주 ${100 - Math.round(diyperc * 10) / 10}%</stacklabel>`
+    out += `</tablebarchartstack>`
+    // total number
+    out += `<td class="stackDataNumber">${diy+bought}</td>`
+    out += `</td>`
+    out += `</tr>`
+    
+    out += `<tr>`
+    out += `<td class="tableBarChartArea" style="width:100vw">`
+    out += `<tablebarchartstack style="width:${partialperc}%; background:#ED7D31; height:${barHeight}" title="${partial}/${partial+full}">`
+    out += `<stacklabel style="font-size:${fontSize}px; padding:${padding}px 0 ${padding}px 0; color:#F9F9F9">파셜 ${Math.round(partialperc * 10) / 10}%</stacklabel>`
+    out += `</tablebarchartstack>`
+    out += `<tablebarchartstack style="width:${100 - partialperc}%; background:#0563C1; height:${barHeight}" title="${full}/${partial+full}">`
+    out += `<stacklabel style="font-size:${fontSize}px; padding:${padding}px 0 ${padding}px 0; color:#F9F9F9"">풀 ${100 - Math.round(partialperc * 10) / 10}%</stacklabel>`
+    out += `</tablebarchartstack>`
+    // total number
+    out += `<td class="stackDataNumber">${partial+full}</td>`
+    out += `</td>`
+    out += `</tr>`
+        
+    document.getElementById("diy_stat_table").innerHTML = out
 }

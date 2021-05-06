@@ -28,5 +28,5 @@ function populateNav(db) {
     
     output += "</ul></div>"
     
-    document.getElementById("panelnav").innerHTML = output
+    document.getElementsByTagName("panelnavwrapper")[0].innerHTML = output
 }

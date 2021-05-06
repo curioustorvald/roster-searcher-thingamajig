@@ -8,16 +8,7 @@
     <script src="stats.js"></script>
 </head>
 <body onload="panelnavinit(), statsinit();">
-    <header>
-        <div id="bannerimage" style="display:flex; justify-content:center; align-items:center; float:left; width:30%; height:inherit">
-            <img src="header.png" style="width: 100%">
-        </div>
-        <div id="panelnavcontainer" style="text-align:center; float:right; width:70%; height:inherit">
-            <div id="panelnav">
-                <!-- TO BE FILLED BY THE COMPUTER LORD -->
-            </div>
-        </div>
-    </header>
+    <header><bannerimage></bannerimage><panelnavwrapper></panelnavwrapper></header>
     <contents>
         <h3>DB정보</h3>
         <table>
@@ -34,22 +25,31 @@
         <h3>간단 그래프</h3>
         
         <div id="flex_container" style="display:flex">
-            <div class="chart_bgimg"><div id="birthday_stats" class="chart_container">
+            <div class="chart_bgimg" style="flex: 1 1 23vw"><div id="birthday_stats" class="chart_container">
                 <h3 style="padding-left:0.5em">활동개시일</h3>
                 <table id="birthday_stat_table">
                     <!-- TO BE FILLED BY THE COMPUTER LORD -->
                 </table>
             </div></div>
-            <div class="chart_bgimg"><div id="style_stats" class="chart_container">
+            <div class="chart_bgimg" style="flex: 1 1 40vw"><div id="style_stats" class="chart_container">
                 <h3 style="padding-left:0.5em">스타일</h3>
                 <table id="style_stat_table">
+                    <!-- TO BE FILLED BY THE COMPUTER LORD -->
+                </table>
+            </div></div>
+            <div class="chart_bgimg" style="flex: 1 1 37vw"><div id="diy_stats" class="chart_container">
+                <h3 style="padding-left:0.5em">자작 vs 수주</h3>
+                <table id="diy_stat_table">
                     <!-- TO BE FILLED BY THE COMPUTER LORD -->
                 </table>
             </div></div>
         </div>
         
         <div id="flex_container" style="display:flex">
-            <div class="chart_bgimg"><div id="market_share_selected" class="chart_container">
+        </div>
+            
+        <div id="flex_container" style="display:flex">
+            <div class="chart_bgimg" style="flex: 1 0"><div id="market_share_selected" class="chart_container">
                 <h3 style="padding-left:0.5em">시장 점유율 (연도별, 선택)</h3>
                 <table id="market_share_stat_table">
                     <!-- TO BE FILLED BY THE COMPUTER LORD -->
