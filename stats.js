@@ -132,7 +132,7 @@ function populateBirthdayStatTable() {
         out += `<tr>`
         out += `<td class="tableChartLabel">${year}</td>`
         out += `<td class="tableDataNumber">${count}</td>`
-        out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${0.8*perc}%">&nbsp;</div></td>`
+        out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${perc}%">&nbsp;</div></td>`
         out += `</tr>`
     })
         
@@ -157,7 +157,7 @@ function populateStyleStatTable() {
         out += `<tr>`
         out += `<td class="tableChartLabel">${style.replaceAll(' ','&nbsp;')}</td>`
         out += `<td class="tableDataNumber">${count}</td>`
-        out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${0.8*perc}%">&nbsp;</div></td>`
+        out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${perc}%">&nbsp;</div></td>`
         out += `</tr>`
     })
     
