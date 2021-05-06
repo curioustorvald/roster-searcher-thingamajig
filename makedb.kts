@@ -62,8 +62,8 @@ val mainDBreplacements = arrayOf(
         Regex("""</td>""") to "¤",
         Regex("""</tr></tbody></table>""") to "", // footer
         Regex("""</?(td|p)>""") to "", // crap
-        Regex("""\n[0-9]+¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤\n""") to "\n", // null entries
-        Regex("""\n[0-9]+¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤FALSE¤¤¤¤""") to "" // null entries
+        Regex("""\n[0-9]+¤{21,}\n""") to "\n", // null entries
+        Regex("""\n[0-9]+¤{17,}FALSE¤{4,}""") to "" // null entries
 )
 
 fun makeDSV(raw: String): String = mainDBreplacements.foldIndexed(raw) { i, str, (k, v) ->

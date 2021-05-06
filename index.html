@@ -8,97 +8,94 @@
     <script src="panelnav.js"></script>
 </head>
 <body onload="pageinit(), panelnavinit();">
-    <section id="header" style="text-align:center">
-        <img src="header.png" style="width: 50vw">
-    </section>
-    <section id="panelnav">
+    <header>
+        <div id="bannerimage" style="display:flex; justify-content:center; align-items:center; float:left; width:30%; height:inherit">
+            <img src="header.png" style="width: 100%">
+        </div>
+        <div id="panelnavcontainer" style="text-align:center; float:right; width:70%; height:inherit">
+            <div id="panelnav">
+                <!-- TO BE FILLED BY THE COMPUTER LORD -->
+            </div>
+        </div>
+    </header>
+    <contents>
+        <section id="simplesearch">
+            <h3 id="simplesearch_header"></h3>
+            <form onsubmit="return false;" method="post" name="simplesearchform">
+                <table>
+                <tr>
+                    <td class="tableFormLabel"><label for="simplesearch_input_creatorname" id="simplesearch_input_creatorname_string"></label></td>
+                    <td><input type="search" id="simplesearch_input_creatorname" name="simplesearch_input_creatorname"></td>
+                </tr>
+                <tr>
+                    <td class="tableFormLabel"><label for="simplesearch_input_furname" id="simplesearch_input_furname_string"></label></td>
+                    <td><input type="search" id="simplesearch_input_furname" name="simplesearch_input_furname"></input>
+                </tr>
+                <tr>
+                    <td class="tableFormLabel"><label for="simplesearch_input_bday_from" id="simplesearch_input_bday_title_string"></label></td>
+                    <td><input type="search" id="simplesearch_input_bday_from" name="simplesearch_input_bday_from">
+                    <label> &mdash; </label>
+                    <input type="search" id="simplesearch_input_bday_to" name="simplesearch_input_bday_to"></input>
+                </tr>
+                <tr>
+                    <td class="tableFormLabel"><label for="simplesearch_dropdown_species" id="simplesearch_dropdown_species_string"></label></td>
+                    <td><select name="simplesearch_dropdown_species" id="simplesearch_dropdown_species">
+                        <!-- TO BE FILLED BY THE COMPUTER LORD -->
+                    </select></td>
+                </tr>
+                <tr>
+                    <td class="tableFormLabel"><label for="simplesearch_input_style" id="simplesearch_input_style_string"></label></td>
+                    <td><select name="simplesearch_input_style" id="simplesearch_input_style">
+                        <!-- TO BE FILLED BY THE COMPUTER LORD -->
+                    </select></td>
+                </tr>
+                <tr>
+                    <td class="tableFormLabel"><label for="simplesearch_input_is_partial" id="simplesearch_input_is_partial_string"></label></td>
+                    <td><select name="simplesearch_input_is_partial" id="simplesearch_input_is_partial">
+                        <option value="dont_care">&mdash;</option>
+                        <option value="TRUE">TRUE</option>
+                        <option value="FALSE">FALSE</option>
+                    </select></td>
+                </tr>
+                </table>
+                
+                <br />
+                <input type="submit" value="Submit" id="simple_submit_button" onclick="simplequery()" />
+            </form>
+        </section>
+        <hr>
+        <section id="searchform">
+            <h3 id="searchform_header"></h3>
+            <form onsubmit="return false;" method="post" name="searchtagsform">
+                <label for="searchtags" id="searchtags_string" class="tableFormLabel"></label>
+                <input type="search" id="searchtags" name="searchtags">
+                <input type="submit" value="Submit" id="submit_button" onclick="query()" />
+                <br />
+                <table><tr>
+                <td id="searchform_option_column1">
+                    <input type="checkbox" id="exactmatch" name="exactmatch">
+                    <label for="exactmatch" id="exactmatch_string"></label>
+                </td>
+                <td id="searchform_option_column2">
+                    <input type="checkbox" id="includewip" name="includewip">
+                    <label for="includewip" id="includewip_string"></label>
+                </td>
+                </tr></table>
+            </form>
+        </section>
+        <section id="tagdoc">
+            <!-- TO BE FILLED BY THE COMPUTER LORD -->
+        </section>
+        <hr>
+        <section id="searchResults">
+            <p>&nbsp;</p>
+    <!--         <p style="text-align: center; font-style: oblique; color: #777">(검색 결과가 여기 표시됩니다)<br />(Search Results Will Be Displayed Here)</p> -->
+            <p style="text-align: center; font-style: oblique; color: #777">(검색 결과가 여기 표시됩니다)</p>
+        </section>
+    </contents>
+    <overlay id="moreinfo_overlay">
         <!-- TO BE FILLED BY THE COMPUTER LORD -->
-    </section>
-    <!--<section id="languages">
-        <form onsubmit="return false;" method="post" name="langselect">
-            <label>Language:</label>
-            <input type="radio" id="lang_ko" name="lang" checked="checked" onclick="setLangKo();">
-            <label for="lang_ko">한국어</label>
-            <input type="radio" id="lang_en" name="lang" onclick="setLangEn();">
-            <label for="lang_en">English</label>
-        </form>
-    </section>-->
-    <section id="simplesearch">
-        <h3 id="simplesearch_header"></h3>
-        <form onsubmit="return false;" method="post" name="simplesearchform">
-            <table>
-            <tr>
-                <td class="tableFormLabel"><label for="simplesearch_input_creatorname" id="simplesearch_input_creatorname_string"></label></td>
-                <td><input type="search" id="simplesearch_input_creatorname" name="simplesearch_input_creatorname"></td>
-            </tr>
-            <tr>
-                <td class="tableFormLabel"><label for="simplesearch_input_furname" id="simplesearch_input_furname_string"></label></td>
-                <td><input type="search" id="simplesearch_input_furname" name="simplesearch_input_furname"></input>
-            </tr>
-            <tr>
-                <td class="tableFormLabel"><label for="simplesearch_input_bday_from" id="simplesearch_input_bday_title_string"></label></td>
-                <td><input type="search" id="simplesearch_input_bday_from" name="simplesearch_input_bday_from">
-                <label> &mdash; </label>
-                <input type="search" id="simplesearch_input_bday_to" name="simplesearch_input_bday_to"></input>
-            </tr>
-            <tr>
-                <td class="tableFormLabel"><label for="simplesearch_dropdown_species" id="simplesearch_dropdown_species_string"></label></td>
-                <td><select name="simplesearch_dropdown_species" id="simplesearch_dropdown_species">
-                    <!-- TO BE FILLED BY THE COMPUTER LORD -->
-                </select></td>
-            </tr>
-            <tr>
-                <td class="tableFormLabel"><label for="simplesearch_input_style" id="simplesearch_input_style_string"></label></td>
-                <td><select name="simplesearch_input_style" id="simplesearch_input_style">
-                    <!-- TO BE FILLED BY THE COMPUTER LORD -->
-                </select></td>
-            </tr>
-            <tr>
-                <td class="tableFormLabel"><label for="simplesearch_input_is_partial" id="simplesearch_input_is_partial_string"></label></td>
-                <td><select name="simplesearch_input_is_partial" id="simplesearch_input_is_partial">
-                    <option value="dont_care">&mdash;</option>
-                    <option value="TRUE">TRUE</option>
-                    <option value="FALSE">FALSE</option>
-                </select></td>
-            </tr>
-            </table>
-            
-            <br />
-            <input type="submit" value="Submit" id="simple_submit_button" onclick="simplequery()" />
-        </form>
-    </section>
-    <hr>
-    <section id="searchform">
-        <h3 id="searchform_header"></h3>
-        <form onsubmit="return false;" method="post" name="searchtagsform">
-            <label for="searchtags" id="searchtags_string" class="tableFormLabel"></label>
-            <input type="search" id="searchtags" name="searchtags">
-            <input type="submit" value="Submit" id="submit_button" onclick="query()" />
-            <br />
-            <table><tr>
-            <td id="searchform_option_column1">
-                <input type="checkbox" id="exactmatch" name="exactmatch">
-                <label for="exactmatch" id="exactmatch_string"></label>
-            </td>
-            <td id="searchform_option_column2">
-                <input type="checkbox" id="includewip" name="includewip">
-                <label for="includewip" id="includewip_string"></label>
-            </td>
-            </tr></table>
-        </form>
-    </section>
-    <section id="tagdoc">
-        <!-- TO BE FILLED BY THE COMPUTER LORD -->
-    </section>
-    <hr>
-    <section id="searchResults">
-        <p>&nbsp;</p>
-<!--         <p style="text-align: center; font-style: oblique; color: #777">(검색 결과가 여기 표시됩니다)<br />(Search Results Will Be Displayed Here)</p> -->
-        <p style="text-align: center; font-style: oblique; color: #777">(검색 결과가 여기 표시됩니다)</p>
-    </section>
-    <div class="overlay" id="moreinfo_overlay">
-        <!-- TO BE FILLED BY THE COMPUTER LORD -->
-    </div>
+    </overlay>
     <script>
 // event listener
 // close overlay box if outside of the box is clicked
