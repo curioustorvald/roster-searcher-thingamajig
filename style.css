@@ -69,7 +69,7 @@ table.stat {
 .tableChartLabel {
     text-align: right;
     padding-right: 0.33em;
-    width: 0; /* this is a hack; the label must always contain non-breakables! (e.g. &nbsp;) */
+    width: 1px; /* this is a hack; the label must always contain non-breakables! (e.g. &nbsp;) */
     border-right: 1px solid #AAA;
 }
 
@@ -78,7 +78,7 @@ table.stat {
     padding-left: 0.33em;
     text-align: right;
     font-size: 90%;
-    width: 0; /* this is a hack; the label must always contain non-breakables! (e.g. &nbsp;) */
+    width: 1px; /* this is a hack; the label must always contain non-breakables! (e.g. &nbsp;) */
 }
 
 .stackDataNumber {
