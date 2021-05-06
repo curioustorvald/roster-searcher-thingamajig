@@ -1,8 +1,11 @@
 import java.io.File
 
+// APPLICATION CONFIGURATION //
+
 val dbFileName = "./html/DB.html"
 val photoFileName = "./html/Photo.html"
 val outJsonName = "./furdb.json"
+val includeHidden = false
 val inColumns = arrayOf( // name of the operations
         "_id",
         "name_ko",
@@ -45,6 +48,8 @@ val outColumns = arrayOf( // name of the property that goes directy onto the JSO
         "is_hidden",
         "aliases"
 )
+
+// END OF APPLICATION CONFIGURATION //
 
 val mainDBraw = File(dbFileName).readText(Charsets.UTF_8).replace("\n", "")
 val picturesraw = File(photoFileName).readText(Charsets.UTF_8).replace("\n", "")
@@ -123,24 +128,32 @@ fun generateCell(record: List<String>, action: String): String? {
         throw IllegalArgumentException(action)
 }
 
-var outJson = StringBuilder()
-outJson.append('{')
+val outJson = StringBuilder()
+outJson.append("{\n")
 
 mainTable.forEach { record ->
     val id = record[0].toInt()
-
-    outJson.append("\"${id}\":{")
-    outJson.append(inColumns.map { generateCell(record, it) }.filter { it != null }
+    
+    val line = StringBuilder() 
+    
+    line.append("\"${id}\":{")
+    line.append(inColumns.map { generateCell(record, it) }.filter { it != null }
         .mapIndexed { i, v -> "\"${outColumns[i]}\":${if (v!!.toLowerCase() == "true" || v.toLowerCase() == "false") v.toLowerCase() else "\"$v\""}" }
         .joinToString(","))
 
     val mainPhoto = photoTable[id-1][6].replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
     val refSheet = photoTable[id-1][8].replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
 
-    outJson.append(",\"photo\":\"${if (mainPhoto.isNotBlank()) "images/$mainPhoto" else ""}\"" +
-                   ",\"ref_sheet\":\"${if (refSheet.isNotBlank()) "images/$refSheet" else ""}\"},")
+    line.append(",\"photo\":\"${if (mainPhoto.isNotBlank()) "images/$mainPhoto" else ""}\"" +
+                   ",\"ref_sheet\":\"${if (refSheet.isNotBlank()) "images/$refSheet" else ""}\"}")
+    
+    if (!line.contains("\"is_hidden\":true") || includeHidden) {
+        outJson.append(line.toString())
+        outJson.append(",\n")
+    }
 }
 
-outJson.set(outJson.lastIndex, '}') // replace last trailing , with }
+outJson.deleteRange(outJson.lastIndex - 1, outJson.lastIndex) // remove trailing (,\n)
+outJson.append("}") // close the json
 
 File(outJsonName).writeText(outJson.toString())
