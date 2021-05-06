@@ -10,5 +10,9 @@
     "stats": {
         "path": "statistics.html",
         "label": "통계"
+    },
+    "legal": {
+        "path": "legal.html",
+        "label": "면책 조항"
     }
 }

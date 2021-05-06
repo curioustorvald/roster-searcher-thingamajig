@@ -273,7 +273,7 @@ h5 {
 }
 
 
-ul {
+ul.sub_menu {
     list-style-type: none;
     padding: 0;
 }
