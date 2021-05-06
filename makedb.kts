@@ -1,4 +1,6 @@
 import java.io.File
+import java.time.*
+import java.time.format.DateTimeFormatter
 
 // APPLICATION CONFIGURATION //
 
@@ -129,7 +131,8 @@ fun generateCell(record: List<String>, action: String): String? {
 }
 
 val outJson = StringBuilder()
-outJson.append("{\n")
+val lastUpdate = "${LocalDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))} (UTC)"
+outJson.append("{\"last_update\":\"${lastUpdate}\",\n")
 
 mainTable.forEach { record ->
     val id = record[0].toInt()
@@ -157,3 +160,4 @@ outJson.deleteRange(outJson.lastIndex - 1, outJson.lastIndex) // remove trailing
 outJson.append("}") // close the json
 
 File(outJsonName).writeText(outJson.toString())
+println("Last update: ${lastUpdate}")

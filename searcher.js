@@ -26,30 +26,30 @@ const dropdownStyle = ["Cyber","Kemo","Kemo Toon","Toon","Semi","Real","Real Too
 // 외부 JSON 가져오기
 // Localhost에서 작동시킬 시 보안 문제로 로딩 안될 수 있음. 보안 설정을 잠깐 끄거나 서버에 올려서 돌리시오.
 function loadJSON(jsonPath, isAsync, callback) {   
-    let xobj = new XMLHttpRequest();
-        xobj.overrideMimeType("application/json");
-    xobj.open('GET', jsonPath, isAsync);
+    let xobj = new XMLHttpRequest()
+        xobj.overrideMimeType("application/json")
+    xobj.open('GET', jsonPath, isAsync)
     xobj.onreadystatechange = function () {
           if (xobj.readyState == 4 && xobj.status == "200") {
             // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-            callback(xobj.responseText);
+            callback(xobj.responseText)
           }
-    };
-    xobj.send(null);  
+    }
+    xobj.send(null)
 }
 
-var furdb = {};
+var furdb = {}
 
 function template(strings, ...keys) {
     return (function(...values) {
-        let dict = values[values.length - 1] || {};
-        let result = [strings[0]];
+        let dict = values[values.length - 1] || {}
+        let result = [strings[0]]
         keys.forEach(function(key, i) {
-            let value = Number.isInteger(key) ? values[key] : dict[key];
-            result.push(value, strings[i + 1]);
-        });
-        return result.join('');
-    });
+            let value = Number.isInteger(key) ? values[key] : dict[key]
+            result.push(value, strings[i + 1])
+        })
+        return result.join('')
+    })
 }
 
 const creatorThesaurus = {
@@ -106,8 +106,8 @@ const tagDocumentation = {
     "style":{"ko":"퍼슈트 캐릭터의 스타일 (Real, Real Toon, Kemo, Kemo Toon, Semi)","en":"Style of the character (Real, Real Toon, Kemo, Kemo Toon, Semi)"},
     "is_partial":{"ko":"캐릭터가 파셜인지 여부 (TRUE, FALSE)","en":"If the suit is partial-suit (TRUE, FALSE)"},
     "country":{"ko":"오너의 국적 (ISO 3166-1 Alpha-3 코드)","en":"Nationality of the actor in ISO 3166-1 Alpha-3 Code"},
-    "birthday_from":{"ko":"생일 검색에서 가장 이른 날짜. 해당 날짜를 포함함 (yyyymmdd)","en":"Earliest day in birthday search, inclusive (yyyymmdd)"},
-    "birthday_to":{"ko":"생일 검색에서 가장 늦은 날짜. 해당 날짜를 포함함 (yyyymmdd)","en":"Latest day in birthday search, inclusive (yyyymmdd)"}
+    "birthday_from":{"ko":"활동개시일 검색에서 가장 이른 날짜. 해당 날짜를 포함함 (yyyymmdd)","en":"Earliest day in birthday search, inclusive (yyyymmdd)"},
+    "birthday_to":{"ko":"활동개시일 검색에서 가장 늦은 날짜. 해당 날짜를 포함함 (yyyymmdd)","en":"Latest day in birthday search, inclusive (yyyymmdd)"}
 }
 
 const i18n = {
@@ -124,8 +124,8 @@ const i18n = {
         "SimpleSearchActor": "소유자: ",
         "SimpleSearchCreator": "제작자: ",
         "SimpleSearchName": "이름 (한/영): ",
-        "SimpleSearchBirthday": "생일 (yyyymmdd): ",
-        "SimpleSearchBirthday2": "생일: ",
+        "SimpleSearchBirthday": "활동개시일 (yyyymmdd): ",
+        "SimpleSearchBirthday2": "활동개시일: ",
         "SimpleSearchSpecies": "종: ",
         "SimpleSearchStyle": "스타일: ",
         "SimpleSearchIsPartial": "파셜 여부: ",
@@ -155,17 +155,17 @@ const i18n = {
     }
 }
 
-var lang = "ko";
+var lang = "ko"
 
 function pageinit() {
     // DB 로드
     loadJSON("furdb.json", true, response => {
-        furdb = JSON.parse(response);
-    });
+        furdb = JSON.parse(response)
+    })
     // 선택된 언어로 문서 출력
-    reloadI18n();
-    populateSpeciesSelection();
-    populateStyleSelection();
+    reloadI18n()
+    populateSpeciesSelection()
+    populateStyleSelection()
 }
 
 function populateSpeciesSelection() {
@@ -189,66 +189,66 @@ function populateStyleSelection() {
 }
 
 function reloadI18n() {    
-    let tagdocOutput = "";
+    let tagdocOutput = ""
     
-    tagdocOutput += "<p>"+i18n[lang].TagOptions+"</p><ul>";
+    tagdocOutput += "<p>"+i18n[lang].TagOptions+"</p><ul>"
     Object.keys(tagDocumentation).forEach(it => {
         tagdocOutput += "<li>"+it+" &ndash; "+tagDocumentation[it][lang]+"</li>"
-    });
-    tagdocOutput += "</ul><p>"+i18n[lang].WillShowAllOnEmptySearch+"</p>";
+    })
+    tagdocOutput += "</ul><p>"+i18n[lang].WillShowAllOnEmptySearch+"</p>"
     
-    document.getElementById("tagdoc").innerHTML = tagdocOutput;
+    document.getElementById("tagdoc").innerHTML = tagdocOutput
     
     // 검색폼 다국어화
-    document.getElementById("simplesearch_header").innerText = i18n[lang].SimpleSearch;
-    document.getElementById("simplesearch_input_creatorname_string").innerText = i18n[lang].SimpleSearchCreator;
-    document.getElementById("simplesearch_input_furname_string").innerText = i18n[lang].SimpleSearchName;
-    document.getElementById("simplesearch_input_bday_title_string").innerText = i18n[lang].SimpleSearchBirthday;
-    document.getElementById("simplesearch_dropdown_species_string").innerText = i18n[lang].SimpleSearchSpecies;
-    document.getElementById("simplesearch_input_is_partial_string").innerText = i18n[lang].SimpleSearchIsPartial;
-    document.getElementById("simplesearch_input_style_string").innerText = i18n[lang].SimpleSearchStyle;
-    document.getElementById("simple_submit_button").setAttribute("value", i18n[lang].Submit);
+    document.getElementById("simplesearch_header").innerText = i18n[lang].SimpleSearch
+    document.getElementById("simplesearch_input_creatorname_string").innerText = i18n[lang].SimpleSearchCreator
+    document.getElementById("simplesearch_input_furname_string").innerText = i18n[lang].SimpleSearchName
+    document.getElementById("simplesearch_input_bday_title_string").innerText = i18n[lang].SimpleSearchBirthday
+    document.getElementById("simplesearch_dropdown_species_string").innerText = i18n[lang].SimpleSearchSpecies
+    document.getElementById("simplesearch_input_is_partial_string").innerText = i18n[lang].SimpleSearchIsPartial
+    document.getElementById("simplesearch_input_style_string").innerText = i18n[lang].SimpleSearchStyle
+    document.getElementById("simple_submit_button").setAttribute("value", i18n[lang].Submit)
     
-    document.getElementById("searchform_header").innerText = i18n[lang].AdvancedSearch;
-    document.getElementById("searchtags_string").innerText = i18n[lang].SearchTags;
-    document.getElementById("exactmatch_string").innerText = i18n[lang].IsExactMatch;
-    document.getElementById("includewip_string").innerText = i18n[lang].IsIncludeWip;
-    document.getElementById("submit_button").setAttribute("value", i18n[lang].Submit);
+    document.getElementById("searchform_header").innerText = i18n[lang].AdvancedSearch
+    document.getElementById("searchtags_string").innerText = i18n[lang].SearchTags
+    document.getElementById("exactmatch_string").innerText = i18n[lang].IsExactMatch
+    document.getElementById("includewip_string").innerText = i18n[lang].IsIncludeWip
+    document.getElementById("submit_button").setAttribute("value", i18n[lang].Submit)
 }
 
 function setLangKo() {
-    lang = "ko";
-    reloadI18n();
+    lang = "ko"
+    reloadI18n()
 }
 function setLangEn() {
-    lang = "en";
-    reloadI18n();
+    lang = "en"
+    reloadI18n()
 }
 function textOrQos(s) {
-    return (s.trim().length === 0) ? "???" : s;
+    return (s.trim().length === 0) ? "???" : s
 }
 function showOverlay(id) {
-    let prop = furdb[id];
+    let prop = furdb[id]
     
-    let displayFurName = textOrQos((prop.name_ko + " " + prop.name_en).trim());
+    let displayFurName = textOrQos((prop.name_ko + " " + prop.name_en).trim())
             
-    let displayFurNameJa = prop.name_ja.trim();
+    let displayFurNameJa = (prop.name_ja).trim()
                         
-    let furAliases = (prop.aliases).trim();
+    let furAliases = (prop.aliases).trim()
                         
-    let actorName = (prop.actor_name).trim();
+    let actorName = (prop.actor_name).trim()
                         
-    let displayActorName = textOrQos(actorName.split("/").shift());
-    let displayCreatorName = textOrQos((prop.creator_name).trim().replace("/자작", ""));
-    if (displayCreatorName == "자작") displayCreatorName = displayActorName;
+    let displayActorName = textOrQos(actorName.split("/").shift())
+    let displayCreatorName = textOrQos((prop.creator_name).trim().replace("/자작", ""))
+    if (displayCreatorName == "자작") displayCreatorName = displayActorName
                         
-    let displayActorLinkHref = (prop.actor_link.includes(":") ? "" : "@") + prop.actor_link;
-    if (displayActorLinkHref == "@") displayActorLinkHref = "";
+    let displayActorLinkHref = (prop.actor_link.includes(":") ? "" : "@") + prop.actor_link
+    if (displayActorLinkHref == "@") displayActorLinkHref = ""
                         
-    let displayActorLinkName = (displayActorLinkHref == "") ? "" : ("@" + displayActorLinkHref.split("/").pop());
+    let displayActorLinkName = (displayActorLinkHref == "") ? "" : ("@" + displayActorLinkHref.split("/").pop())
                         
                         
-    let displayCreatorLinkHref = prop.creator_link;
+    let displayCreatorLinkHref = prop.creator_link
     let displayCreatorLinkName = (displayCreatorLinkHref == "") ? "" : ((displayCreatorLinkHref.startsWith("https://twitter.com/")) ? `@${displayCreatorLinkHref.split("/").pop()}` : `(링크)`)
     
     let tdtemplate = template`<tr><td class="tableFormLabel" style="color:#888">${0}</td><td style="color:#333">${1}</td></tr>`
@@ -258,12 +258,12 @@ function showOverlay(id) {
     let actorLinkFull = `<a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a>`
     let creatorLinkFull = (prop.creator_name == "자작") ? actorLinkFull : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorLinkName}</a>`
     
-    output += `<div class="imgBoxLarge">`;
+    output += `<div class="imgBoxLarge">`
     if (prop.photo)
-        output += `<img src="${prop.photo}" />`;
+        output += `<img src="${prop.photo}" />`
     else
-        output += `<img src="no-image-available.png" />`;
-    output += `</div>`;
+        output += `<img src="no-image-available.png" />`
+    output += `</div>`
     
     output += `<div class="parBoxLarge">`
     output += `<div class="refsheetFlexWrapper">`
@@ -274,119 +274,119 @@ function showOverlay(id) {
         output += `<h4 style="font-size: 20px">${displayFurName} ${displayFurNameJa}</h4>`
         if (furAliases.length > 0)
             output += `<h5>${furAliases.replaceAll('/', '<br />')}</h5>`
-        output += `</th></tr></thead>`;
-        output += tdtemplate(i18n[lang].SimpleSearchSpecies, prop.species_ko);
-        output += tdtemplate(i18n[lang].SimpleSearchStyle, prop.style.replaceAll('?',''));
-        output += tdtemplate(i18n[lang].SimpleSearchActor, displayActorName + `&nbsp; ${actorLinkFull}`);
-        output += tdtemplate(i18n[lang].SimpleSearchCreator, displayCreatorName + `&nbsp; ${creatorLinkFull}`);
-        output += tdtemplate(i18n[lang].SimpleSearchBirthday2, prop.birthday);
-        output += `</table>`;
+        output += `</th></tr></thead>`
+        output += tdtemplate(i18n[lang].SimpleSearchSpecies, prop.species_ko)
+        output += tdtemplate(i18n[lang].SimpleSearchStyle, prop.style.replaceAll('?',''))
+        output += tdtemplate(i18n[lang].SimpleSearchActor, displayActorName + `&nbsp; ${actorLinkFull}`)
+        output += tdtemplate(i18n[lang].SimpleSearchCreator, displayCreatorName + `&nbsp; ${creatorLinkFull}`)
+        output += tdtemplate(i18n[lang].SimpleSearchBirthday2, prop.birthday)
+        output += `</table>`
         
-        output += `</div>`; // end of refsElem1
+        output += `</div>` // end of refsElem1
         
         if (prop.ref_sheet)
-            output += `<img class="refsElem2" src="${prop.ref_sheet}" />`; // refsElem2
+            output += `<img class="refsElem2" src="${prop.ref_sheet}" />` // refsElem2
         else
-            output += `<p style="color:#AAA; text-align:center">(레퍼런스 시트가 없어요)</p>`;
+            output += `<p style="color:#AAA; text-align:center">(레퍼런스 시트가 없어요)</p>`
         
     output += `</div>` // end of refsheetFlexWrapper
     output += `</div>` // end of parBoxLarge
     
-    output += `</div></div></div>`; // end of bigFurboxContents, bigFurboxOuter, dummyCenterWrapper
+    output += `</div></div></div>` // end of bigFurboxContents, bigFurboxOuter, dummyCenterWrapper
     
-    document.getElementById("moreinfo_overlay").innerHTML = output;
-    document.getElementById("moreinfo_overlay").style.display = "block";
+    document.getElementById("moreinfo_overlay").innerHTML = output
+    document.getElementById("moreinfo_overlay").style.display = "block"
 }
 function hideOverlay() {
-    document.getElementById("moreinfo_overlay").style.display = "none";
+    document.getElementById("moreinfo_overlay").style.display = "none"
 }
 
 function makeOutput(searchResults) {
-    let output = `<p>${i18n[lang].ThisManySearchResults(searchResults.length)}</p>`;
+    let output = `<p>${i18n[lang].ThisManySearchResults(searchResults.length)}</p>`
     
     searchResults.forEach(it => {
-        let id = it.id;
-        let prop = it.prop;
+        let id = it.id
+        let prop = it.prop
         
-        let displayFurName = textOrQos((prop.name_ko + " " + prop.name_en).trim());
+        let displayFurName = textOrQos((prop.name_ko + " " + prop.name_en).trim())
             
-        let displayFurNameJa = prop.name_ja.trim();
+        let displayFurNameJa = (prop.name_ja).trim()
                             
-        let furAliases = (prop.aliases).trim();
-        if (furAliases == "") furAliases = String.fromCharCode(0x3000);
+        let furAliases = (prop.aliases).trim()
+        if (furAliases == "") furAliases = String.fromCharCode(0x3000)
                             
-        let actorName = (prop.actor_name).trim();
+        let actorName = (prop.actor_name).trim()
                             
-        let displayActorName = textOrQos(actorName.split("/").shift());
+        let displayActorName = textOrQos(actorName.split("/").shift())
                             
-        let displayActorLinkHref = (prop.actor_link.includes(":") ? "" : "@") + prop.actor_link;
-        if (displayActorLinkHref == "@") displayActorLinkHref = "???";
+        let displayActorLinkHref = (prop.actor_link.includes(":") ? "" : "@") + prop.actor_link
+        if (displayActorLinkHref == "@") displayActorLinkHref = "???"
                             
-        let displayActorLinkName = displayActorLinkHref.split("/").pop();
+        let displayActorLinkName = displayActorLinkHref.split("/").pop()
                             
-        let displayCreatorName = textOrQos((prop.creator_name).trim().replace("/자작", ""));
-        if (displayCreatorName == "자작") displayCreatorName = displayActorName;
+        let displayCreatorName = textOrQos((prop.creator_name).trim().replace("/자작", ""))
+        if (displayCreatorName == "자작") displayCreatorName = displayActorName
                             
-        let displayCreatorLinkHref = prop.creator_link;
+        let displayCreatorLinkHref = prop.creator_link
                                   
-        output += `<div class="furBox">`;
-        output += `<div class="imgBox" onclick="showOverlay(${id})">`;
+        output += `<div class="furBox">`
+        output += `<div class="imgBox" onclick="showOverlay(${id})">`
         
         if (prop.photo)
-            output += `<img src="${prop.photo}" />`;
+            output += `<img src="${prop.photo}" />`
         else if (prop.ref_sheet)
-            output += `<img src="${prop.ref_sheet}" />`;
+            output += `<img src="${prop.ref_sheet}" />`
         else
-            output += `<img src="no-image-available.png" />`;
+            output += `<img src="no-image-available.png" />`
             
-        output += `</div>`;
-        output += `<div class="infoBox">`;
-        output += `<h4 title="${(furAliases.length == 0) ? `${displayFurName} ${displayFurNameJa}`.trim() : `${displayFurName} ${displayFurNameJa} (${furAliases})`}">${displayFurName}</h4>`;
-        output += `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a></h5>`;
-        output += `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorName}</a>`)}</h5>`;
-        output += `</div></div>`;
-    });
+        output += `</div>`
+        output += `<div class="infoBox">`
+        output += `<h4 title="${(furAliases.length == 0) ? `${displayFurName} ${displayFurNameJa}`.trim() : `${displayFurName} ${displayFurNameJa} (${furAliases})`}">${displayFurName}</h4>`
+        output += `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a></h5>`
+        output += `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorName}</a>`)}</h5>`
+        output += `</div></div>`
+    })
     
-    document.getElementById("searchResults").innerHTML = output;
+    document.getElementById("searchResults").innerHTML = output
 }
 
 function simplequery() {
-    let creatorName = document.getElementById("simplesearch_input_creatorname").value;
-    if (creatorName == "") creatorName = undefined;
-    let furName = document.getElementById("simplesearch_input_furname").value;
-    if (furName == "") furNameKo = undefined;
-    let birthdayFrom = document.getElementById("simplesearch_input_bday_from").value;
-    if (birthdayFrom == "") birthdayFrom = undefined;
-    let birthdayTo = document.getElementById("simplesearch_input_bday_to").value;
-    if (birthdayTo == "") birthdayTo = undefined;
-    let species = document.getElementById("simplesearch_dropdown_species").value;
-    if (species == "dont_care") species = undefined;
-    let isPartial = document.getElementById("simplesearch_input_is_partial").value;
-    if (isPartial == "dont_care") isPartial = undefined;
-    let style = document.getElementById("simplesearch_input_style").value;
-    if (style == "dont_care") style = undefined;
+    let creatorName = document.getElementById("simplesearch_input_creatorname").value
+    if (creatorName == "") creatorName = undefined
+    let furName = document.getElementById("simplesearch_input_furname").value
+    if (furName == "") furNameKo = undefined
+    let birthdayFrom = document.getElementById("simplesearch_input_bday_from").value
+    if (birthdayFrom == "") birthdayFrom = undefined
+    let birthdayTo = document.getElementById("simplesearch_input_bday_to").value
+    if (birthdayTo == "") birthdayTo = undefined
+    let species = document.getElementById("simplesearch_dropdown_species").value
+    if (species == "dont_care") species = undefined
+    let isPartial = document.getElementById("simplesearch_input_is_partial").value
+    if (isPartial == "dont_care") isPartial = undefined
+    let style = document.getElementById("simplesearch_input_style").value
+    if (style == "dont_care") style = undefined
     
-    let searchFilter = {};
+    let searchFilter = {}
     
-    if (creatorName !== undefined) searchFilter.creator_name = creatorName;
-    if (furName !== undefined) searchFilter.name = furName;
-    if (birthdayFrom !== undefined) searchFilter.birthday_from = birthdayFrom;
-    if (birthdayTo !== undefined) searchFilter.birthday_to = birthdayTo;
-    if (isPartial !== undefined) searchFilter.is_partial = isPartial;
-    if (species !== undefined) searchFilter.species_ko = dropdownIdToDBname[species];
-    if (style !== undefined) searchFilter.style = style;
+    if (creatorName !== undefined) searchFilter.creator_name = creatorName
+    if (furName !== undefined) searchFilter.name = furName
+    if (birthdayFrom !== undefined) searchFilter.birthday_from = birthdayFrom
+    if (birthdayTo !== undefined) searchFilter.birthday_to = birthdayTo
+    if (isPartial !== undefined) searchFilter.is_partial = isPartial
+    if (species !== undefined) searchFilter.species_ko = dropdownIdToDBname[species]
+    if (style !== undefined) searchFilter.style = style
     
-    let includeWIP = document.getElementById("includewip").checked;
+    let includeWIP = document.getElementById("includewip").checked
     
-    makeOutput(performSearch(searchFilter, false, includeWIP));
+    makeOutput(performSearch(searchFilter, false, includeWIP))
 }
 
 function query() {
-    let query = document.getElementById("searchtags").value;
-    let exactMatch = document.getElementById("exactmatch").checked;
-    let includeWIP = document.getElementById("includewip").checked;
+    let query = document.getElementById("searchtags").value
+    let exactMatch = document.getElementById("exactmatch").checked
+    let includeWIP = document.getElementById("includewip").checked
     
-    makeOutput(performSearch(parseSearchTags(query), exactMatch, includeWIP));
+    makeOutput(performSearch(parseSearchTags(query), exactMatch, includeWIP))
 }
 
 /*
@@ -394,29 +394,29 @@ Composes searchFilter by obtaining key-value pair from Danbooru tagging syntax
 단부루식 태그 문법에서 key와 value를 분리해 searchFilter를 만듦
  */
 function parseSearchTags(searchstrr) {
-    let searchstr = searchstrr.trim();
+    let searchstr = searchstrr.trim()
     
-    if (searchstr.length == 0) return undefined;
+    if (searchstr.length == 0) return undefined
     
-    let tokens = searchstr.split(' ');
-    let searchFilter = new Object();
+    let tokens = searchstr.split(' ')
+    let searchFilter = new Object()
     // populate searchfilter object
     tokens.forEach(v => {
         // example tag: "creator:DIY"
         // split key-value
-        let kvpair = v.split(':');
+        let kvpair = v.split(':')
         
-        if (kvpair[0].startsWith("name_")) kvpair[0] = "name"; // 이름 언어 구분 제거
+        if (kvpair[0].startsWith("name_")) kvpair[0] = "name" // 이름 언어 구분 제거
         
-        searchFilter[kvpair[0]] = kvpair[1];
-    });
+        searchFilter[kvpair[0]] = kvpair[1]
+    })
 
-    return searchFilter;
+    return searchFilter
 }
 
 // 문자열을 검색하기 좋게 소문자로 바꾸고 띄어쓰기와 언더스코어를 없앰 (언더스코어는 사용자가 검색어에 띄어쓰기 대신 집어넣을 가능성 있음)
 String.prototype.babostr = function() {
-    return this.toLowerCase().replaceAll(" ","").replaceAll("_","");
+    return this.toLowerCase().replaceAll(" ","").replaceAll("_","")
 }
 
 /*
@@ -445,25 +445,27 @@ filter = {
 exactMatch가 참일 경우 문자열이 정확히 일치하는지를 검사, 그렇지 않으면 필터키값이 DB값의 일부인지 검사함
 
  */
-const nameSearchAliases = ["name_ko", "name_en", "name_ja", "aliases"];
-const pseudoCriteria = ["name"];
-const specialSearchTags = ["birthday_from", "birthday_to"];
+const nameSearchAliases = ["name_ko", "name_en", "name_ja", "aliases"]
+const pseudoCriteria = ["name"]
+const specialSearchTags = ["birthday_from", "birthday_to"]
 function performSearch(searchFilter, exactMatch, includeWIP) {
-    let isSearchTagEmpty = searchFilter === undefined;
-    let foundFurs = []; // contains object in {id: (int), prop: (object)}
+    let isSearchTagEmpty = searchFilter === undefined
+    let foundFurs = [] // contains object in {id: (int), prop: (object)}
 
-    let birthdayFrom = undefined;
-    let birthdayTo = undefined;
+    let birthdayFrom = undefined
+    let birthdayTo = undefined
     if (!isSearchTagEmpty) {
-        birthdayFrom = searchFilter.birthday_from;
-        birthdayTo = searchFilter.birthday_to;
+        birthdayFrom = searchFilter.birthday_from
+        birthdayTo = searchFilter.birthday_to
     }
     
-    //console.log(searchFilter);
-    //console.log(exactMatch);
+    //console.log(searchFilter)
+    //console.log(exactMatch)
     
     for (const furid in furdb) {
-        let searchMatches = true;
+        if (isNaN(furid)) continue
+        
+        let searchMatches = true
                 
         // do not check for conditions if search term is empty -> will put every fursuits onto foundFurs
         // 검색 태그가 비어있으면 조건 검사를 하지 않음 -> searchMatches의 초기값이 참이기 때문에 모든 털들을 foundFurs에 집어넣게 됨
@@ -471,95 +473,95 @@ function performSearch(searchFilter, exactMatch, includeWIP) {
             for (const searchCriterion in searchFilter) {
 
                 try {
-                    //console.log(`searchCriterion = ${searchCriterion}`);
+                    //console.log(`searchCriterion = ${searchCriterion}`)
                     // check if the tag is valid
                     // 태그가 올바른지 검사
                     if (searchCriterion in furdb[furid] || pseudoCriteria.find(it => it == searchCriterion) !== undefined) {
-                        const arraySearchMode = Array.isArray(searchFilter[searchCriterion]);
+                        const arraySearchMode = Array.isArray(searchFilter[searchCriterion])
                         
-                        //console.log(`arraySearchMode = ${arraySearchMode}`);
+                        //console.log(`arraySearchMode = ${arraySearchMode}`)
     
                         
                         // 검색어 sanitise
-                        let searchTerm = undefined;
+                        let searchTerm = undefined
                         if (arraySearchMode) {
-                            searchTerm = searchFilter[searchCriterion].map(it => it.babostr());
+                            searchTerm = searchFilter[searchCriterion].map(it => it.babostr())
                         }
                         else {
-                            searchTerm = searchFilter[searchCriterion].babostr();
+                            searchTerm = searchFilter[searchCriterion].babostr()
                         }
                         
                         // disambiguate search term if the criterion is creator_name
                         // 메이커 검색어의 동음이의 처리
                         if (searchCriterion == "creator_name") {
                             if (arraySearchMode) {
-                                searchTerm = searchTerm.map(it => (creatorThesaurus[it] !== undefined) ? creatorThesaurus[searchTerm].babostr() : it);
+                                searchTerm = searchTerm.map(it => (creatorThesaurus[it] !== undefined) ? creatorThesaurus[searchTerm].babostr() : it)
                             }
                             else {
                                 if (creatorThesaurus[searchTerm] !== undefined) {
-                                    searchTerm = creatorThesaurus[searchTerm].babostr();
+                                    searchTerm = creatorThesaurus[searchTerm].babostr()
                                 }
                             }
                         }
                                                 
                         if (arraySearchMode) {
-                            let partialMatch = false;
+                            let partialMatch = false
                             searchTerm.forEach(it => {
-                                partialMatch |= (exactMatch) ? (furdb[furid][searchCriterion].babostr() == it) : furdb[furid][searchCriterion].babostr().includes(it);
-                            });
-                            searchMatches &= partialMatch;
+                                partialMatch |= (exactMatch) ? (furdb[furid][searchCriterion].babostr() == it) : furdb[furid][searchCriterion].babostr().includes(it)
+                            })
+                            searchMatches &= partialMatch
                         }
                         else {
                             // 이름은 한/영/일/이명에 대해서도 검색해야 함
                             if (searchCriterion == "name") {
-                                let partialMatch = false;
+                                let partialMatch = false
                                 nameSearchAliases.forEach(it => {
-                                    partialMatch |= furdb[furid][it].babostr().includes(searchTerm);
-                                });
-                                searchMatches &= partialMatch;
+                                    partialMatch |= furdb[furid][it].babostr().includes(searchTerm)
+                                })
+                                searchMatches &= partialMatch
                             }
                             else {
-                                searchMatches &= (exactMatch) ? (furdb[furid][searchCriterion].babostr() == searchTerm) : furdb[furid][searchCriterion].babostr().includes(searchTerm);
+                                searchMatches &= (exactMatch) ? (furdb[furid][searchCriterion].babostr() == searchTerm) : furdb[furid][searchCriterion].babostr().includes(searchTerm)
                             }
                         }
                         
                         // 위 대입 식이 searchMatches에 AND하기 때문에 모든 조건을 만족해야만 searchMatches가 최종적으로 true가 됨
-                        // OR로 하려면 let searchMatches = false; 하고 searchMatches |= ... 하면 됨
+                        // OR로 하려면 let searchMatches = false 하고 searchMatches |= ... 하면 됨
                     }
                     // display error message if the tag is not valid
                     // 올바르지 않은 태그면 에러창 띄움
                     else if (!(searchCriterion in specialSearchTags)) {
-                        //console.log(i18n[lang].TagSyntaxError + searchCriterion);
-                        alert(i18n[lang].TagSyntaxError + searchCriterion);
-                        return undefined;
+                        //console.log(i18n[lang].TagSyntaxError + searchCriterion)
+                        alert(i18n[lang].TagSyntaxError + searchCriterion)
+                        return undefined
                     }
                 }
                 catch (e) {
-                    //console.log(e);
-                    //console.log(e.stack);
+                    //console.log(e)
+                    //console.log(e.stack)
                 }
             }
             
-            // 생일 조건은 별도로 검사
+            // 활동개시일 조건은 별도로 검사
             // check birthday condition here
             if ((birthdayFrom !== undefined || birthdayTo !== undefined) && furdb[furid].birthday.length < 1) {
-                searchMatches = false;
+                searchMatches = false
             }
             if (
                 ((birthdayFrom !== undefined && birthdayTo !== undefined) && (furdb[furid].birthday < birthdayFrom || furdb[furid].birthday > birthdayTo)) ||
                 (birthdayFrom !== undefined && furdb[furid].birthday < birthdayFrom) ||
                 (birthdayTo !== undefined && furdb[furid].birthday > birthdayTo)
             ) {
-                searchMatches = false;
+                searchMatches = false
             }
         }
 
         
         // do not return "hidden" furs /  hidden인 퍼슈트는 반환하지 않음
         if (searchMatches && !furdb[furid].is_hidden && (includeWIP || furdb[furid].is_done)) {
-            foundFurs.push({id: furid, prop: furdb[furid]});
+            foundFurs.push({id: furid, prop: furdb[furid]})
         }
     }
 
-    return foundFurs;
+    return foundFurs
 }
