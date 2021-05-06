@@ -198,12 +198,12 @@ function populateMarketshareTable() {
     document.getElementById("market_share_stat_table").innerHTML = out
     
     // make legend area
-    out = `<p>`
+    out = `<idiv style="text-align:center; font-size: 90%; margin-top: 10px; line-height: ${2*fontSize}px">`
     Object.keys(workshopThemeCol).forEach((shop, i) => {
-        out += `<idiv><idiv style="font-size:144%; color:${workshopThemeCol[shop]}">&#x25CF;</idiv>`
+        out += `<idiv><idiv style="font-size:120%; color:${workshopThemeCol[shop]}">&#x2588;</idiv>`
         out += `<idiv style="color:#444; margin: 0 1em 0 0.25em">&nbsp;${shop}</idiv></idiv>`
     })
-    out += `</p>`
+    out += `</idiv>`
     
     document.getElementById("market_share_stat_table_legend").innerHTML = out
 }
