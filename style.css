@@ -3,13 +3,18 @@
     --gaps: 10px;
 }
 
+idiv {
+    display: inline-block;
+    padding: 
+}
 
 html {
     background-color: #F0EDE5;
     font-family: Open Sans, Arial;
-    color: #454545;
+    color: #444;
     font-size: 16px;
     text-align: justify;
+    z-index: 10;
 }
 
 header {
@@ -44,21 +49,36 @@ overlay {
 
 .tableChartLabel {
     text-align: right;
-    padding-right: 0.5em;
-    border-right: 1px solid #AAA;
+    padding-right: 0em;
+/*     border-right: 1px solid #AAA; */
 }
 
 .tableDataNumber {
     font-weight:bold;
-    text-align:right;
-    padding-left: 0.5em
+    padding-left: 0.5em;
+    display: inline;
+    font-size: 90%;
+}
+
+.tableBarChartArea {
+    padding-left: 0.5em;
 }
 
 .tableBarChart {
     display:inline-block;
-    margin-left: 0.5em;
     padding: 0;
     background: #444
+}
+
+.tableBarChartStack {
+    display: inline-block;
+    margin: 3px 0 3px 0;
+    padding: 0;
+    background: #f00;
+    font-size: 90%;
+    text-align: center;
+    font-weight: bold;
+    vertical-align: middle;
 }
 
 a {
