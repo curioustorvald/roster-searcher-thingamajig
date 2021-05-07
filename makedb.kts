@@ -68,6 +68,14 @@ val mainDBreplacements = arrayOf(
         Regex("""\n[0-9]+¤{17,}FALSE¤{4,}""") to "" // null entries
 )
 
+fun <T> Array<T>.linearSearch(selector: (T) -> Boolean): Int? {
+    this.forEachIndexed { index, it ->
+        if (selector.invoke(it)) return index
+    }
+
+    return null
+}
+
 fun makeDSV(raw: String): String = mainDBreplacements.foldIndexed(raw) { i, str, (k, v) ->
     println("Text substitution ${i + 1} / ${mainDBreplacements.size}")
     str.replace(k, v)
@@ -130,6 +138,55 @@ fun generateCell(record: List<String>, action: String): String? {
         throw IllegalArgumentException(action)
 }
 
+val colourNames = arrayOf("시안","마젠타","인디고","올리브드랩","아이보리","페리윙클")
+val colourSuffixes = arrayOf("색","포인트")
+val colourPrefixes = arrayOf("네온","연","진","남")
+val colourRegex = Regex("""${colourNames.joinToString("|")}|${colourSuffixes.map { "[가-힣]+$it" }.joinToString("|")}|${colourPrefixes.map { "$it[가-힣]+" }.joinToString("|") }""")
+val hairRegex = Regex("""(${colourRegex}) 머리카락( (${colourRegex}) 브릿지)?""")
+val eyesRegex = Regex("""[가-힣]안""")
+
+fun parseGetColours(descRaw: String): Pair<List<String>, List<String>> {
+    val colourWords = colourRegex.findAll(descRaw).map { it.groupValues[0] }.toList().reversed()
+    val hairWords = parseGetHairs(descRaw)
+    val removal = colourWords.indices.map { intArrayOf(it, 1) }
+    // remove hairWords from colourWords and return it;
+    // mark words for removal
+    hairWords.reversed().forEach { hairword ->
+        for (index in colourWords.indices) {
+            val colourword = colourWords[index]
+            if (hairword == colourword) {
+                removal[index][1] = 0
+                break
+            }
+        }
+    }
+    // create list of words that are not marked for removal
+    val newWords = ArrayList<String>()
+    removal.forEach {
+        if (it[1] == 1) newWords.add(colourWords[it[0]])
+    }
+    
+    return newWords.toList().reversed() to hairWords
+}
+
+fun parseGetHairs(descRaw: String): List<String> {
+    try {
+        val groups = hairRegex.findAll(descRaw).map { it.groupValues }.first()
+        if (groups[3].isNotBlank())
+            return listOf(groups[1].trim(), groups[3].trim()) // hair colour, streak colour
+        else
+            return listOf(groups[1].trim())
+    }
+    catch (e: java.util.NoSuchElementException) {
+        return listOf()
+    }
+}
+
+fun parseGetEyeColour(descRaw: String): List<String> {
+    val matches = eyesRegex.findAll(descRaw).map { it.groupValues[0] }.toList() // will contain one or more eye colours and zero or one '역안'
+    return matches
+}
+
 val outJson = StringBuilder()
 val lastUpdate = "${LocalDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))} (UTC)"
 outJson.append("{\"last_update\":\"${lastUpdate}\",\n")
@@ -148,7 +205,23 @@ mainTable.forEach { record ->
     val refSheet = photoTable[id-1][8].replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
 
     line.append(",\"photo\":\"${if (mainPhoto.isNotBlank()) "images/$mainPhoto" else ""}\"" +
-                   ",\"ref_sheet\":\"${if (refSheet.isNotBlank()) "images/$refSheet" else ""}\"}")
+                   ",\"ref_sheet\":\"${if (refSheet.isNotBlank()) "images/$refSheet" else ""}\"")
+    
+    // parse desc_raw separately
+    val descRaw = record[inColumns.linearSearch { it == "desc_raw" }!!]
+    if (descRaw != null) {
+        //val tokens = descRaw.split(Regex(""", *"""))
+        val (colours, hairs) = parseGetColours(descRaw)
+        val eyes = parseGetEyeColour(descRaw)
+        
+        
+        line.append(",\"colours\":[${colours.map { "\"${it}\"" }.joinToString(",")}]")
+        line.append(",\"hairs\":[${hairs.map { "\"${it}\"" }.joinToString(",")}]")
+        line.append(",\"eyes\":[${eyes.map { "\"${it}\"" }.joinToString(",")}]")
+    }
+    
+    
+    line.append("}")
     
     if (!line.contains("\"is_hidden\":true") || includeHidden) {
         outJson.append(line.toString())
