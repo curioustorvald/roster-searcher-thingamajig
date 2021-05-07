@@ -133,7 +133,7 @@ fun generateCell(record: List<String>, action: String): String? {
     else if ("aliases_raw" == action)
         value //.split('/') // just return as-is
     else if ("desc_raw" == action)
-        value.substringBefore(',').replace("?", "")
+        value.substringBefore(',').replace("?", "").substringBefore('(')
     else
         throw IllegalArgumentException(action)
 }

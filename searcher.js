@@ -5,7 +5,7 @@ const dropdownIdToDBname = {
     "group_felidae":["고양이과","고양잇과","사자","호랑이","표범","카라칼","퓨마","쿠거","마운틴라이언"],
     "literal_fox":["여우"],
     "literal_rabbit":["토끼"],
-    "group_aves":["새","조류","앵무","수리","올빼미","부엉이"],
+    "group_aves":["조류","새","앵무","수리","올빼미","부엉이"],
     "group_pisces":["어류","물고기","잉어"],
     "literal_dragon":["드래곤"],
     "literal_deer":["사슴","노루"],
@@ -14,7 +14,7 @@ const dropdownIdToDBname = {
     "group_rodentia":["설치류","다람쥐","청설모","날다람쥐","쥐"],
     "group_mustelidae":["족제비과","오소리","족제비"],
     "group_bovidae":["소","염소","양","젖소"],
-    "group_camelidae":["낙타","알파카","라마"],
+    "group_camelidae":["낙타/알파카/라마","낙타","알파카","라마"],
     "literal_bat":["박쥐"],
     "literal_fantasy_sergal":["세르갈"],
     "literal_fantasy_protogen":["프로토겐"],
@@ -548,7 +548,7 @@ function simplequery() {
         
     let includeWIP = document.getElementById("includewip_simple").checked
     
-    makeOutput(performSearch(searchFilter, false, includeWIP))
+    makeOutput(performSearch(searchFilter, "simple", false, includeWIP))
 }
 
 function query() {
@@ -556,7 +556,7 @@ function query() {
     let exactMatch = document.getElementById("exactmatch").checked
     let includeWIP = document.getElementById("includewip").checked
     
-    makeOutput(performSearch(parseSearchTags(query), exactMatch, includeWIP))
+    makeOutput(performSearch(parseSearchTags(query), "tags", exactMatch, includeWIP))
 }
 
 /*
@@ -619,7 +619,8 @@ const nameSearchAliases = ["name_ko", "name_en", "name_ja", "aliases"]
 const pseudoCriteria = {"name":1}
 const specialSearchTags = {"birthday_from":1, "birthday_to":1}
 const arrayOfTagsAndMatch = {"colours":1, "hairs":1, "eyes":1}
-function performSearch(searchFilter, exactMatch, includeWIP) {
+const alwaysExactMatch = {"species_ko":1}
+function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
     let isSearchTagEmpty = searchFilter === undefined
     let foundFurs = [] // contains object in {id: (int), prop: (object)}
 
@@ -711,7 +712,7 @@ function performSearch(searchFilter, exactMatch, includeWIP) {
                             else {
                                 let partialMatch = false
                                 searchTerm.forEach(it => {
-                                    partialMatch |= (exactMatch) ? (furdb[furid][searchCriterion].babostr() == it) : furdb[furid][searchCriterion].babostr().includes(it)
+                                    partialMatch |= (searchCriterion in alwaysExactMatch || exactMatch) ? (furdb[furid][searchCriterion].babostr() == it) : furdb[furid][searchCriterion].babostr().includes(it)
                                 })
                                 searchMatches &= partialMatch
                             }
@@ -726,7 +727,7 @@ function performSearch(searchFilter, exactMatch, includeWIP) {
                                 searchMatches &= partialMatch
                             }
                             else {
-                                searchMatches &= (exactMatch) ? (furdb[furid][searchCriterion].babostr() == searchTerm) : furdb[furid][searchCriterion].babostr().includes(searchTerm)
+                                searchMatches &= (searchCriterion in alwaysExactMatch || exactMatch) ? (furdb[furid][searchCriterion].babostr() == searchTerm) : furdb[furid][searchCriterion].babostr().includes(searchTerm)
                             }
                         }
                         
