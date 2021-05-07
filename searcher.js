@@ -365,6 +365,7 @@ function reloadI18n() {
     document.getElementById("searchtags_string").innerText = i18n[lang].SearchTags
     document.getElementById("exactmatch_string").innerText = i18n[lang].IsExactMatch
     document.getElementById("includewip_string").innerText = i18n[lang].IsIncludeWip
+    document.getElementById("includewip_string2").innerText = i18n[lang].IsIncludeWip
     document.getElementById("submit_button").setAttribute("value", i18n[lang].Submit)
 }
 
@@ -545,7 +546,7 @@ function simplequery() {
     if (eyeCols.length > 0) searchFilter.eyes = eyeCols
     if (hairCols.length > 0) searchFilter.hairs = hairCols
         
-    let includeWIP = document.getElementById("includewip").checked
+    let includeWIP = document.getElementById("includewip_simple").checked
     
     makeOutput(performSearch(searchFilter, false, includeWIP))
 }
