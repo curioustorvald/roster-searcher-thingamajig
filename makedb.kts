@@ -183,7 +183,7 @@ fun parseGetHairs(descRaw: String): List<String> {
 }
 
 fun parseGetEyeColour(descRaw: String): List<String> {
-    val matches = eyesRegex.findAll(descRaw).map { it.groupValues[0] }.toList() // will contain one or more eye colours and zero or one '역안'
+    val matches = eyesRegex.findAll(descRaw).map { it.groupValues[0] }.toList().filter { !colourNames.contains(it) } // will contain one or more eye colours and zero or one '역안'
     return matches
 }
 
