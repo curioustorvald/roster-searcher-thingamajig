@@ -153,7 +153,8 @@ const i18n = {
         "SimpleSearchHair": "머리카락:",
         "MadeBy": "제작: ",
         "ThisManySearchResults": template`${0}개의 검색 결과:`,
-        "None": "없음"
+        "None": "없음",
+        "Any": "아무거나"
     },
     "en": {
         "TagSyntaxError": "Entered tag is malformed: ",
@@ -184,13 +185,31 @@ const i18n = {
         "SimpleSearchHair": "Hair Colour: ",
         "MadeBy": "Made by ",
         "ThisManySearchResults": template`Showing ${0} search results:`,
-        "None": "None"
+        "None": "None",
+        "Any": "Any"
     }
 }
 
 const nulsel = `<option value="dont_care">&mdash;</option>`
 function nonesel() {
     return `<option value="none">${i18n[lang].None}</option>`
+}
+function anysel() {
+    return `<option value="any">${i18n[lang].Any}</option>`
+}
+
+// haskell-inspired array functions
+Array.prototype.head = function() {
+    return this[0]
+}
+Array.prototype.last = function() {
+    return this[this.length - 1]
+}
+Array.prototype.tail = function() {
+    return this.slice(1)
+}
+Array.prototype.init = function() {
+    return this.slice(0, this.length - 1)
 }
 
 var lang = "ko"
@@ -271,7 +290,7 @@ function populateEyesSelection() {
     })
         
     let colList = Object.keys(cols).sort()
-    let scleraList = ["정상", "역안"]
+    let scleraList = ["역안"]
     
     let colSel = nulsel + colList.map(s => `<option value="${s}">${s}</option>`).join('')
     let sclearSel = nulsel + scleraList.map(s => `<option value="${s}">${s}</option>`).join('')
@@ -299,8 +318,8 @@ function populateHairSelection() {
     let bgColList = Object.keys(bgCols).sort()
     let fgColList = Object.keys(fgCols).sort()
     
-    let bgSel = nulsel + nonesel() + bgColList.map(s => `<option value="${s}">${s}</option>`).join('')
-    let fgSel = nulsel + nonesel() + fgColList.map(s => `<option value="${s}">${s}</option>`).join('')
+    let bgSel = nulsel + nonesel() + anysel() + bgColList.map(s => `<option value="${s}">${s}</option>`).join('')
+    let fgSel = nulsel + nonesel() + anysel() + fgColList.map(s => `<option value="${s}">${s}</option>`).join('')
     
     document.getElementById("simplesearch_hair_dye").innerHTML = bgSel
     document.getElementById("simplesearch_hair_streak").innerHTML = fgSel
@@ -501,6 +520,19 @@ function simplequery() {
     
     let searchFilter = {}
     
+    let colourCombi = ["_background","1","2","3"].map(s => {
+        let t = document.getElementById(`simplesearch_colour${s}`).value
+        return (t == "dont_care") ? undefined : t
+    }).filter(it => it !== undefined)
+    let eyeCols = ["_sclera",""].map(s => {
+        let t = document.getElementById(`simplesearch_eyes${s}`).value
+        return (t == "dont_care") ? undefined : t
+    }).filter(it => it !== undefined)
+    let hairCols = ["_dye","_streak"].map(s => {
+        let t = document.getElementById(`simplesearch_hair${s}`).value
+        return (t == "dont_care") ? undefined : t
+    }).filter(it => it !== undefined)
+        
     if (creatorName !== undefined) searchFilter.creator_name = creatorName
     if (furName !== undefined) searchFilter.name = furName
     if (birthdayFrom !== undefined) searchFilter.birthday_from = birthdayFrom
@@ -508,7 +540,11 @@ function simplequery() {
     if (isPartial !== undefined) searchFilter.is_partial = isPartial
     if (species !== undefined) searchFilter.species_ko = dropdownIdToDBname[species]
     if (style !== undefined) searchFilter.style = style
-    
+
+    if (colourCombi.length > 0) searchFilter.colours = colourCombi
+    if (eyeCols.length > 0) searchFilter.eyes = eyeCols
+    if (hairCols.length > 0) searchFilter.hairs = hairCols
+        
     let includeWIP = document.getElementById("includewip").checked
     
     makeOutput(performSearch(searchFilter, false, includeWIP))
@@ -579,8 +615,9 @@ exactMatch가 참일 경우 문자열이 정확히 일치하는지를 검사, �
 
  */
 const nameSearchAliases = ["name_ko", "name_en", "name_ja", "aliases"]
-const pseudoCriteria = ["name"]
-const specialSearchTags = ["birthday_from", "birthday_to"]
+const pseudoCriteria = {"name":1}
+const specialSearchTags = {"birthday_from":1, "birthday_to":1}
+const arrayOfTagsAndMatch = {"colours":1, "hairs":1, "eyes":1}
 function performSearch(searchFilter, exactMatch, includeWIP) {
     let isSearchTagEmpty = searchFilter === undefined
     let foundFurs = [] // contains object in {id: (int), prop: (object)}
@@ -609,7 +646,7 @@ function performSearch(searchFilter, exactMatch, includeWIP) {
                     //console.log(`searchCriterion = ${searchCriterion}`)
                     // check if the tag is valid
                     // 태그가 올바른지 검사
-                    if (searchCriterion in furdb[furid] || pseudoCriteria.find(it => it == searchCriterion) !== undefined) {
+                    if (searchCriterion in furdb[furid] || searchCriterion in pseudoCriteria || searchCriterion in specialSearchTags) {
                         const arraySearchMode = Array.isArray(searchFilter[searchCriterion])
                         
                         //console.log(`arraySearchMode = ${arraySearchMode}`)
@@ -638,11 +675,45 @@ function performSearch(searchFilter, exactMatch, includeWIP) {
                         }
                                                 
                         if (arraySearchMode) {
-                            let partialMatch = false
-                            searchTerm.forEach(it => {
-                                partialMatch |= (exactMatch) ? (furdb[furid][searchCriterion].babostr() == it) : furdb[furid][searchCriterion].babostr().includes(it)
-                            })
-                            searchMatches &= partialMatch
+                            // some tags want AND match, not OR
+                            if (searchCriterion in arrayOfTagsAndMatch) {
+                                if (searchCriterion == "colours") {
+                                    // index 0 must match the 0th search term; anything goes for 1st or more
+                                    let baseColMatches = furdb[furid][searchCriterion][0] === searchTerm[0]
+                                    
+                                    let partialMatch = (searchTerm.length <= 1)
+                                    searchTerm.tail().forEach(it => {
+                                        partialMatch |= furdb[furid][searchCriterion].tail().includes(it)
+                                    })
+                                    searchMatches &= baseColMatches & partialMatch
+                                }
+                                else if (searchCriterion == "hairs") {                                    
+                                    // "none" and "any" are special keywords
+                                    // second index is streak colour; anything goes for others
+                                    if (searchTerm[0] === "none") {
+                                        searchMatches &= furdb[furid][searchCriterion].length == 0
+                                    }
+                                    else {
+                                        let streakColMatches = (searchTerm.length < 2) ? true : ((searchTerm.last() == "none") ? (furdb[furid][searchCriterion].length < 2) : ((searchTerm.last() == "any") ? (furdb[furid][searchCriterion].length > 1 && furdb[furid][searchCriterion].last().length > 0) : furdb[furid][searchCriterion].last() === searchTerm.last()))
+                                        let partialMatch = (searchTerm[0] == "any") ? (furdb[furid][searchCriterion].length > 0) : (furdb[furid][searchCriterion][0] == searchTerm[0])
+                                        searchMatches &= streakColMatches & partialMatch
+                                    }
+                                }
+                                else {
+                                    let partialMatch = true
+                                    searchTerm.forEach(it => {
+                                        partialMatch &= furdb[furid][searchCriterion].includes(it)
+                                    })
+                                    searchMatches &= partialMatch
+                                }
+                            }
+                            else {
+                                let partialMatch = false
+                                searchTerm.forEach(it => {
+                                    partialMatch |= (exactMatch) ? (furdb[furid][searchCriterion].babostr() == it) : furdb[furid][searchCriterion].babostr().includes(it)
+                                })
+                                searchMatches &= partialMatch
+                            }
                         }
                         else {
                             // 이름은 한/영/일/이명에 대해서도 검색해야 함

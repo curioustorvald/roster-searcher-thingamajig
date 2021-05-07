@@ -138,7 +138,7 @@ fun generateCell(record: List<String>, action: String): String? {
         throw IllegalArgumentException(action)
 }
 
-val colourNames = arrayOf("시안","마젠타","인디고","올리브드랩","아이보리","페리윙클")
+val colourNames = arrayOf("시안","마젠타","인디고","올리브드랩","아이보리","페리윙클","베이지")
 val colourSuffixes = arrayOf("색","포인트")
 val colourPrefixes = arrayOf("네온","연","진","남")
 val colourRegex = Regex("""${colourNames.joinToString("|")}|${colourSuffixes.map { "[가-힣]+$it" }.joinToString("|")}|${colourPrefixes.map { "$it[가-힣]+" }.joinToString("|") }""")
