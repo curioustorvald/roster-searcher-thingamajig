@@ -507,7 +507,7 @@ function simplequery() {
     let creatorName = document.getElementById("simplesearch_input_creatorname").value
     if (creatorName == "") creatorName = undefined
     let furName = document.getElementById("simplesearch_input_furname").value
-    if (furName == "") furNameKo = undefined
+    if (furName == "") furName = undefined
     let birthdayFrom = document.getElementById("simplesearch_input_bday_from").value
     if (birthdayFrom == "") birthdayFrom = undefined
     let birthdayTo = document.getElementById("simplesearch_input_bday_to").value
@@ -524,7 +524,10 @@ function simplequery() {
     let colourCombi = ["_background","1","2","3"].map(s => {
         let t = document.getElementById(`simplesearch_colour${s}`).value
         return (t == "dont_care") ? undefined : t
-    }).filter(it => it !== undefined)
+    })
+    // special treatment for colourCombi because 0th elem must be nullable
+    colourCombi = [colourCombi[0]].concat(colourCombi.tail().filter(it => it != undefined))
+    
     let eyeCols = ["_sclera",""].map(s => {
         let t = document.getElementById(`simplesearch_eyes${s}`).value
         return (t == "dont_care") ? undefined : t
@@ -652,12 +655,12 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                         const arraySearchMode = Array.isArray(searchFilter[searchCriterion])
                         
                         //console.log(`arraySearchMode = ${arraySearchMode}`)
-    
+                        //console.log(searchFilter[searchCriterion])
                         
                         // 검색어 sanitise
                         let searchTerm = undefined
                         if (arraySearchMode) {
-                            searchTerm = searchFilter[searchCriterion].map(it => it.babostr())
+                            searchTerm = searchFilter[searchCriterion].map(it => (it === undefined) ? it : it.babostr())
                         }
                         else {
                             searchTerm = searchFilter[searchCriterion].babostr()
@@ -675,15 +678,15 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                                 }
                             }
                         }
-                                                
+                                                                        
                         if (arraySearchMode) {
                             // some tags want AND match, not OR
                             if (searchCriterion in arrayOfTagsAndMatch) {
                                 if (searchCriterion == "colours") {
                                     // index 0 must match the 0th search term; anything goes for 1st or more
-                                    let baseColMatches = furdb[furid][searchCriterion][0] === searchTerm[0]
+                                    let baseColMatches = (searchTerm[0] === undefined) ? true : furdb[furid][searchCriterion][0] === searchTerm[0]
                                     
-                                    let partialMatch = (searchTerm.length <= 1)
+                                    let partialMatch = (searchTerm[1] === undefined)
                                     searchTerm.tail().forEach(it => {
                                         partialMatch |= furdb[furid][searchCriterion].tail().includes(it)
                                     })
@@ -743,8 +746,8 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                     }
                 }
                 catch (e) {
-                    //console.log(e)
-                    //console.log(e.stack)
+                    console.log(e)
+                    console.log(e.stack)
                 }
             }
             
