@@ -295,19 +295,24 @@ function populateDiyTable() {
 function populateTopTenSpecies() {
     const showCount = 10
     let records = {}
-    
+    let unknowns = 0
     forEachFur(prop => {
         if (prop.species_ko) {
-            if (records[prop.species_ko] === undefined)
-                records[prop.species_ko] = 0
-                
-            records[prop.species_ko] += 1
+            let tokens = prop.species_ko.split(' ')
+            tokens.forEach(tok => {
+                if (records[tok] === undefined)
+                    records[tok] = 0
+                    
+                records[tok] += 1
+            })
         }
+        else
+            unknowns += 1
     })
     
     let sorted = Object.entries(records).sort((one,other) => other[1] - one[1]).slice(0, showCount)
-    const total = Object.keys(furdb).length - 1
     const namedTotal = Object.values(records).reduce((acc,p) => acc + p, 0)
+    const total = namedTotal + unknowns
     const sortedTotal = sorted.reduce((acc,p) => acc + p[1], 0)
     const sortedMax = sorted.reduce((acc,p) => (p[1] > acc) ? p[1] : acc, 0)
         
@@ -321,7 +326,7 @@ function populateTopTenSpecies() {
         let perc = 100.0 * count / total
         let graphPerc = 100.0 * count / sortedMax
         out += `<tr>`
-        out += `<td class="tableDataNumber">${`${i+1}.`.nonbreakable()}</td>`
+        out += `<td class="tableDataNumber">${`${i+1}. `.nonbreakable()}</td>`
         if (copyrighted)
             out += `<td class="tableChartLabel" ${altstyle}>${name}</td>`
         else
@@ -336,8 +341,7 @@ function populateTopTenSpecies() {
     let etcPerc = 100.0 * etcCount / total
     let etcPerc2 = 100.0 * etcCount / sortedMax
     out += `<tr>`
-    out += `<td class="tableDataNumber"></td>`
-    out += `<td class="tableChartLabel" ${altstyle}>${"기타".nonbreakable()}</td>`
+    out += `<td colspan="2" class="tableChartLabel" ${altstyle}>${"기타".nonbreakable()}</td>`
     out += `<td class="tableDataNumber" style="color:#888">${`${Math.round(etcPerc * 10) / 10} %`.nonbreakable()}</td>`
     out += `<td class="tableDataNumber" style="color:#888">${`(${etcCount})`.nonbreakable()}</td>`
     out += `<td class="tableBarChartArea"><div class="tableBarChart" style="background:#AAA; width:${etcPerc2}%">&nbsp;</div></td>`
@@ -347,12 +351,13 @@ function populateTopTenSpecies() {
     let unkPerc = 100.0 * unkCount / total
     let unkPerc2 = 100.0 * unkCount / sortedMax
     out += `<tr>`
-    out += `<td class="tableDataNumber"></td>`
-    out += `<td class="tableChartLabel" ${altstyle}>${"알수없음".nonbreakable()}</td>`
+    out += `<td colspan="2" class="tableChartLabel" ${altstyle}>${"알수없음".nonbreakable()}</td>`
     out += `<td class="tableDataNumber" style="color:#888">${`${Math.round(unkPerc * 10) / 10} %`.nonbreakable()}</td>`
     out += `<td class="tableDataNumber" style="color:#888">${`(${unkCount})`.nonbreakable()}</td>`
     out += `<td class="tableBarChartArea"><div class="tableBarChart" style="background:#AAA; width:${unkPerc2}%">&nbsp;</div></td>`
     out += `</tr>`
+    
+    out += `<tr><td colspan="2" class="tableChartLabel">${"전체".nonbreakable()}</td><td colspan="2" class="tableDataNumber">${`${Object.keys(records).length}종 ${total}개`.nonbreakable()}</td></tr>`
     
     document.getElementById("top_ten_species_table").innerHTML = out
 }
