@@ -133,7 +133,7 @@ fun generateCell(record: List<String>, action: String): String? {
     else if ("aliases_raw" == action)
         value //.split('/') // just return as-is
     else if ("desc_raw" == action)
-        value.substringBefore(',').replace("?", "").substringBefore('(')
+        value.substringBefore(',').replace("?", "").substringBefore('(').trim()
     else
         throw IllegalArgumentException(action)
 }
@@ -198,7 +198,7 @@ mainTable.forEach { record ->
     
     line.append("\"${id}\":{")
     line.append(inColumns.map { generateCell(record, it) }.filter { it != null }
-        .mapIndexed { i, v -> "\"${outColumns[i]}\":${if (v!!.toLowerCase() == "true" || v.toLowerCase() == "false") v.toLowerCase() else "\"$v\""}" }
+        .mapIndexed { i, v -> "\"${outColumns[i]}\":${if (v!!.toLowerCase() == "true" || v.toLowerCase() == "false") v.toLowerCase() else "\"${v.trim()}\""}" }
         .joinToString(","))
 
     val mainPhoto = photoTable[id-1][6].replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
