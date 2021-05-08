@@ -631,7 +631,7 @@ exactMatch가 참일 경우 문자열이 정확히 일치하는지를 검사, �
 const nameSearchAliases = ["name_ko", "name_en", "name_ja", "aliases"]
 const pseudoCriteria = {"name":1}
 const specialSearchTags = {"birthday_from":1, "birthday_to":1}
-const arrayOfTagsAndMatch = {"colours":1, "hairs":1, "eyes":1}
+const arraySearchSpecial = {"colours":1, "hairs":1, "eyes":1, "species_ko":1}
 const alwaysExactMatch = {"species_ko":1}
 function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
     let isSearchTagEmpty = searchFilter === undefined
@@ -690,11 +690,16 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                         }
                            
                         let matching = furdb[furid][searchCriterion]
-                           
+                                                      
                         if (arraySearchMode) {
                             // some tags want AND match, not OR
-                            if (searchCriterion in arrayOfTagsAndMatch) {
-                                if (searchCriterion == "colours") {
+                            if (searchCriterion in arraySearchSpecial) {
+                                if (searchCriterion == "species_ko") {
+                                    // tokenise using space, and OR-match each token by checking if (token === one of the searchword)
+                                    let tokens = matching.split(' ')
+                                    searchMatches &= tokens.map(tok => searchTerm.map(word => (tok === word))).flat().some(it => it)
+                                }
+                                else if (searchCriterion == "colours") {
                                     // index 0 must match the 0th search term; anything goes for 1st or more
                                     let baseColMatches = (searchTerm[0] === undefined) ? true : matching[0] === searchTerm[0]
                                     
