@@ -10,21 +10,28 @@
 <body onload="panelnavinit(), statsinit();">
     <header><bannerimage></bannerimage><panelnavwrapper></panelnavwrapper></header>
     <contents>
-        <h3>프론트엔드 업데이트 내역</h3>
-        <table>
-        <tr>
-            <td class="tableFormLabel">20210506</td>
-            <td>최초 릴리스</td>
-        </tr>
-        <tr>
-            <td class="tableFormLabel">20210507</td>
-            <td>색상 키워드 검색 기능 추가</td>
-        </tr>
-        <tr>
-            <td class="tableFormLabel">20210508</td>
-            <td>초기화 버튼 추가, 고급 검색을 태그 검색으로 변경하면서 기본으로 숨기기</td>
-        </tr>
-        </table>
+        <section class="accordion">
+            <input type="checkbox" name="collapse" id="handle1">
+            <h3 class="handle">
+                <label for="handle1">프론트엔드 업데이트 내역</label>
+            </h3>
+            <div class="content">
+                <table>
+                <tr>
+                    <td class="tableFormLabel">20210506</td>
+                    <td>최초 릴리스</td>
+                </tr>
+                <tr>
+                    <td class="tableFormLabel">20210507</td>
+                    <td>색상 키워드 검색 기능 추가</td>
+                </tr>
+                <tr>
+                    <td class="tableFormLabel">20210508</td>
+                    <td>초기화 버튼 추가, 고급 검색을 태그 검색으로 변경하면서 기본으로 숨기기, 종 관련 통계 추가</td>
+                </tr>
+                </table>
+            </div>
+        </section>
         
         <hr />
         
@@ -60,6 +67,15 @@
             <div class="chart_bgimg" style="flex: 1 1 40vw"><div id="diy_stats" class="chart_container">
                 <h3 style="padding-left:0.5em">자작 vs 수주</h3>
                 <table class="stat" id="diy_stat_table">
+                    <!-- TO BE FILLED BY THE COMPUTER LORD -->
+                </table>
+            </div></div>
+        </div>
+            
+        <div id="flex_container" style="display:flex">
+            <div class="chart_bgimg" style="flex: 1 1 50vw"><div id="top_ten_species" class="chart_container">
+                <h3 style="padding-left:0.5em">종 (상위 10개)</h3>
+                <table class="stat" id="top_ten_species_table">
                     <!-- TO BE FILLED BY THE COMPUTER LORD -->
                 </table>
             </div></div>

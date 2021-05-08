@@ -344,8 +344,7 @@ li.columngap > a {
 .accordion>input[name=collapse] {
     display:none
 }
-.accordion label,
-.accordion .content {
+.accordion label, .accordion .content {
 /*     max-width:620px; */
     margin:0 auto
 }
@@ -379,6 +378,8 @@ li.columngap > a {
 /*     display:block */
     color:#444;
     cursor:pointer;
+    font-weight: bold;
+    font-size: 18px;
 /*     font-weight:400; */
 /*     padding:10px; */
 /*     background:#b0100c; */

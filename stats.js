@@ -11,6 +11,10 @@ function loadJSON(jsonPath, isAsync, callback) {
     xobj.send(null)
 }
 
+String.prototype.nonbreakable = function() {
+    return this.split('').join('&NoBreak;').replaceAll(' ', '&nbsp;')
+}
+
 const dropdownStyle = ["Cyber","Kemo","Kemo Toon","Toon","Semi","Real","Real Toon"]
 
 const workshopThemeCol = {
@@ -91,6 +95,7 @@ function statsinit() {
         populateStyleStatTable()
         populateMarketshareTable()
         populateDiyTable()
+        populateTopTenSpecies()
     })
 }
 
@@ -155,7 +160,7 @@ function populateStyleStatTable() {
         let count = counts[style]
         let perc = 100.0 * count / countmax
         out += `<tr>`
-        out += `<td class="tableChartLabel">${style.replaceAll(' ','&nbsp;')}</td>`
+        out += `<td class="tableChartLabel">${style.nonbreakable()}</td>`
         out += `<td class="tableDataNumber">${count}</td>`
         out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${perc}%">&nbsp;</div></td>`
         out += `</tr>`
@@ -285,4 +290,42 @@ function populateDiyTable() {
     out += `</tr>`
         
     document.getElementById("diy_stat_table").innerHTML = out
+}
+
+function populateTopTenSpecies() {
+    const showCount = 10
+    let records = {}
+    
+    forEachFur(prop => {
+        if (prop.species_ko) {
+            if (records[prop.species_ko] === undefined)
+                records[prop.species_ko] = 0
+                
+            records[prop.species_ko] += 1
+        }
+    })
+    
+    let sorted = Object.entries(records).sort((one,other) => other[1] - one[1]).slice(0, showCount)
+    const total = Object.keys(furdb).length - 1
+    const sortedMax = sorted.reduce((acc,p) => (p[1] > acc) ? p[1] : acc, 0)
+        
+    let out = ``
+    sorted.forEach((v,i) => {
+        let copyrighted = (v[0] == "저작권")
+        let name = (copyrighted ? "(저작권)" : v[0]).nonbreakable()
+        let count = v[1]
+        let perc = 100.0 * count / total
+        let graphPerc = 100.0 * count / sortedMax
+        out += `<tr>`
+        out += `<td class="tableDataNumber">${`${i+1}. `.nonbreakable()}</td>`
+        if (copyrighted)
+            out += `<td class="tableChartLabel" style="color:#888; font-style:italic">${name}</td>`
+        else
+            out += `<td class="tableChartLabel">${name}</td>`
+        out += `<td class="tableDataNumber">${Math.round(perc * 10) / 10}%&nbsp;&nbsp;(${count})</td>`
+        out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${graphPerc}%">&nbsp;</div></td>`
+        out += `</tr>`
+    })
+    
+    document.getElementById("top_ten_species_table").innerHTML = out
 }
