@@ -192,7 +192,7 @@ h5 {
 }
 
 .chart_bgimg {
-    padding: 10px;
+    margin: 10px;
     background: no-repeat center/80% url("header.png");
 }
 
