@@ -341,3 +341,63 @@ li.columngap > a {
     border-bottom: 1px solid #111111;
 }
 
+.accordion>input[name=collapse] {
+    display:none
+}
+.accordion label,
+.accordion .content {
+/*     max-width:620px; */
+    margin:0 auto
+}
+.accordion .content {
+/*     background:#fff; */
+    overflow:hidden;
+    height:0;
+    transition:.5s;
+}
+.accordion>input[name=collapse]:checked~.content {
+    height:auto;
+    transition:height .5s
+}
+/*@media only screen and (min-width:620px) {
+    .accordion>input[name=collapse]:checked~.content {
+        height:220px
+    }
+}*/
+.accordion {
+    margin-bottom:1em
+}
+.accordion>input[name=collapse]:checked~.content {
+    border-top:0;
+    transition:.3s
+}
+.accordion .handle {
+    margin:10px 0 10px 0;
+    font-size:16px
+}
+.accordion label {
+/*     display:block */
+    color:#444;
+    cursor:pointer;
+/*     font-weight:400; */
+/*     padding:10px; */
+/*     background:#b0100c; */
+    user-select:none
+}
+.accordion .handle label:before {
+    content:"\25bc";
+    display:inline-block;
+    margin-right:10px;
+    font-size:1em;
+    line-height:1.556em;
+    vertical-align:middle;
+    transition:.4s
+}
+.accordion>input[name=collapse]:checked~.handle label:before {
+    transform:rotate(180deg);
+    transform-origin:center;
+    transition:.4s
+}
+.accordion p:last-child {
+    margin-bottom:0
+}

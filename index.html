@@ -106,40 +106,48 @@
                     <td><input type="checkbox" id="includewip_simple" name="includewip_simple"></td>
                 </tr>
                 
-                </table>
+                <tr><td style="line-height: 6px">&nbsp;</td></tr> <!-- some aesthetic gap -->
                 
-                <br />
-                <input type="submit" value="Submit" id="simple_submit_button" onclick="simplequery()" />
+                <tr>
+                    <td class="tableFormLabel"><input type="submit" value="Submit" id="simple_submit_button" onclick="simplequery()" /></td>
+                    <td><input type="reset" value="Reset" id="simple_reset_button" onclick="clearResults()" /></td>
+                </tr>
+                
+                </table>
             </form>
         </section>
         <hr>
-        <section id="searchform">
-            <h3 id="searchform_header"></h3>
-            <form onsubmit="return false;" method="post" name="searchtagsform">
-                <label for="searchtags" id="searchtags_string" class="tableFormLabel"></label>
-                <input type="search" id="searchtags" name="searchtags">
-                <input type="submit" value="Submit" id="submit_button" onclick="query()" />
-                <br />
-                <table><tr>
-                <td id="searchform_option_column1">
-                    <input type="checkbox" id="exactmatch" name="exactmatch">
-                    <label for="exactmatch" id="exactmatch_string"></label>
-                </td>
-                <td id="searchform_option_column2">
-                    <input type="checkbox" id="includewip" name="includewip">
-                    <label for="includewip" id="includewip_string"></label>
-                </td>
-                </tr></table>
-            </form>
-        </section>
-        <section id="tagdoc">
-            <!-- TO BE FILLED BY THE COMPUTER LORD -->
+        <section id="searchform" class="accordion">
+            <input type="checkbox" name="collapse" id="handle4" checked="unchecked">
+            <h3 class="handle">
+                <label id="searchform_header" for="handle4"></label>
+            </h3>
+            <!--<h3 id="searchform_header"></h3>-->
+            <div class="content">
+                <form onsubmit="return false;" method="post" name="searchtagsform">
+                    <label for="searchtags" id="searchtags_string" class="tableFormLabel"></label>
+                    <input type="search" id="searchtags" name="searchtags">
+                    <input type="submit" value="Submit" id="submit_button" onclick="query()" />
+                    <br />
+                    <table><tr>
+                    <td id="searchform_option_column1">
+                        <input type="checkbox" id="exactmatch" name="exactmatch">
+                        <label for="exactmatch" id="exactmatch_string"></label>
+                    </td>
+                    <td id="searchform_option_column2">
+                        <input type="checkbox" id="includewip" name="includewip">
+                        <label for="includewip" id="includewip_string"></label>
+                    </td>
+                    </tr></table>
+                </form>
+                <section id="tagdoc">
+                    <!-- TO BE FILLED BY THE COMPUTER LORD -->
+                </section>
+            </div>
         </section>
         <hr>
         <section id="searchResults">
-            <p>&nbsp;</p>
-    <!--         <p style="text-align: center; font-style: oblique; color: #777">(검색 결과가 여기 표시됩니다)<br />(Search Results Will Be Displayed Here)</p> -->
-            <p style="text-align: center; font-style: oblique; color: #777">(검색 결과가 여기 표시됩니다)</p>
+            <!-- TO BE FILLED BY THE COMPUTER LORD -->
         </section>
     </contents>
     <overlay id="moreinfo_overlay">
