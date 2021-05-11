@@ -169,6 +169,25 @@ function populateStyleStatTable() {
     document.getElementById("style_stat_table").innerHTML = out
 }
 
+let marketShareDetailsShown = false
+
+function toggleMarketShareDetails(key) {
+    let p = key.split('¤')
+
+    if (marketShareDetailsShown)
+        hideMarketShareDetails()
+    else showMarketShareDetails(filterFurs(prop => prop.birthday.startsWith(p[0]) && prop.creator_name == p[1]).map(i => furdb[i]))
+}
+
+function showMarketShareDetails(dict) {
+    //marketShareDetailsShown = true
+    console.log(dict.map(p => `${p.name_ko} ${p.name_en}`))
+}
+
+function hideMarketShareDetails() {
+    //marketShareDetailsShown = false
+}
+
 function populateMarketshareTable() {
     let barHeight = 42
     
@@ -210,7 +229,7 @@ function populateMarketshareTable() {
             let percentage = count * 100.0 / total
             
             if (count > 0) {
-                out += `<tablebarchartstack class="${lum}" style="width:${percentage}%; background:${col}; height:${barHeight}px; line-height:${barHeight}px" title="${shop} (${Math.round(percentage * 10) / 10}%)">`
+                out += `<tablebarchartstack class="${lum}" style="width:${percentage}%; background:${col}; height:${barHeight}px; line-height:${barHeight}px" title="${shop} (${Math.round(percentage * 10) / 10}%)" onclick="toggleMarketShareDetails('${year}¤${shop}')">`
                 out += count
                 out += `</tablebarchartstack>`
             }

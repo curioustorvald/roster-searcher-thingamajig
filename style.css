@@ -120,6 +120,10 @@ tablebarchartstack.dark {
     color: #444;
 }
 
+tablebarchartstack:hover {
+    text-decoration: solid underline 2px;
+}
+
 stacklabel {
     display: table-cell;
     width: 100%;
