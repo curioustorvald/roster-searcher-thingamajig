@@ -8,7 +8,7 @@ idiv {
 }
 
 html {
-    background-color: #F0EDE5;
+    background-color: #E5EDF4;
     font-family: Open Sans, Arial;
     color: #444;
     font-size: 16px;
@@ -121,7 +121,8 @@ tablebarchartstack.dark {
 }
 
 tablebarchartstack:hover {
-    text-decoration: solid underline 2px;
+    text-decoration: underline;
+    text-decoration-width: 2px;
 }
 
 stacklabel {
