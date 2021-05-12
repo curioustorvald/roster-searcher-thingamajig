@@ -59,7 +59,6 @@ function makeWorkshopsList() {
         out += `<div class="infoBox">`
         
         out += `<shopname style="color: ${prop.fg}">${prop.dispname.nonbreakable()}</shopname>`
-        
         out += `<shopinfo style="color: ${prop.fg}">`
         out += `<a style="color: ${prop.fg}" href="https://twitter.com/${prop.twitter}" target="_blank" rel="noopener noreferrer">${'트위터'.nonbreakable()}</a>`
         if (prop.web) {

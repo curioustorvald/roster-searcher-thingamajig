@@ -35,6 +35,7 @@ panelnavwrapper {
     display: inline-block;
     text-align: center;
     min-width: 300px;
+    width: calc(100% - 2em);
     height: 74px;
 }
 
@@ -209,6 +210,7 @@ workshopbox {
     width: calc(50% - 2*var(--gaps));
     animation: smooth 1.5s backwards;
     animation-delay: 0.40s;
+    min-width: 240px;
 }
 
 @media (min-width: 1308px) {
@@ -240,25 +242,26 @@ workshopbox > .imgBox img {
 }
 
 workshopbox > .infoBox {
-    margin: 10pt 10px 10pt 10px;
+    margin: 10pt 0 10pt 0;
     text-align: center;
 /*     border: 1px solid black; */
 }
 
 workshopbox > .infoBox > shopname {
-    margin-right: 0.666em;
+    display: inline;
     line-height: 14pt;
     font-size: 14pt;
     font-weight: 700;
-    display: inline;
     color: #444;
+    margin: auto 0.5em;
 }
 
 workshopbox > .infoBox > shopinfo {
-    margin-left: 0.666em;
-    line-height: 12pt;
-    font-size: 12pt;
     display: inline;
+    line-height: 14pt;
+    font-size: 12pt;
+    color: #444;
+    margin: auto 0.5em;
 }
 
 workshopbox > .infoBox > shopinfo > a {
