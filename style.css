@@ -247,6 +247,7 @@ workshopbox > .infoBox {
 }
 
 workshopbox > .infoBox > shopname {
+    margin-right: 0.666em;
     line-height: 14pt;
     font-size: 14pt;
     font-weight: 700;
@@ -255,7 +256,7 @@ workshopbox > .infoBox > shopname {
 }
 
 workshopbox > .infoBox > shopinfo {
-    margin-left: 2em;
+    margin-left: 0.666em;
     line-height: 12pt;
     font-size: 12pt;
     display: inline;
