@@ -35,7 +35,7 @@ panelnavwrapper {
     display: inline-block;
     text-align: center;
     min-width: 300px;
-    width: calc(100% - 2em);
+    width: calc(min(450px, 100% - 2em));
     height: 74px;
 }
 
