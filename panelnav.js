@@ -1,3 +1,5 @@
+"use strict";
+
 function loadJSON(jsonPath, isAsync, callback) {   
     let xobj = new XMLHttpRequest()
         xobj.overrideMimeType("application/json")

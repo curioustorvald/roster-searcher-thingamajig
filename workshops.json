@@ -1,84 +1,100 @@
 {
     "아토아마":{
+        "country":"JPN",
         "colour":"#AFC930",
         "dispname":"Atelier Amanojaku",
         "altname":"아토아마",
         "bannerimg":"atoama.png",
         "bg":"#AFC930",
-        "fg":"#F9F9F9",
+        "fg":"#000",
         "web":"https://atoama.jp/",
         "twitter":"amanojaku_j"
     },
     "케이라인":{
+        "country":"JPN",
         "colour":"#004E90",
         "dispname":"Kemono Line",
         "bannerimg":"kline.png",
         "bg":"#1997E1",
-        "fg":"#F9F9F9",
+        "fg":"#FFF",
         "web":"https://kemono-line.jp/",
         "twitter":"Kemono_LINE"
     },
     "모치리":{
+        "country":"JPN",
         "colour":"#99F5DB",
         "dispname":"Mochiri Works",
-        "bannerimg":"mochiri.png",
-        "twitter":"mochiri_work"
+        "bannerimg":"mochiri.jpg",
+        "twitter":"mochiri_work",
+        "bg":"#FFF"
     },
     "이누코보":{
+        "country":"JPN",
         "colour":"#D28D1F",
-        "dispname":"Doggy Studio &ndash; 이누코보",
+        "dispname":"이누코보",
         "bannerimg":"inukoubou.png",
+        "bg":"#FFF"
     },
     "블루폭스":{
+        "country":"KOR",
         "colour":"#00A0EA",
         "dispname":"블루폭스",
-        "bannerimg":"mochiri.png",
+        "bannerimg":"bluefox.png"
     },
     "제로케모":{
+        "country":"KOR",
         "colour":"#F2B218",
         "dispname":"제로케모",
-        "bannerimg":"mochiri.png",
+        "bannerimg":"zerokemo.png"
     },
     "아흔":{
+        "country":"KOR",
         "colour":"#999999",
         "dispname":"Hide on Aheun",
-        "bannerimg":"aheun.png",
+        "bannerimg":"aheun.png"
     },
     "티거":{
+        "country":"KOR",
         "colour":"#EFEFEF",
         "dispname":"Tigger Fur Who",
         "bannerimg":"tigger.png"
     },
     "SIN":{
+        "country":"KOR",
         "colour":"#AC4EEE",
         "dispname":"Purple Bat",
         "bannerimg":"purplebat.png",
         "bg":"#000",
-        "fg":"#F9F9F9"
+        "fg":"#F0F0F0"
     },
     "라이칸":{
+        "country":"KOR",
         "colour":"#434343",
         "dispname":"Lycan Work",
         "bannerimg":"lycan.png",
         "bg":"#535151",
-        "fg":"#F9F9F9"
+        "fg":"#D3D3D3"
     },
     "아설":{
+        "country":"KOR",
         "colour":"#FFE926",
         "dispname":"AseoL Fursuit",
         "bannerimg":"aseol.png"
     },
     "키루":{
+        "country":"KOR",
         "colour":"#79491B",
         "dispname":"Binari Fursuit",
         "bannerimg":"binari.png"
     },
     "Yohen":{
+        "country":"KOR",
         "colour":"#65DAF1",
         "dispname":"Like a Palette",
-        "bannerimg":"likeapalette.png",
+        "bannerimg":"likeapalette.png"
     },
     "라온":{
+        "country":"KOR",
         "colour":"#C5DDFC",
         "dispname":"Teddy Fursuit",
         "bannerimg":"teddy.png",
@@ -86,22 +102,26 @@
         "fg":"#F9F9F9"
     },
     "소지":{
+        "country":"KOR",
         "colour":"#85ECDC",
         "dispname":"Sozi Fursuit",
         "bannerimg":"sozi.png",
-        "bg":"#E6F9F2",
+        "bg":"#E6F9F2"
     },
     "Tio":{
+        "country":"KOR",
         "colour":"#8FC9C8",
         "dispname":"Tio Factory",
         "bannerimg":"tio.png",
         "bg":"#8FC9C8",
-        "fg":"#F9F9F9"
+        "fg":"#FFF"
     },
     "후루츠허브":{
+        "country":"KOR",
         "colour":"#EAD1DC"
     },
     "내장":{
+        "country":"KOR",
         "colour":"#7D0182",
         "dispname":"BLACKMOON",
         "bannerimg":"blackmoon.jpg",
@@ -109,27 +129,32 @@
         "fg":"#F9F9F9"
     },
     "바토":{
+        "country":"KOR",
         "colour":"#FFD1F7",
         "dispname":"Fluffyjellydog",
-        "bannerimg":"Fluffyjellydog.jpg",
+        "bannerimg":"fluffyjellydog.jpg",
         "bg":"#FFF"
     },
     "Ohiya":{
+        "country":"KOR",
         "colour":"#FF7300"
     },
     "뻐꾹":{
+        "country":"KOR",
         "colour":"#CCCCCC",
         "dispname":"LUCHETsuit",
         "bannerimg":"luchet.jpg",
-        "bg":"#FFF",
+        "bg":"#FFF"
     },
     "개만두":{
+        "country":"KOR",
         "colour":"#D02C2B",
         "dispname":"Dogma Fursuit",
         "bannerimg":"dogma.jpg",
-        "bg":"#FFF",
+        "bg":"#FFF"
     },
     "세논":{
+        "country":"KOR",
         "colour":"#2AC99A",
         "dispname":"옥탑방공방",
         "bannerimg":"rooftop.jpg",
@@ -137,9 +162,11 @@
         "fg":"#F9F9F9"
     },
     "도운":{
+        "country":"KOR",
         "colour":"#329552"
     },
     "레윈":{
+        "country":"KOR",
         "colour":"#FD3627"
     }
 }

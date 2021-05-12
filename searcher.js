@@ -1,3 +1,5 @@
+"use strict";
+
 const dropdownIdToDBname = {
     "literal_dog":["개"],
     "literal_wolf":["늑대"],
@@ -487,7 +489,7 @@ function makeOutput(searchResults) {
                             
         let displayCreatorLinkHref = prop.creator_link
                                   
-        output += `<div class="furBox">`
+        output += `<furbox>`
         output += `<div class="imgBox" onclick="showOverlay(${id})">`
         
         if (prop.photo)
@@ -502,7 +504,7 @@ function makeOutput(searchResults) {
         output += `<h4 title="${(furAliases.length == 0) ? `${displayFurName} ${displayFurNameJa}`.trim() : `${displayFurName} ${displayFurNameJa} (${furAliases})`}">${displayFurName}</h4>`
         output += `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a></h5>`
         output += `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorName}</a>`)}</h5>`
-        output += `</div></div>`
+        output += `</div></furbox>`
     })
     
     document.getElementById("searchResults").innerHTML = output
