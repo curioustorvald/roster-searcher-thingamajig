@@ -61,10 +61,10 @@ function makeWorkshopsList() {
         out += `<shopname style="color: ${prop.fg}">${prop.dispname}</shopname>`
         
         out += `<shopinfo style="color: ${prop.fg}">`
-        out += `<a style="color: ${prop.fg}" href="${prop.twitter}">트위터</a>`
+        out += `<a style="color: ${prop.fg}" href="https://twitter.com/${prop.twitter}" target="_blank" rel="noopener noreferrer">트위터</a>`
         if (prop.web) {
             out += `&nbsp;|&nbsp;`
-            out += `<a style="color: ${prop.fg}" href="${prop.web}">홈페이지</a>`
+            out += `<a style="color: ${prop.fg}" href="${prop.web}" target="_blank" rel="noopener noreferrer">홈페이지</a>`
         }
         out += `</shopinfo>`
         

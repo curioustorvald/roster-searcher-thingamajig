@@ -25,39 +25,49 @@
         "colour":"#99F5DB",
         "dispname":"Mochiri Works",
         "bannerimg":"mochiri.jpg",
-        "twitter":"mochiri_work",
-        "bg":"#FFF"
+        "bg":"#FFF",
+        "twitter":"mochiri_work"
     },
     "이누코보":{
         "country":"JPN",
         "colour":"#D28D1F",
-        "dispname":"이누코보",
+        "dispname":"Doggy Studio",
         "bannerimg":"inukoubou.png",
-        "bg":"#FFF"
+        "bg":"#FFF",
+        "twitter":"Doggy_studio",
+        "web":"https://www.inu-koubou.com/"
     },
     "블루폭스":{
         "country":"KOR",
         "colour":"#00A0EA",
         "dispname":"블루폭스",
-        "bannerimg":"bluefox.png"
+        "bannerimg":"bluefox.png",
+        "twitter":"bluefox_kr",
+        "web":"https://bluefox.kr/"
     },
     "제로케모":{
         "country":"KOR",
         "colour":"#F2B218",
         "dispname":"제로케모",
-        "bannerimg":"zerokemo.png"
+        "bannerimg":"zerokemo.png",
+        "twitter":"ZeroKemo",
+        "web":"https://zerokemo.com"
     },
     "아흔":{
         "country":"KOR",
         "colour":"#999999",
         "dispname":"Hide on Aheun",
-        "bannerimg":"aheun.png"
+        "bannerimg":"aheun.png",
+        "twitter":"aheunfursuit",
+        "web":"https://aheunzzip.wixsite.com/hideonaheunfursuits"
     },
     "티거":{
         "country":"KOR",
         "colour":"#EFEFEF",
         "dispname":"Tigger Fur Who",
-        "bannerimg":"tigger.png"
+        "bannerimg":"tigger.png",
+        "twitter":"tigger_0228",
+        "web":"https://qhrud228.wixsite.com/tigfurw"
     },
     "SIN":{
         "country":"KOR",
@@ -65,7 +75,9 @@
         "dispname":"Purple Bat",
         "bannerimg":"purplebat.png",
         "bg":"#000",
-        "fg":"#F0F0F0"
+        "fg":"#F0F0F0",
+        "twitter":"Purple_bat781",
+        "web":"https://purplebat781.wixsite.com/sin781"
     },
     "라이칸":{
         "country":"KOR",
@@ -73,25 +85,33 @@
         "dispname":"Lycan Work",
         "bannerimg":"lycan.png",
         "bg":"#535151",
-        "fg":"#D3D3D3"
+        "fg":"#D3D3D3",
+        "twitter":"lycan_work",
+        "web":"https://money24352.wixsite.com/lycanwork"
     },
     "아설":{
         "country":"KOR",
         "colour":"#FFE926",
         "dispname":"AseoL Fursuit",
-        "bannerimg":"aseol.png"
+        "bannerimg":"aseol.png",
+        "twitter":"hanaseol428",
+        "web":"https://hanaseol428.wixsite.com/aseolfursuit"
     },
     "키루":{
         "country":"KOR",
         "colour":"#79491B",
         "dispname":"Binari Fursuit",
-        "bannerimg":"binari.png"
+        "bannerimg":"binari.png",
+        "twitter":"binari_fursuit",
+        "web":"https://j80337589.wixsite.com/binari"
     },
     "Yohen":{
         "country":"KOR",
         "colour":"#65DAF1",
         "dispname":"Like a Palette",
-        "bannerimg":"likeapalette.png"
+        "bannerimg":"likeapalette.png",
+        "twitter":"likeapalette",
+        "web":"https://likeapalette.wixsite.com/official"
     },
     "라온":{
         "country":"KOR",
@@ -99,14 +119,18 @@
         "dispname":"Teddy Fursuit",
         "bannerimg":"teddy.png",
         "bg":"#7288A3",
-        "fg":"#F9F9F9"
+        "fg":"#F9F9F9",
+        "twitter":"TEDDY_FUR",
+        "web":"https://gooroom0505.wixsite.com/teddy"
     },
     "소지":{
         "country":"KOR",
         "colour":"#85ECDC",
         "dispname":"Sozi Fursuit",
         "bannerimg":"sozi.png",
-        "bg":"#E6F9F2"
+        "bg":"#E6F9F2",
+        "twitter":"Sozi_io",
+        "web":"https://t010404625.wixsite.com/-site"
     },
     "Tio":{
         "country":"KOR",
@@ -114,11 +138,14 @@
         "dispname":"Tio Factory",
         "bannerimg":"tio.png",
         "bg":"#8FC9C8",
-        "fg":"#FFF"
+        "fg":"#FFF",
+        "twitter":"furry_tio",
+        "web":"https://tiofactory.creatorlink.net/"
     },
     "후루츠허브":{
         "country":"KOR",
-        "colour":"#EAD1DC"
+        "colour":"#EAD1DC",
+        "twitter":"FurutzHerb"
     },
     "내장":{
         "country":"KOR",
@@ -126,32 +153,39 @@
         "dispname":"BLACKMOON",
         "bannerimg":"blackmoon.jpg",
         "bg":"#000",
-        "fg":"#F9F9F9"
+        "fg":"#F9F9F9",
+        "twitter":"BLACKON666"
     },
     "바토":{
         "country":"KOR",
         "colour":"#FFD1F7",
         "dispname":"Fluffyjellydog",
         "bannerimg":"fluffyjellydog.jpg",
-        "bg":"#FFF"
+        "bg":"#FFF",
+        "twitter":"fluffyjellydog",
+        "web":"https://fluffyjellydog.com"
     },
     "Ohiya":{
         "country":"KOR",
-        "colour":"#FF7300"
+        "colour":"#FF7300",
+        "twitter":"MiNiMi_GongBang"
     },
     "뻐꾹":{
         "country":"KOR",
         "colour":"#CCCCCC",
         "dispname":"LUCHETsuit",
         "bannerimg":"luchet.jpg",
-        "bg":"#FFF"
+        "bg":"#FFF",
+        "twitter":"LUCHET_SUIT",
+        "web":"https://lucetsuit.creatorlink.net/"
     },
     "개만두":{
         "country":"KOR",
         "colour":"#D02C2B",
         "dispname":"Dogma Fursuit",
         "bannerimg":"dogma.jpg",
-        "bg":"#FFF"
+        "bg":"#FFF",
+        "twitter":"Dogma_fursuit"
     },
     "세논":{
         "country":"KOR",
@@ -159,14 +193,18 @@
         "dispname":"옥탑방공방",
         "bannerimg":"rooftop.jpg",
         "bg":"#000",
-        "fg":"#F9F9F9"
+        "fg":"#F9F9F9",
+        "twitter":"rooftoproom_mk"
     },
     "도운":{
         "country":"KOR",
-        "colour":"#329552"
+        "colour":"#329552",
+        "twitter":"hyphen_GRENSUIT",
+        "web":"https://hyphengg.wixsite.com/gren-en"
     },
     "레윈":{
         "country":"KOR",
-        "colour":"#FD3627"
+        "colour":"#FD3627",
+        "twitter":"kangmy96"
     }
 }
