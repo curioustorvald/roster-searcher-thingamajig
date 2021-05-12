@@ -16,35 +16,6 @@ String.prototype.nonbreakable = function() {
 }
 
 const dropdownStyle = ["Cyber","Kemo","Kemo Toon","Toon","Semi","Real","Real Toon"]
-
-const workshopThemeCol = {
-    "아토아마":"#AFC930",
-    "케이라인":"#004E90",
-    "모치리":"#99F5DB",
-    "이누코보":"#D28D1F",
-    "블루폭스":"#00A0EA",
-    "제로케모":"#F2B218",
-    "아흔":"#999999",
-    "티거":"#EFEFEF",
-    "SIN":"#AC4EEE",
-    "라이칸":"#434343",
-    "아설":"#FFE926",
-    "키루":"#79491B",
-    "Yohen":"#65DAF1",
-    "라온":"#C5DDFC",
-    "소지":"#85ECDC",
-    "Tio":"#8FC9C8",
-    "후루츠허브":"#EAD1DC",
-    "내장":"#7D0182",
-    "바토":"#FFD1F7",
-    "Ohiya":"#FF7300",
-    "뻐꾹":"#CCCCCC",
-    "개만두":"#D02C2B",
-    "세논":"#2AC99A",
-    "도운":"#329552",
-    "레윈":"#FD3627"
-}
-
 function htmlColToLum(text) {
     let r = parseInt("0x"+text.substring(1,3)) / 255.0
     let g = parseInt("0x"+text.substring(3,5)) / 255.0
@@ -72,6 +43,7 @@ function range(start, stop, step) {
 }
 
 var furdb = {}
+var workshops = {}
 
 function forEachFur(action) {
     Object.keys(furdb).filter(i => !isNaN(i)).forEach(v => action(furdb[v]))
@@ -86,6 +58,10 @@ function filterFurs(predicate) {
 }
 
 function statsinit() {
+    loadJSON("workshops.json", false, response => {
+        workshops = JSON.parse(response)
+    })
+
     loadJSON("furdb.json", true, response => {
         furdb = JSON.parse(response)
         
@@ -203,7 +179,7 @@ function populateMarketshareTable() {
             let year = prop.birthday.substring(0,4)
             let sanitisedCreatorName = prop.creator_name.split('/')[0]
             
-            if (Object.keys(workshopThemeCol).includes(sanitisedCreatorName)) {
+            if (Object.keys(workshops).includes(sanitisedCreatorName)) {
                 if (!data[year]) data[year] = {}
                 if (!data[year][sanitisedCreatorName]) data[year][sanitisedCreatorName] = 0
                     
@@ -222,8 +198,8 @@ function populateMarketshareTable() {
         let total = Object.values(record).reduce((a,i) => a+i, 0)
         
         out += `<td class="tableBarChartArea" style="width:100vw">`
-        Object.keys(workshopThemeCol).forEach(shop => {
-            let col = workshopThemeCol[shop]
+        Object.keys(workshops).forEach(shop => {
+            let col = workshops[shop].colour
             let lum = (htmlColToLum(col) > 0.6215) ? "dark" : "light"
             let count = record[shop] || 0
             let percentage = count * 100.0 / total
@@ -244,8 +220,8 @@ function populateMarketshareTable() {
     
     // make legend area
     out = `<idiv style="text-align:center; font-size: 90%; margin-top: 10px; line-height: 200%">`
-    Object.keys(workshopThemeCol).forEach((shop, i) => {
-        out += `<idiv><span style="font-size:120%; color:${workshopThemeCol[shop]}">&#x2588;</span>`
+    Object.keys(workshops).forEach((shop, i) => {
+        out += `<idiv><span style="font-size:120%; color:${workshops[shop].colour}">&#x2588;</span>`
         out += `<span style="color:#444; margin: 0 1em 0 0.25em">&nbsp;${shop}</span></idiv>`
     })
     out += `</idiv>`
@@ -292,10 +268,10 @@ function populateDiyTable() {
     
     out += `<tr>`
     out += `<td class="tableBarChartArea" style="width:100vw">`
-    out += `<tablebarchartstack style="width:${partialperc}%; background:#ED7D31; height:${barHeight}; line-height:${barHeight}px" title="${partial}/${partial+full}">`
+    out += `<tablebarchartstack class="light" style="width:${partialperc}%; background:#ED7D31; height:${barHeight}; line-height:${barHeight}px" title="${partial}/${partial+full}">`
     out += `파셜&nbsp;${Math.round(partialperc * 10) / 10}%`
     out += `</tablebarchartstack>`
-    out += `<tablebarchartstack style="width:${100 - partialperc}%; background:#0563C1; height:${barHeight}; line-height:${barHeight}px" title="${full}/${partial+full}">`
+    out += `<tablebarchartstack class="light" style="width:${100 - partialperc}%; background:#0563C1; height:${barHeight}; line-height:${barHeight}px" title="${full}/${partial+full}">`
     out += `풀&nbsp;${100 - Math.round(partialperc * 10) / 10}%`
     out += `</tablebarchartstack>`
     // total number

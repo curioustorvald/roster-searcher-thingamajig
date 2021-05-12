@@ -1,0 +1,145 @@
+{
+    "아토아마":{
+        "colour":"#AFC930",
+        "dispname":"Atelier Amanojaku",
+        "altname":"아토아마",
+        "bannerimg":"atoama.png",
+        "bg":"#AFC930",
+        "fg":"#F9F9F9",
+        "web":"https://atoama.jp/",
+        "twitter":"amanojaku_j"
+    },
+    "케이라인":{
+        "colour":"#004E90",
+        "dispname":"Kemono Line",
+        "bannerimg":"kline.png",
+        "bg":"#1997E1",
+        "fg":"#F9F9F9",
+        "web":"https://kemono-line.jp/",
+        "twitter":"Kemono_LINE"
+    },
+    "모치리":{
+        "colour":"#99F5DB",
+        "dispname":"Mochiri Works",
+        "bannerimg":"mochiri.png",
+        "twitter":"mochiri_work"
+    },
+    "이누코보":{
+        "colour":"#D28D1F",
+        "dispname":"Doggy Studio &ndash; 이누코보",
+        "bannerimg":"inukoubou.png",
+    },
+    "블루폭스":{
+        "colour":"#00A0EA",
+        "dispname":"블루폭스",
+        "bannerimg":"mochiri.png",
+    },
+    "제로케모":{
+        "colour":"#F2B218",
+        "dispname":"제로케모",
+        "bannerimg":"mochiri.png",
+    },
+    "아흔":{
+        "colour":"#999999",
+        "dispname":"Hide on Aheun",
+        "bannerimg":"aheun.png",
+    },
+    "티거":{
+        "colour":"#EFEFEF",
+        "dispname":"Tigger Fur Who",
+        "bannerimg":"tigger.png"
+    },
+    "SIN":{
+        "colour":"#AC4EEE",
+        "dispname":"Purple Bat",
+        "bannerimg":"purplebat.png",
+        "bg":"#000",
+        "fg":"#F9F9F9"
+    },
+    "라이칸":{
+        "colour":"#434343",
+        "dispname":"Lycan Work",
+        "bannerimg":"lycan.png",
+        "bg":"#535151",
+        "fg":"#F9F9F9"
+    },
+    "아설":{
+        "colour":"#FFE926",
+        "dispname":"AseoL Fursuit",
+        "bannerimg":"aseol.png"
+    },
+    "키루":{
+        "colour":"#79491B",
+        "dispname":"Binari Fursuit",
+        "bannerimg":"binari.png"
+    },
+    "Yohen":{
+        "colour":"#65DAF1",
+        "dispname":"Like a Palette",
+        "bannerimg":"likeapalette.png",
+    },
+    "라온":{
+        "colour":"#C5DDFC",
+        "dispname":"Teddy Fursuit",
+        "bannerimg":"teddy.png",
+        "bg":"#7288A3",
+        "fg":"#F9F9F9"
+    },
+    "소지":{
+        "colour":"#85ECDC",
+        "dispname":"Sozi Fursuit",
+        "bannerimg":"sozi.png",
+        "bg":"#E6F9F2",
+    },
+    "Tio":{
+        "colour":"#8FC9C8",
+        "dispname":"Tio Factory",
+        "bannerimg":"tio.png",
+        "bg":"#8FC9C8",
+        "fg":"#F9F9F9"
+    },
+    "후루츠허브":{
+        "colour":"#EAD1DC"
+    },
+    "내장":{
+        "colour":"#7D0182",
+        "dispname":"BLACKMOON",
+        "bannerimg":"blackmoon.jpg",
+        "bg":"#000",
+        "fg":"#F9F9F9"
+    },
+    "바토":{
+        "colour":"#FFD1F7",
+        "dispname":"Fluffyjellydog",
+        "bannerimg":"Fluffyjellydog.jpg",
+        "bg":"#FFF"
+    },
+    "Ohiya":{
+        "colour":"#FF7300"
+    },
+    "뻐꾹":{
+        "colour":"#CCCCCC",
+        "dispname":"LUCHETsuit",
+        "bannerimg":"luchet.jpg",
+        "bg":"#FFF",
+    },
+    "개만두":{
+        "colour":"#D02C2B",
+        "dispname":"Dogma Fursuit",
+        "bannerimg":"dogma.jpg",
+        "bg":"#FFF",
+    },
+    "세논":{
+        "colour":"#2AC99A",
+        "dispname":"옥탑방공방",
+        "bannerimg":"rooftop.jpg",
+        "bg":"#000",
+        "fg":"#F9F9F9"
+    },
+    "도운":{
+        "colour":"#329552"
+    },
+    "레윈":{
+        "colour":"#FD3627"
+    }
+}
