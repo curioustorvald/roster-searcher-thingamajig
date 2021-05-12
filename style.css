@@ -18,10 +18,24 @@ html {
 }
 
 header {
-    display: inline-block;
-    height: 74px;
+    display: block;
+/*     height: 74px; */
     width: calc(100% - 2em);
     padding: 0 1em 0 1em;
+}
+
+bannerimage {
+    display: inline-block;
+    width: 272px;
+    height: 74px;
+    background: no-repeat center/auto 90% url("header.png");
+}
+
+panelnavwrapper {
+    display: inline-block;
+    text-align: center;
+    min-width: 300px;
+    height: 74px;
 }
 
 contents {
@@ -41,21 +55,6 @@ overlay {
     background-color: rgba(0,0,0,0.5); /* Black background with opacity */
     z-index: 0; /* Specify a stack order in case you're using a different order for other elements */
     cursor: pointer; /* Add a pointer on hover */
-}
-
-bannerimage {
-    display: block;
-    float: left;
-    width: 272px;
-    height: inherit;
-    background: no-repeat center/auto 90% url("header.png");
-}
-
-panelnavwrapper {
-    text-align: center;
-    float: right;
-    width: calc(100vw - 4em - 272px - 20px);
-    height: inherit;
 }
 
 table.stat {
