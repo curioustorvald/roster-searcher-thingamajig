@@ -215,7 +215,7 @@ workshopbox {
 
 @media (min-width: 1308px) {
     workshopbox {
-        width: calc(33% - 3 * var(--gaps));
+        width: calc(33% - 2 * var(--gaps));
     }
 }
 
