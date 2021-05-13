@@ -201,11 +201,15 @@ mainTable.forEach { record ->
         .mapIndexed { i, v -> "\"${outColumns[i]}\":${if (v!!.toLowerCase() == "true" || v.toLowerCase() == "false") v.toLowerCase() else "\"${v.trim()}\""}" }
         .joinToString(","))
 
-    val mainPhoto = photoTable[id-1][6].replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
-    val refSheet = photoTable[id-1][8].replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
+    val mainPhotoCopyright = photoTable[id-1][5]
+    val mainPhoto = photoTable[id-1][6]//.replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
+    val refSheetCopyright = photoTable[id-1][7]
+    val refSheet = photoTable[id-1][8]//.replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
 
-    line.append(",\"photo\":\"${if (mainPhoto.isNotBlank()) "images/$mainPhoto" else ""}\"" +
-                   ",\"ref_sheet\":\"${if (refSheet.isNotBlank()) "images/$refSheet" else ""}\"")
+    line.append(",\"photo\":\"${if (mainPhoto.isNotBlank()) "$mainPhoto" else ""}\"")
+    line.append(",\"photo_copying\":\"${if (mainPhotoCopyright.isNotBlank()) "$mainPhotoCopyright" else ""}\"")
+    line.append(",\"ref_sheet\":\"${if (refSheet.isNotBlank()) "$refSheet" else ""}\"")
+    line.append(",\"ref_sheet_copying\":\"${if (refSheetCopyright.isNotBlank()) "$refSheetCopyright" else ""}\"")
     
     // parse desc_raw separately
     val descRaw = record[inColumns.linearSearch { it == "desc_raw" }!!]

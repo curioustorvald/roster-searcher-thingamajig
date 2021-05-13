@@ -380,10 +380,15 @@ function showOverlay(id) {
     let creatorLinkFull = (prop.creator_name == "자작") ? actorLinkFull : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorLinkName}</a>`
     
     output += `<imgbox>`
+    
     if (prop.photo)
         output += `<img src="${prop.photo}" />`
     else
         output += `<img src="no-image-available.png" />`
+    
+    if (prop.photo_copying)
+        output += `<copying>&#169; ${prop.photo_copying}</copying>`
+    
     output += `</imgbox>`
     
     output += `<parbox>`
@@ -405,8 +410,11 @@ function showOverlay(id) {
         
         output += `</refselem1>`
         
-        if (prop.ref_sheet)
-            output += `<img class="refsElem2" src="${prop.ref_sheet}" />` // refsElem2
+        if (prop.ref_sheet) {
+            output += `<img class="refsElem2" src="${prop.ref_sheet}" />`
+            if (prop.ref_sheet_copying)
+                output += `<copying>&#169; ${prop.ref_sheet_copying}</copying>`
+        }
         else
             output += `<p style="color:#AAA; text-align:center">(레퍼런스 시트가 없어요)</p>`
         

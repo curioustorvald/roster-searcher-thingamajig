@@ -2,6 +2,7 @@
     --img-height: 280px;
     --shopbannerimg-height: 50px;
     --gaps: 10px;
+    --textborder: rgba(0,0,0,0.5);
 }
 
 thoushaltnotobservestthisblock {
@@ -343,6 +344,20 @@ refselem1 table {
     height: inherit;
     flex: 1 1 auto;
     object-fit: contain;
+}
+
+bigfurbox copying {
+    display: block;
+    position: relative;
+    top: -17pt;
+    font-size: 10pt;
+    font-weight: 700;
+    color: #F9F9F9;
+    text-shadow: -1px 1px 0 var(--textborder),
+        1px 1px 0 var(--textborder),
+        1px -1px 0 var(--textborder),
+        -1px -1px 0 var(--textborder);
+    text-align: center;
 }
 
 /* END OF SEARCHRESULTS */
