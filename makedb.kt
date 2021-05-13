@@ -30,7 +30,11 @@ object Main {
             "desc_raw",
             "is_34partial",
             "is_hidden", // this line WON'T get into the JSON but don't remove it otherwise the filtering wouldn't work
-            "aliases_raw"
+            "aliases_raw",
+            "photo_copying",
+            "photo_link",
+            "ref_sheet_copying",
+            "ref_sheet"
     )
     @JvmStatic val outColumns = arrayOf( // name of the property that goes directy onto the JSON
             "name_ko",
@@ -50,7 +54,11 @@ object Main {
             "species_ko",
             "is_34partial",
             "is_hidden", // this line WON'T get into the JSON but don't remove it otherwise the filtering wouldn't work
-            "aliases"
+            "aliases",
+            "photo_copying",
+            "photo",
+            "ref_sheet_copying",
+            "ref_sheet"
     )
 
     @JvmStatic val colourNames = arrayOf("시안","마젠타","인디고","올리브드랩","아이보리","페리윙클","베이지","블론드","골든","골드")
@@ -65,7 +73,7 @@ object Main {
     @JvmStatic val inColsIndices = inColumns.mapIndexed { i, s -> s to i }.toMap()
 
     @JvmStatic val mainDBraw = File(dbFileName).readText(Charsets.UTF_8).replace("\n", "")
-    @JvmStatic val picturesraw = File(photoFileName).readText(Charsets.UTF_8).replace("\n", "")
+    //@JvmStatic val picturesraw = File(photoFileName).readText(Charsets.UTF_8).replace("\n", "")
 
     @JvmStatic val mainDBreplacements = arrayOf(
             Regex("""<meta [^\n]+style="line-height: [0-9]{2,3}px">3</div></th><td class="s[0-9]">""") to "", // header
@@ -135,6 +143,10 @@ object Main {
             value //.split('/') // just return as-is
         else if ("desc_raw" == action)
             value.substringBefore(',').replace("?", "").substringBefore('(').trim()
+        else if ("photo_copying" == action || "photo_link" == action ||
+            "ref_sheet_copying" == action || "ref_sheet" == action
+        )
+            value
         else
             throw IllegalArgumentException(action)
     }
@@ -183,12 +195,12 @@ object Main {
 
     @JvmStatic fun main(args: Array<String>) {
         val mainDSV = makeDSV(mainDBraw)
-        val photoDSV = makeDSV(picturesraw)
+        //val photoDSV = makeDSV(picturesraw)
         val mainTable = buildTable(mainDSV)
-        val photoTable = buildTable(photoDSV)
+        //val photoTable = buildTable(photoDSV)
 
         File("./maindb_testout.dsv").writeText(mainDSV)
-        File("./photodb_testout.dsv").writeText(photoDSV)
+        //File("./photodb_testout.dsv").writeText(photoDSV)
 
         val outJson = StringBuilder()
         val lastUpdate = "${LocalDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))} (UTC)"
@@ -204,7 +216,7 @@ object Main {
                 .mapIndexed { i, v -> "\"${outColumns[i]}\":${if (v!!.toLowerCase() == "true" || v.toLowerCase() == "false") v.toLowerCase() else "\"${v.trim()}\""}" }
                 .joinToString(","))
 
-            val mainPhotoCopyright = photoTable[id-1][5]
+            /*val mainPhotoCopyright = photoTable[id-1][5]
             val mainPhoto = photoTable[id-1][6]//.replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
             val refSheetCopyright = photoTable[id-1][7]
             val refSheet = photoTable[id-1][8]//.replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
@@ -212,7 +224,7 @@ object Main {
             line.append(",\"photo\":\"${if (mainPhoto.isNotBlank()) "$mainPhoto" else ""}\"")
             line.append(",\"photo_copying\":\"${if (mainPhotoCopyright.isNotBlank()) "$mainPhotoCopyright" else ""}\"")
             line.append(",\"ref_sheet\":\"${if (refSheet.isNotBlank()) "$refSheet" else ""}\"")
-            line.append(",\"ref_sheet_copying\":\"${if (refSheetCopyright.isNotBlank()) "$refSheetCopyright" else ""}\"")
+            line.append(",\"ref_sheet_copying\":\"${if (refSheetCopyright.isNotBlank()) "$refSheetCopyright" else ""}\"")*/
 
             // parse desc_raw separately
             val descRaw = record[inColumns.linearSearch { it == "desc_raw" }!!]
