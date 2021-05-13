@@ -29,7 +29,7 @@ object Main {
             "is_done",
             "desc_raw",
             "is_34partial",
-            "_is_hidden",
+            "is_hidden", // this line WON'T get into the JSON but don't remove it otherwise the filtering wouldn't work
             "aliases_raw"
     )
     @JvmStatic val outColumns = arrayOf( // name of the property that goes directy onto the JSON
@@ -49,7 +49,7 @@ object Main {
             "is_done",
             "species_ko",
             "is_34partial",
-//            "is_hidden",
+            "is_hidden", // this line WON'T get into the JSON but don't remove it otherwise the filtering wouldn't work
             "aliases"
     )
 
@@ -239,7 +239,11 @@ object Main {
         outJson.deleteRange(outJson.lastIndex - 1, outJson.lastIndex) // remove trailing (,\n)
         outJson.append("}") // close the json
 
-        File(outJsonName).writeText(outJson.toString())
+        var outstr = outJson.toString()
+        outstr = outstr.replace(Regex("""\"is_hidden\":true,"""), "")
+        outstr = outstr.replace(Regex("""\"is_hidden\":false,"""), "")
+                
+        File(outJsonName).writeText(outstr)
         println("Last update: ${lastUpdate}")
     }
 }
