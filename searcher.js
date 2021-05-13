@@ -41,7 +41,7 @@ function loadJSON(jsonPath, isAsync, callback) {
 }
 
 var furdb = {}
-
+var creatorThesaurus = {}
 
 function forEachFur(action) {
     Object.keys(furdb).filter(i => !isNaN(i)).forEach(v => action(furdb[v]))
@@ -65,82 +65,6 @@ function template(strings, ...keys) {
         })
         return result.join('')
     })
-}
-
-const creatorThesaurus = {
-    "bluefox":"블루폭스",
-    "atoama":"아토아마",
-    "amanojaku":"아토아마",
-    "atelieramanojaku":"아토아마",
-    "아마노자쿠":"아토아마",
-    "k-line":"케이라인",
-    "kline":"케이라인",
-    "kemono":"케이라인",
-    "mochiri":"모치리",
-    "mochiriworks":"모치리",
-    "doggy":"이누코보",
-    "doggystudio":"이누코보",
-    "binari":"키루",
-    "binarifursuit":"키루",
-    "비나리":"키루",
-    "kiru":"키루",
-    "aheun":"아흔",
-    "hideonaheun":"아흔",
-    "tigger":"티거",
-    "tiggerfurwho":"티거",
-    "likeapalette":"Yohen",
-    "팔레트":"Yohen",
-    "라이크어팔레트":"Yohen",
-    "요헨":"Yohen",
-    "y0hen":"Yohen",
-    "lycan":"라이칸",
-    "lycanwork":"라이칸",
-    "퍼플뱃":"SIN",
-    "purplebat":"SIN",
-    "신":"SIN",
-    "한아설":"아설",
-    "aseol":"아설",
-    "aseoldollstudio":"아설",
-    "aseolfursuit":"아설",
-    "젤리독":"바토",
-    "플러피젤리독":"바토",
-    "fluffyjellydog":"바토",
-    "jellydog":"바토",
-    "블랙문":"내장",
-    "blackmoon":"내장",
-    "blackon":"내장",
-    "미니미":"Ohiya",
-    "minimi":"Ohiya",
-    "sozi":"소지",
-    "sozifursuit":"소지",
-    "루쳇":"뻐꾹",
-    "lucet":"뻐꾹",
-    "lucetsuit":"뻐꾹",
-    "luchet":"뻐꾹",
-    "luchetsuit":"뻐꾹",
-    "도그마":"개만두",
-    "dogma":"개만두",
-    "dogmafursuit":"개만두",
-    "루프탑":"세논",
-    "옥탑방":"세논",
-    "옥탑방공방":"세논",
-    "rooftop":"세논",
-    "하이픈":"도운",
-    "hiphen":"도운",
-    "hyphen":"도운",
-    "그렌":"도운",
-    "gren":"도운",
-    "grensuit":"도운",
-    "laown":"라온",
-    "teddy":"라온",
-    "teddyfursuit":"라온",
-    "테디":"라온",
-    "티오":"Tio",
-    "티오팩토리":"Tio",
-    "tiofactory":"Tio",
-    
-    "diy":"자작",
-    "selfmade":"자작"
 }
 
 const tagDocumentation = {
@@ -250,15 +174,19 @@ var lang = "ko"
 
 function pageinit() {
     // DB 로드
-    loadJSON("furdb.json", true, response => {
-        furdb = JSON.parse(response)
-        // jobs that need DB to be there
-        populateColourSelection()
-        populateEyesSelection()
-        populateHairSelection()
-        // these are here to just make them pop up in sync with more heavy tasks
-        populateSpeciesSelection()
-        populateStyleSelection()
+    loadJSON("workshopaliases.json", true, response => {
+        creatorThesaurus = JSON.parse(response)
+        
+        loadJSON("furdb.json", true, response => {
+            furdb = JSON.parse(response)
+            // jobs that need DB to be there
+            populateColourSelection()
+            populateEyesSelection()
+            populateHairSelection()
+            // these are here to just make them pop up in sync with more heavy tasks
+            populateSpeciesSelection()
+            populateStyleSelection()
+        })
     })
     // 선택된 언어로 문서 출력
     reloadI18n()
@@ -361,7 +289,10 @@ function populateHairSelection() {
     document.getElementById("simplesearch_hair_streak").innerHTML = fgSel
 }
 
-function reloadI18n() {    
+function reloadI18n() {
+    document.getElementById("will_show_anything_string").innerText = i18n[lang].WillShowAllOnEmptySearch
+    
+    
     let tagdocOutput = ""
     
     tagdocOutput += "<p>"+i18n[lang].TagOptions+"</p><ul>"
@@ -443,22 +374,22 @@ function showOverlay(id) {
     
     let tdtemplate = template`<tr><td class="tableFormLabel" style="color:#888">${0}</td><td style="color:#333">${1}</td></tr>`
     
-    let output = `<div class="dummyCenterWrapper" id="dummyCenterWrapper"><div class="bigFurboxOuter" id="bigFurbox"><div class="bigFurboxContents">`
+    let output = `<dummycentre><bigfurbox>`
     
     let actorLinkFull = `<a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a>`
     let creatorLinkFull = (prop.creator_name == "자작") ? actorLinkFull : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorLinkName}</a>`
     
-    output += `<div class="imgBoxLarge">`
+    output += `<imgbox>`
     if (prop.photo)
         output += `<img src="${prop.photo}" />`
     else
         output += `<img src="no-image-available.png" />`
-    output += `</div>`
+    output += `</imgbox>`
     
-    output += `<div class="parBoxLarge">`
-    output += `<div class="refsheetFlexWrapper">`
+    output += `<parbox>`
+    output += `<refsheetflexwrapper>`
         
-        output += `<div class="refsElem1">`
+        output += `<refselem1>`
         output += `<table>`
         output += `<thead><tr><th colspan="2">`
         output += `<h4 style="font-size: 20px">${displayFurName} ${displayFurNameJa}</h4>`
@@ -472,17 +403,17 @@ function showOverlay(id) {
         output += tdtemplate(i18n[lang].SimpleSearchBirthday2, prop.birthday)
         output += `</table>`
         
-        output += `</div>` // end of refsElem1
+        output += `</refselem1>`
         
         if (prop.ref_sheet)
             output += `<img class="refsElem2" src="${prop.ref_sheet}" />` // refsElem2
         else
             output += `<p style="color:#AAA; text-align:center">(레퍼런스 시트가 없어요)</p>`
         
-    output += `</div>` // end of refsheetFlexWrapper
-    output += `</div>` // end of parBoxLarge
+    output += `</refsheetflexwrapper>`
+    output += `</parbox>`
     
-    output += `</div></div></div>` // end of bigFurboxContents, bigFurboxOuter, dummyCenterWrapper
+    output += `</bigfurbox></dummycentre>`
     
     document.getElementById("moreinfo_overlay").innerHTML = output
     document.getElementById("moreinfo_overlay").style.display = "block"
@@ -520,7 +451,7 @@ function makeOutput(searchResults) {
         let displayCreatorLinkHref = prop.creator_link
                                   
         output += `<furbox>`
-        output += `<div class="imgBox" onclick="showOverlay(${id})">`
+        output += `<imgbox onclick="showOverlay(${id})">`
         
         if (prop.photo)
             output += `<img src="${prop.photo}" />`
@@ -529,12 +460,12 @@ function makeOutput(searchResults) {
         else
             output += `<img src="no-image-available.png" />`
             
-        output += `</div>`
-        output += `<div class="infoBox">`
+        output += `</imgbox>`
+        output += `<infobox>`
         output += `<h4 title="${(furAliases.length == 0) ? `${displayFurName} ${displayFurNameJa}`.trim() : `${displayFurName} ${displayFurNameJa} (${furAliases})`}">${displayFurName}</h4>`
         output += `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a></h5>`
         output += `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorName}</a>`)}</h5>`
-        output += `</div></furbox>`
+        output += `</infobox></furbox>`
     })
     
     document.getElementById("searchResults").innerHTML = output

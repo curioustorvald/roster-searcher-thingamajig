@@ -58,6 +58,7 @@
         "colour":"#999999",
         "dispname":"Hide on Aheun",
         "bannerimg":"aheun.png",
+        "fg":"#222",
         "twitter":"aheunfursuit",
         "web":"https://aheunzzip.wixsite.com/hideonaheunfursuits"
     },
@@ -66,6 +67,7 @@
         "colour":"#EFEFEF",
         "dispname":"Tigger Fur Who",
         "bannerimg":"tigger.png",
+        "fg":"181818",
         "twitter":"tigger_0228",
         "web":"https://qhrud228.wixsite.com/tigfurw"
     },

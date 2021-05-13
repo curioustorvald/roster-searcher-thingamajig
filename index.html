@@ -116,9 +116,11 @@
                 </tr>
                 
                 </table>
+                
+                <p id="will_show_anything_string"><!-- TO BE FILLED BY THE COMPUTER LORD --></p>
             </form>
         </section>
-        <hr>
+        <thoushaltnotobservestthisblock>
         <section id="searchform" class="accordion">
             <input type="checkbox" name="collapse" id="handle4">
             <h3 class="handle">
@@ -147,6 +149,7 @@
                 </section>
             </div>
         </section>
+        </thoushaltnotobservestthisblock>
         <hr>
         <section id="searchResults">
             <!-- TO BE FILLED BY THE COMPUTER LORD -->
@@ -159,8 +162,7 @@
 // event listener
 // close overlay box if outside of the box is clicked
 document.getElementById('moreinfo_overlay').addEventListener('click', function(event){
-    //console.log(event.target.id)
-    if (event.target.id == 'dummyCenterWrapper'){
+    if (event.target.tagName.toLowerCase() == 'dummycentre'){
         hideOverlay();
     }
 });

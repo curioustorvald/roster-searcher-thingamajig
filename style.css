@@ -4,6 +4,10 @@
     --gaps: 10px;
 }
 
+thoushaltnotobservestthisblock {
+    display: none;
+}
+
 idiv {
     display: inline-block;
 }
@@ -171,23 +175,25 @@ furbox {
     position: relative;
     box-sizing: border-box;
     max-width: 210px;
+    width: 210px;
     height: calc(var(--img-height) + 9rem);
-    width: 33%;
+    max-height: calc(var(--img-height) + 9rem);
     animation: smooth 1.5s backwards;
     animation-delay: 0.40s;
 }
 
-furbox > .infoBox {
+furbox infobox {
+    display: block;
     padding: 0.5rem;
 }
 
-furbox > .imgBox {
+furbox imgbox {
     display: block;
     height: var(--img-height);
     overflow: hidden;
 }
 
-furbox > .imgBox img {
+furbox imgbox img {
     object-fit: cover;
     width: 100%;
     height: var(--img-height);
@@ -273,12 +279,7 @@ workshopbox > .infoBox > shopinfo > a {
 
 /* BEGIN OF SEARCHRESULTS */
 
-.searchresults {
-    margin: 1rem;
-    background-color: #f9f9f9;
-}
-
-.dummyCenterWrapper {
+dummycentre {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -286,7 +287,8 @@ workshopbox > .infoBox > shopinfo > a {
     height: 100%;
 }
 
-.bigFurboxOuter {
+bigfurbox {
+    display: block;
     box-shadow: 0px 0px 64px rgba(0, 0, 0, 0.35);
     border-radius: 0 0 16px 0;
     background-color: #f9f9f9;
@@ -295,48 +297,43 @@ workshopbox > .infoBox > shopinfo > a {
     height: 600px;
     animation: smooth 1.5s backwards;
     animation-delay: 0.40s;
+    padding: var(--gaps);
 }
 
-.bigFurboxContents {
-    margin: var(--gaps);
-    width: calc(100% - 2 * var(--gaps));
-    height: calc(100% - 1 * var(--gaps));
-}
-
-.imgBoxLarge {
+bigfurbox imgbox {
     display: block;
     float: left;
     width: calc(50% - var(--gaps)/2);
-    height: inherit;
-    min-height: inherit;
-}
-
-.imgBoxLarge img {
-    object-fit: contain;
     height: 100%;
-    width: 100%;
 }
 
-.parBoxLarge {
+bigfurbox imgbox img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+bigfurbox parbox {
     float: right;
     width: calc(50% - 0.5 * var(--gaps));
-    height: calc(100% - var(--gaps));
+    height: 100%
 }
 
-.refsheetFlexWrapper {
+refsheetflexwrapper {
     display: flex;
     flex-flow: column;
     height: 100%;
 }
 
-.refsElem1 {
+refselem1 {
     display: flex;
     width: 100%;
     flex: 0 1 auto;
     justify-content:center;
+    margin-bottom: calc(0.5 * var(--gaps));
 }
 
-.refsElem1 table {
+refselem1 table {
     min-width: 330px;
 }
 

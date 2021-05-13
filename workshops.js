@@ -32,7 +32,7 @@ function filterShops(predicate) {
 }
 
 function workshopsinit() {
-    loadJSON("workshops.json", false, response => {
+    loadJSON("workshops.json", true, response => {
         let w = JSON.parse(response)
         
         // filter closed shops
@@ -50,7 +50,10 @@ function makeWorkshopsList() {
     let out = ``
     
     forEachShop(prop => {
-        out += `<workshopbox style="background:${prop.bg}">`
+        let bgstyle = (prop.bg) ? `background:${prop.bg}` : ``
+        let fgstyle = (prop.fg) ? `color:${prop.fg}` : ``
+        
+        out += `<workshopbox style="${bgstyle}">`
         
         out += `<div class="imgBox">`
         out += `<img src="webheaders/${prop.bannerimg}" />`
@@ -58,12 +61,12 @@ function makeWorkshopsList() {
         
         out += `<div class="infoBox">`
         
-        out += `<shopname style="color: ${prop.fg}">${prop.dispname.nonbreakable()}</shopname>`
-        out += `<shopinfo style="color: ${prop.fg}">`
-        out += `<a style="color: ${prop.fg}" href="https://twitter.com/${prop.twitter}" target="_blank" rel="noopener noreferrer">${'트위터'.nonbreakable()}</a>`
+        out += `<shopname style="${fgstyle}">${prop.dispname.nonbreakable()}</shopname>`
+        out += `<shopinfo style="${fgstyle}">`
+        out += `<a style="${fgstyle}" href="https://twitter.com/${prop.twitter}" target="_blank" rel="noopener noreferrer">${'트위터'.nonbreakable()}</a>`
         if (prop.web) {
             out += `&nbsp;|&nbsp;`
-            out += `<a style="color: ${prop.fg}" href="${prop.web}" target="_blank" rel="noopener noreferrer">${'홈페이지'.nonbreakable()}</a>`
+            out += `<a style="${fgstyle}" href="${prop.web}" target="_blank" rel="noopener noreferrer">${'홈페이지'.nonbreakable()}</a>`
         }
         out += `</shopinfo>`
         
