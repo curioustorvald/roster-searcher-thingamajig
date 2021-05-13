@@ -199,7 +199,7 @@ object Main {
         val mainTable = buildTable(mainDSV)
         //val photoTable = buildTable(photoDSV)
 
-        File("./maindb_testout.dsv").writeText(mainDSV)
+        //File("./maindb_testout.dsv").writeText(mainDSV)
         //File("./photodb_testout.dsv").writeText(photoDSV)
 
         val outJson = StringBuilder()
