@@ -355,7 +355,7 @@ function reloadI18n() {
     document.getElementById("simplesearch_header").innerText = i18n[lang].SimpleSearch
     document.getElementById("simplesearch_input_creatorname_string").innerText = i18n[lang].SimpleSearchCreator
     document.getElementById("simplesearch_input_furname_string").innerText = i18n[lang].SimpleSearchName
-    document.getElementById("simplesearch_input_actorname_string").innerText = i18n[lang].SimpleSearchActor
+//     document.getElementById("simplesearch_input_actorname_string").innerText = i18n[lang].SimpleSearchActor
     document.getElementById("simplesearch_input_bday_title_string").innerText = i18n[lang].SimpleSearchBirthday
     document.getElementById("simplesearch_dropdown_species_string").innerText = i18n[lang].SimpleSearchSpecies
     document.getElementById("simplesearch_input_is_partial_string").innerText = i18n[lang].SimpleSearchIsPartial
