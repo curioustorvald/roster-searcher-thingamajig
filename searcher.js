@@ -4,7 +4,7 @@ const dropdownIdToDBname = {
     "literal_dog":["개"],
     "literal_wolf":["늑대"],
     "literal_cat":["고양이"],
-    "group_felidae":["고양이과","고양잇과","사자","호랑이","표범","카라칼","퓨마","쿠거","마운틴라이언"],
+    "group_felidae":["고양이과","고양잇과","사자","호랑이","표범","카라칼","퓨마","쿠거","마운틴라이언","치타"],
     "literal_fox":["여우"],
     "literal_rabbit":["토끼"],
     "group_aves":["조류","새","앵무","수리","올빼미","부엉이"],
