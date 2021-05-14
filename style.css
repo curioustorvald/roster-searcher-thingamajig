@@ -185,12 +185,12 @@ floatbox#colour_palette_showoff {
     min-width: max-content;
 }
 
-floatbox#colour_palette_showoff tbody td {
-    font-size: 90%;
+floatbox#colour_palette_showoff thead h4 {
+    margin: 2pt;
 }
 
 td .colour_swatch {
-    width: 1.33em;
+    width: 1.3em;
 }
 
 td .rainbowbox {

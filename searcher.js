@@ -214,7 +214,7 @@ function pageinit() {
 function populateColourPalette() {
     let maxSwatchCount = Object.values(colourPalette).reduce((acc,arr) => (arr.length > acc) ? arr.length : acc, 0)
     
-    let out = `<table><thead style="text-align:center"><tr><td style=" border-bottom: 1px solid #AAA" colspan="${maxSwatchCount + 2}" >${i18n[lang].SimpleSearchColourTable}</td></tr></thead><tbody>`
+    let out = `<table><thead style="text-align:center"><tr><td style=" border-bottom:1px solid #AAA;" colspan="${maxSwatchCount + 2}" ><h4>${i18n[lang].SimpleSearchColourTable}</h4></td></tr><tr><td colspan="${maxSwatchCount + 2}" ></td></tr></thead><tbody>`
  
     Object.entries(colourPalette).forEach(kv => {
         out += `<tr>`
