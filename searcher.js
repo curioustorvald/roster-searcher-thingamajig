@@ -95,7 +95,7 @@ const i18n = {
         "SimpleSearchActor": "소유자: ",
         "SimpleSearchCreator": "제작자: ",
         "SimpleSearchName": "이름 (한/영): ",
-        "SimpleSearchBirthday": "활동개시일 (yyyymmdd): ",
+        "SimpleSearchBirthday": "활동개시일&nbsp;<br />(yyyymmdd): ",
         "SimpleSearchBirthday2": "활동개시일: ",
         "SimpleSearchSpecies": "종: ",
         "SimpleSearchStyle": "스타일: ",
@@ -113,7 +113,11 @@ const i18n = {
         "ThisManySearchResults": template`${0}개의 검색 결과:`,
         "None": "없음",
         "Any": "아무거나",
-        "SimpleSearchColourTable": "색도표"
+        "SimpleSearchColourTable": "색도표",
+        "SimpleSearchFromPre": "",
+        "SimpleSearchFromPost": "부터",
+        "SimpleSearchToPre": "",
+        "SimpleSearchToPost": "까지"
     },
     "en": {
         "TagSyntaxError": "Entered tag is malformed: ",
@@ -147,7 +151,11 @@ const i18n = {
         "ThisManySearchResults": template`Showing ${0} search results:`,
         "None": "None",
         "Any": "Any",
-        "SimpleSearchColourTable": "Colour Table"
+        "SimpleSearchColourTable": "Colour Table",
+        "SimpleSearchFromPre": "From",
+        "SimpleSearchFromPost": "",
+        "SimpleSearchToPre": "&nbsp;&nbsp;To",
+        "SimpleSearchToPost": ""
     }
 }
 
@@ -338,7 +346,7 @@ function populateHairSelection() {
 }
 
 function reloadI18n() {
-    document.getElementById("will_show_anything_string").innerText = i18n[lang].WillShowAllOnEmptySearch
+    document.getElementById("will_show_anything_string").innerHTML = i18n[lang].WillShowAllOnEmptySearch
     
     
     let tagdocOutput = ""
@@ -352,37 +360,43 @@ function reloadI18n() {
     document.getElementById("tagdoc").innerHTML = tagdocOutput
     
     // 검색폼 다국어화
-    document.getElementById("simplesearch_header").innerText = i18n[lang].SimpleSearch
-    document.getElementById("simplesearch_input_creatorname_string").innerText = i18n[lang].SimpleSearchCreator
-    document.getElementById("simplesearch_input_furname_string").innerText = i18n[lang].SimpleSearchName
-//     document.getElementById("simplesearch_input_actorname_string").innerText = i18n[lang].SimpleSearchActor
-    document.getElementById("simplesearch_input_bday_title_string").innerText = i18n[lang].SimpleSearchBirthday
-    document.getElementById("simplesearch_dropdown_species_string").innerText = i18n[lang].SimpleSearchSpecies
-    document.getElementById("simplesearch_input_is_partial_string").innerText = i18n[lang].SimpleSearchIsPartial
-    document.getElementById("simplesearch_input_style_string").innerText = i18n[lang].SimpleSearchStyle
+    document.getElementById("simplesearch_header").innerHTML = i18n[lang].SimpleSearch
+    document.getElementById("simplesearch_input_creatorname_string").innerHTML = i18n[lang].SimpleSearchCreator
+    document.getElementById("simplesearch_input_furname_string").innerHTML = i18n[lang].SimpleSearchName
+//     document.getElementById("simplesearch_input_actorname_string").innerHTML = i18n[lang].SimpleSearchActor
+    document.getElementById("simplesearch_input_bday_title_string").innerHTML = i18n[lang].SimpleSearchBirthday
+     
+    document.getElementById("bday_from_pre").innerHTML = i18n[lang].SimpleSearchFromPre
+    document.getElementById("bday_from_post").innerHTML = i18n[lang].SimpleSearchFromPost
+    document.getElementById("bday_to_pre").innerHTML = i18n[lang].SimpleSearchToPre
+    document.getElementById("bday_to_post").innerHTML = i18n[lang].SimpleSearchToPost
+
+    document.getElementById("simplesearch_dropdown_species_string").innerHTML = i18n[lang].SimpleSearchSpecies
+    document.getElementById("simplesearch_input_is_partial_string").innerHTML = i18n[lang].SimpleSearchIsPartial
+    document.getElementById("simplesearch_input_style_string").innerHTML = i18n[lang].SimpleSearchStyle
     document.getElementById("simple_submit_button").setAttribute("value", i18n[lang].Submit)
     document.getElementById("simple_reset_button").setAttribute("value", i18n[lang].Reset)
     
-    document.getElementById("simplesearch_colour_string").innerText = i18n[lang].SimpleSearchColourCombi
-    document.getElementById("simplesearch_colourcombi0").innerText = i18n[lang].SimpleSearchColourCombi0
-    document.getElementById("simplesearch_colourcombi1").innerText = i18n[lang].SimpleSearchColourCombi1(1)
-    document.getElementById("simplesearch_colourcombi2").innerText = i18n[lang].SimpleSearchColourCombi1(2)
-    document.getElementById("simplesearch_colourcombi3").innerText = i18n[lang].SimpleSearchColourCombi1(3)
+    document.getElementById("simplesearch_colour_string").innerHTML = i18n[lang].SimpleSearchColourCombi
+    document.getElementById("simplesearch_colourcombi0").innerHTML = i18n[lang].SimpleSearchColourCombi0
+    document.getElementById("simplesearch_colourcombi1").innerHTML = i18n[lang].SimpleSearchColourCombi1(1)
+    document.getElementById("simplesearch_colourcombi2").innerHTML = i18n[lang].SimpleSearchColourCombi1(2)
+    document.getElementById("simplesearch_colourcombi3").innerHTML = i18n[lang].SimpleSearchColourCombi1(3)
     
-    document.getElementById("simplesearch_input_eyes_string").innerText = i18n[lang].SimpleSearchEyes
-    document.getElementById("simplesearch_eyes_sclera_string").innerText = i18n[lang].SimpleSearchEyesSclera
-    document.getElementById("simplesearch_eyes_string").innerText = i18n[lang].SimpleSearchEyesColour
+    document.getElementById("simplesearch_input_eyes_string").innerHTML = i18n[lang].SimpleSearchEyes
+    document.getElementById("simplesearch_eyes_sclera_string").innerHTML = i18n[lang].SimpleSearchEyesSclera
+    document.getElementById("simplesearch_eyes_string").innerHTML = i18n[lang].SimpleSearchEyesColour
     
-    document.getElementById("simplesearch_input_hair_string").innerText = i18n[lang].SimpleSearchHair
-    document.getElementById("simplesearch_hair_dye_string").innerText = i18n[lang].SimpleSearchHairColour
-    document.getElementById("simplesearch_hair_streak_string").innerText = i18n[lang].SimpleSearchHairStreak
+    document.getElementById("simplesearch_input_hair_string").innerHTML = i18n[lang].SimpleSearchHair
+    document.getElementById("simplesearch_hair_dye_string").innerHTML = i18n[lang].SimpleSearchHairColour
+    document.getElementById("simplesearch_hair_streak_string").innerHTML = i18n[lang].SimpleSearchHairStreak
 
     
-    document.getElementById("searchform_header").innerText = i18n[lang].AdvancedSearch
-    document.getElementById("searchtags_string").innerText = i18n[lang].SearchTags
-    document.getElementById("exactmatch_string").innerText = i18n[lang].IsExactMatch
-    document.getElementById("includewip_string").innerText = i18n[lang].IsIncludeWip
-    document.getElementById("includewip_string2").innerText = i18n[lang].IsIncludeWip
+    document.getElementById("searchform_header").innerHTML = i18n[lang].AdvancedSearch
+    document.getElementById("searchtags_string").innerHTML = i18n[lang].SearchTags
+    document.getElementById("exactmatch_string").innerHTML = i18n[lang].IsExactMatch
+    document.getElementById("includewip_string").innerHTML = i18n[lang].IsIncludeWip
+    document.getElementById("includewip_string2").innerHTML = i18n[lang].IsIncludeWip
     document.getElementById("submit_button").setAttribute("value", i18n[lang].Submit)
 }
 
