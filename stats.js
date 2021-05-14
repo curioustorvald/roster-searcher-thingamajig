@@ -13,8 +13,14 @@ function loadJSON(jsonPath, isAsync, callback) {
     xobj.send(null)
 }
 
-String.prototype.nonbreakable = function() {
+String.prototype.unbreakable = function() {
     return this.split('').join('&NoBreak;').replaceAll(' ', '&nbsp;')
+}
+Array.prototype.sum = function(selector) {
+    return this.reduce((acc,val) => acc + ((selector === undefined) ? val : selector(val)), 0)
+}
+Array.prototype.max = function(selector) {
+    return this.reduce((acc,val) => (((selector === undefined) ? val : selector(val)) > acc) ? ((selector === undefined) ? val : selector(val)) : acc, 0)
 }
 
 const dropdownStyle = ["Cyber","Kemo","Kemo Toon","Toon","Semi","Real","Real Toon"]
@@ -46,6 +52,7 @@ function range(start, stop, step) {
 
 var furdb = {}
 var workshops = {}
+var colourPalette = {}
 
 function forEachFur(action) {
     Object.keys(furdb).filter(i => !isNaN(i)).forEach(v => action(furdb[v]))
@@ -60,20 +67,25 @@ function filterFurs(predicate) {
 }
 
 function statsinit() {
-    loadJSON("workshops.json", false, response => {
+    loadJSON("workshops.json", true, response => {
         workshops = JSON.parse(response)
-    })
 
-    loadJSON("furdb.json", true, response => {
-        furdb = JSON.parse(response)
-        
-        // must be here because db load is asynchronous        
-        populateStatsText()
-        populateBirthdayStatTable()
-        populateStyleStatTable()
-        populateMarketshareTable()
-        populateDiyTable()
-        populateTopTenSpecies()
+        loadJSON("colourpalette.json", true, response => {
+            colourPalette = JSON.parse(response)
+            
+            loadJSON("furdb.json", true, response => {
+                furdb = JSON.parse(response)
+                
+                // must be here because db load is asynchronous        
+                populateStatsText()
+                populateBirthdayStatTable()
+                populateStyleStatTable()
+                populateMarketshareTable()
+                populateDiyTable()
+                populateTopTenSpecies()
+                populateColourScheme()
+            })
+        })
     })
 }
 
@@ -108,7 +120,7 @@ function populateBirthdayStatTable() {
             }
         }
     })
-    let countmax = counts.reduce((acc, i) => (i > acc) ? i : acc, 0)
+    let countmax = counts.max()
     Object.keys(counts).forEach(year => {
         let count = counts[year]
         let perc = 100.0 * count / countmax
@@ -133,12 +145,12 @@ function populateStyleStatTable() {
             counts[prop.style] += 1
         }
     })
-    let countmax = Object.keys(counts).reduce((acc, style) => (counts[style] > acc) ? counts[style] : acc, 0)   
+    let countmax = Object.values(counts).max()
     dropdownStyle.forEach(style => {
         let count = counts[style]
         let perc = 100.0 * count / countmax
         out += `<tr>`
-        out += `<td class="tableChartLabel">${style.nonbreakable()}</td>`
+        out += `<td class="tableChartLabel">${style.unbreakable()}</td>`
         out += `<td class="tableDataNumber">${count}</td>`
         out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${perc}%">&nbsp;</div></td>`
         out += `</tr>`
@@ -197,7 +209,7 @@ function populateMarketshareTable() {
         out += `<td class="tableChartLabel">${year}</td>`
         
         let record = data[""+year]
-        let total = Object.values(record).reduce((a,i) => a+i, 0)
+        let total = Object.values(record).sum()
         
         out += `<td class="tableBarChartArea" style="width:100vw">`
         Object.keys(workshops).forEach(shop => {
@@ -303,28 +315,28 @@ function populateTopTenSpecies() {
     })
     
     let sorted = Object.entries(records).sort((one,other) => other[1] - one[1]).slice(0, showCount)
-    const namedTotal = Object.values(records).reduce((acc,p) => acc + p, 0)
+    const namedTotal = Object.values(records).sum()
     const total = namedTotal + unknowns
-    const sortedTotal = sorted.reduce((acc,p) => acc + p[1], 0)
-    const sortedMax = sorted.reduce((acc,p) => (p[1] > acc) ? p[1] : acc, 0)
+    const sortedTotal = sorted.sum(p=>p[1])
+    const sortedMax = sorted.max(p=>p[1])
         
     const altstyle = `style="color:#888; font-style:italic"`
     
     let out = ``
     sorted.forEach((v,i) => {
         let copyrighted = (v[0] == "저작권")
-        let name = v[0].nonbreakable()
+        let name = v[0].unbreakable()
         let count = v[1]
         let perc = 100.0 * count / total
         let graphPerc = 100.0 * count / sortedMax
         out += `<tr>`
-        out += `<td class="tableDataNumber">${`${i+1}. `.nonbreakable()}</td>`
+        out += `<td class="tableDataNumber">${`${i+1}. `.unbreakable()}</td>`
         if (copyrighted)
             out += `<td class="tableChartLabel" ${altstyle}>${name}</td>`
         else
             out += `<td class="tableChartLabel">${name}</td>`
-        out += `<td class="tableDataNumber">${`${Math.round(perc * 10) / 10} %`.nonbreakable()}</td>`
-        out += `<td class="tableDataNumber">${`(${count})`.nonbreakable()}</td>`
+        out += `<td class="tableDataNumber">${`${Math.round(perc * 10) / 10} %`.unbreakable()}</td>`
+        out += `<td class="tableDataNumber">${`(${count})`.unbreakable()}</td>`
         out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${graphPerc}%">&nbsp;</div></td>`
         out += `</tr>`
     })
@@ -333,9 +345,9 @@ function populateTopTenSpecies() {
     let etcPerc = 100.0 * etcCount / total
     let etcPerc2 = 100.0 * etcCount / sortedMax
     out += `<tr>`
-    out += `<td colspan="2" class="tableChartLabel" ${altstyle}>${"기타".nonbreakable()}</td>`
-    out += `<td class="tableDataNumber" style="color:#888">${`${Math.round(etcPerc * 10) / 10} %`.nonbreakable()}</td>`
-    out += `<td class="tableDataNumber" style="color:#888">${`(${etcCount})`.nonbreakable()}</td>`
+    out += `<td colspan="2" class="tableChartLabel" ${altstyle}>${"기타".unbreakable()}</td>`
+    out += `<td class="tableDataNumber" style="color:#888">${`${Math.round(etcPerc * 10) / 10} %`.unbreakable()}</td>`
+    out += `<td class="tableDataNumber" style="color:#888">${`(${etcCount})`.unbreakable()}</td>`
     out += `<td class="tableBarChartArea"><div class="tableBarChart" style="background:#AAA; width:${etcPerc2}%">&nbsp;</div></td>`
     out += `</tr>`
     
@@ -343,13 +355,97 @@ function populateTopTenSpecies() {
     let unkPerc = 100.0 * unkCount / total
     let unkPerc2 = 100.0 * unkCount / sortedMax
     out += `<tr>`
-    out += `<td colspan="2" class="tableChartLabel" ${altstyle}>${"알수없음".nonbreakable()}</td>`
-    out += `<td class="tableDataNumber" style="color:#888">${`${Math.round(unkPerc * 10) / 10} %`.nonbreakable()}</td>`
-    out += `<td class="tableDataNumber" style="color:#888">${`(${unkCount})`.nonbreakable()}</td>`
+    out += `<td colspan="2" class="tableChartLabel" ${altstyle}>${"알수없음".unbreakable()}</td>`
+    out += `<td class="tableDataNumber" style="color:#888">${`${Math.round(unkPerc * 10) / 10} %`.unbreakable()}</td>`
+    out += `<td class="tableDataNumber" style="color:#888">${`(${unkCount})`.unbreakable()}</td>`
     out += `<td class="tableBarChartArea"><div class="tableBarChart" style="background:#AAA; width:${unkPerc2}%">&nbsp;</div></td>`
     out += `</tr>`
     
-    out += `<tr><td colspan="2" class="tableChartLabel">${"전체".nonbreakable()}</td><td colspan="2" class="tableDataNumber">${`${Object.keys(records).length}종 ${total}개`.nonbreakable()}</td></tr>`
+    out += `<tr><td colspan="2" class="tableChartLabel">${"전체".unbreakable()}</td><td colspan="2" class="tableDataNumber">${`${Object.keys(records).length}종 ${total}개`.unbreakable()}</td></tr>`
     
     document.getElementById("top_ten_species_table").innerHTML = out
+}
+
+function populateColourScheme() {
+    let barHeight = 42
+    let out = ''
+    
+    let bgstat = {}
+    let fgstat = {}
+    
+    // init data
+    Object.keys(colourPalette).forEach(c => { bgstat[c] = 0; fgstat[c] = 0 })
+    // gather data
+    forEachFur(prop => {
+        if (prop.colours.length > 0) {
+            let used = {} // to check dupes
+            for (let i = 0; i < prop.colours.length; i++) {
+                let col = prop.colours[i]
+                
+                if (!(col in bgstat)) continue
+                if (0 == i) {
+                    bgstat[col] += 1
+                }
+                else {
+                    // check for dupes
+                    if (!(col in used)) {
+                        fgstat[col] += 1
+                        used[col] = 1
+                    }
+                }
+            }
+        }
+    })
+        
+    let bgmax = Object.values(bgstat).max()
+    let fgmax = Object.values(fgstat).max()
+    
+    //bgstat["무지개색"]=123;fgstat["무지개색"]=123
+    
+    // bg bar
+    out += `<table style="width: 100%">`
+    out += `<thead style="text-align:center"><tr><td style=" border-bottom:1px solid #AAA;" colspan="3" ><h5>바탕색</h5></td></tr><tr><td colspan="3" ></td></tr></thead>`
+    
+    Object.entries(bgstat).forEach(kv => {
+        let name = kv[0]
+        let count = kv[1]
+        let colour = (colourPalette[kv[0]][1]) ? colourPalette[kv[0]][1] : colourPalette[kv[0]][0]
+        if (!colour.startsWith("#")) {
+            colour = `var(--${colour})`
+        }
+        
+        let perc = 100.0 * count / bgmax
+        out += `<tr>`
+        out += `<td class="tableChartLabel">${name.unbreakable()}</td>`
+        out += `<td class="tableDataNumber">${count}</td>`
+        out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${perc}%; background:${colour}">&nbsp;</div></td>`
+        out += `</tr>`
+    })
+    
+    out += `</table>`
+    document.getElementById("colour_scheme_table_bg").innerHTML = out
+    
+    
+    // fg bar
+    out = ``
+    out += `<table style="width: 100%">`
+    out += `<thead style="text-align:center"><tr><td style=" border-bottom:1px solid #AAA;" colspan="3" ><h5>염색</h5></td></tr><tr><td colspan="3" ></td></tr></thead>`
+    
+    Object.entries(fgstat).forEach(kv => {
+        let name = kv[0]
+        let count = kv[1]
+        let colour = (colourPalette[kv[0]][1]) ? colourPalette[kv[0]][1] : colourPalette[kv[0]][0]
+        if (!colour.startsWith("#")) {
+            colour = `var(--${colour})`
+        }
+        let perc = 100.0 * count / fgmax
+        out += `<tr>`
+        out += `<td class="tableChartLabel">${name.unbreakable()}</td>`
+        out += `<td class="tableDataNumber">${count}</td>`
+        out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${perc}%; background:${colour}">&nbsp;</div></td>`
+        out += `</tr>`
+    })
+    
+    out += `</table>`
+    document.getElementById("colour_scheme_table_fg").innerHTML = out
 }

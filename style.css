@@ -3,6 +3,7 @@
     --shopbannerimg-height: 50px;
     --gaps: 10px;
     --textborder: rgba(0,0,0,0.5);
+    --rainbowbox: linear-gradient(to right, #EC6A69,#F0994F,#CCAB13,#9ABA28,#59C36A,#00C6B7,#00BFE6,#96AAF6,#C89CE4,#DF6D9D,#EC6A69);
 }
 
 /*form table {
@@ -193,8 +194,8 @@ td .colour_swatch {
     width: 1.3em;
 }
 
-td .rainbowbox {
-    background-image: linear-gradient(to right, #EC6A69,#F0994F,#CCAB13,#9ABA28,#59C36A,#00C6B7,#00BFE6,#96AAF6,#C89CE4,#DF6D9D,#EC6A69);
+.rainbowbox {
+    background-image: var(--rainbowbox);
 }
 
 /* BEGIN OF FURBOX */
@@ -418,6 +419,20 @@ bigfurbox copying {
     margin: 10px;
     background: no-repeat center/80% url("header.png");
 }
+
+.flex_halfcol {
+    flex: 50%;
+}
+.flex_halfcol:nth-child(2){ 
+}
+
+div#colour_scheme thead h5 {
+    color: #444;
+    font-weight: 700;
+    font-size: 100%;
+    margin: 2pt;
+}
+
 
 /* END OF STATS */
 
