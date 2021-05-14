@@ -181,7 +181,11 @@ floatbox {
     box-sizing: border-box;
 }
 
-#colour_palette_showoff tbody td {
+floatbox#colour_palette_showoff {
+    min-width: max-content;
+}
+
+floatbox#colour_palette_showoff tbody td {
     font-size: 90%;
 }
 
