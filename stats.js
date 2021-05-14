@@ -214,12 +214,13 @@ function populateMarketshareTable() {
         out += `<td class="tableBarChartArea" style="width:100vw">`
         Object.keys(workshops).forEach(shop => {
             let col = workshops[shop].colour
-            let lum = (htmlColToLum(col) > 0.6215) ? "dark" : "light"
+            let lum = htmlColToLum(col)
+            let barclass = (lum > 0.93) ? "superlight" : (lum >= 0.6215) ? "light" : "dark"
             let count = record[shop] || 0
             let percentage = count * 100.0 / total
             
             if (count > 0) {
-                out += `<tablebarchartstack class="${lum}" style="width:${percentage}%; background:${col}; height:${barHeight}px; line-height:${barHeight}px" title="${shop} (${Math.round(percentage * 10) / 10}%)" onclick="toggleMarketShareDetails('${year}¤${shop}')">`
+                out += `<tablebarchartstack class="${barclass}" style="width:${percentage}%; background:${col}; height:${barHeight}px; line-height:${barHeight}px" title="${shop} (${Math.round(percentage * 10) / 10}%)" onclick="toggleMarketShareDetails('${year}¤${shop}')">`
                 out += count
                 out += `</tablebarchartstack>`
             }
@@ -282,10 +283,10 @@ function populateDiyTable() {
     
     out += `<tr>`
     out += `<td class="tableBarChartArea" style="width:100vw">`
-    out += `<tablebarchartstack class="light" style="width:${partialperc}%; background:#ED7D31; height:${barHeight}; line-height:${barHeight}px" title="${partial}/${partial+full}">`
+    out += `<tablebarchartstack class="dark" style="width:${partialperc}%; background:#ED7D31; height:${barHeight}; line-height:${barHeight}px" title="${partial}/${partial+full}">`
     out += `파셜&nbsp;${Math.round(partialperc * 10) / 10}%`
     out += `</tablebarchartstack>`
-    out += `<tablebarchartstack class="light" style="width:${100 - partialperc}%; background:#0563C1; height:${barHeight}; line-height:${barHeight}px" title="${full}/${partial+full}">`
+    out += `<tablebarchartstack class="dark" style="width:${100 - partialperc}%; background:#0563C1; height:${barHeight}; line-height:${barHeight}px" title="${full}/${partial+full}">`
     out += `풀&nbsp;${100 - Math.round(partialperc * 10) / 10}%`
     out += `</tablebarchartstack>`
     // total number
@@ -415,10 +416,11 @@ function populateColourScheme() {
         }
         
         let perc = 100.0 * count / bgmax
+        let barclass = ("백색" == name) ? "tableBarChartWhite" : "tableBarChart"
         out += `<tr>`
         out += `<td class="tableChartLabel">${name.unbreakable()}</td>`
         out += `<td class="tableDataNumber">${count}</td>`
-        out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${perc}%; background:${colour}">&nbsp;</div></td>`
+        out += `<td class="tableBarChartArea"><div class="${barclass}" style="width:${perc}%; background:${colour}">&nbsp;</div></td>`
         out += `</tr>`
     })
     
@@ -439,10 +441,11 @@ function populateColourScheme() {
             colour = `var(--${colour})`
         }
         let perc = 100.0 * count / fgmax
+        let barclass = ("백색" == name) ? "tableBarChartWhite" : "tableBarChart"
         out += `<tr>`
         out += `<td class="tableChartLabel">${name.unbreakable()}</td>`
         out += `<td class="tableDataNumber">${count}</td>`
-        out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${perc}%; background:${colour}">&nbsp;</div></td>`
+        out += `<td class="tableBarChartArea"><div class="${barclass}" style="width:${perc}%; background:${colour}">&nbsp;</div></td>`
         out += `</tr>`
     })
     

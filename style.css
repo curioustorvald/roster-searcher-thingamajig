@@ -4,6 +4,7 @@
     --gaps: 10px;
     --textborder: rgba(0,0,0,0.5);
     --rainbowbox: linear-gradient(to right, #EC6A69,#F0994F,#CCAB13,#9ABA28,#59C36A,#00C6B7,#00BFE6,#96AAF6,#C89CE4,#DF6D9D,#EC6A69);
+    --whitegraph-bordercol: #CCC;
 }
 
 /*form table {
@@ -111,7 +112,15 @@ table.stat {
 .tableBarChart {
     display: inline-block;
     padding: 0;
-    background: #444
+    background: #444;
+}
+
+.tableBarChartWhite {
+    display: inline-block;
+    padding: 0;
+    background: #FFF;
+    border: 1px solid var(--whitegraph-bordercol);
+    box-sizing: border-box;
 }
 
 tablebarchartstack {
@@ -126,12 +135,19 @@ tablebarchartstack {
     float: left;
 }
 
-tablebarchartstack.light {
+tablebarchartstack.dark {
     color: #F9F9F9;
 }
 
-tablebarchartstack.dark {
+tablebarchartstack.light {
     color: #444;
+}
+
+tablebarchartstack.superlight {
+    color: #444;
+    box-sizing: border-box;
+    border-top: 1px solid var(--whitegraph-bordercol);
+    border-bottom: 1px solid var(--whitegraph-bordercol);
 }
 
 tablebarchartstack:hover {

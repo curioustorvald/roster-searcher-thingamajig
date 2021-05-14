@@ -61,7 +61,7 @@ object Main {
             "ref_sheet"
     )
 
-    @JvmStatic val colourNames = arrayOf("시안","마젠타","인디고","올리브드랩","아이보리","페리윙클","베이지","블론드","골든","골드")
+    @JvmStatic val colourNames = arrayOf("베이지","블론드","골든","골드")
     @JvmStatic val colourSuffixes = arrayOf("색","포인트")
     @JvmStatic val colourPrefixes = arrayOf("네온","연","진","남")
     @JvmStatic val colourRegex = Regex("""${colourNames.joinToString("|")}|${colourSuffixes.map { "[가-힣]+$it" }.joinToString("|")}|${colourPrefixes.map { "$it[가-힣]+" }.joinToString("|") }""")
