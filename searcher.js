@@ -112,7 +112,8 @@ const i18n = {
         "MadeBy": "제작: ",
         "ThisManySearchResults": template`${0}개의 검색 결과:`,
         "None": "없음",
-        "Any": "아무거나"
+        "Any": "아무거나",
+        "SimpleSearchColourTable": "색도표"
     },
     "en": {
         "TagSyntaxError": "Entered tag is malformed: ",
@@ -145,7 +146,8 @@ const i18n = {
         "MadeBy": "Made by ",
         "ThisManySearchResults": template`Showing ${0} search results:`,
         "None": "None",
-        "Any": "Any"
+        "Any": "Any",
+        "SimpleSearchColourTable": "Colour Table"
     }
 }
 
@@ -188,6 +190,7 @@ function pageinit() {
                 populateEyesSelection()
                 populateHairSelection()
                 // these are here to just make them pop up in sync with more heavy tasks
+                populateColourPalette()
                 populateSpeciesSelection()
                 populateStyleSelection()
             })
@@ -198,6 +201,40 @@ function pageinit() {
     reloadI18n()
     
     clearResults()
+}
+
+function populateColourPalette() {
+    let maxSwatchCount = Object.values(colourPalette).reduce((acc,arr) => (arr.length > acc) ? arr.length : acc, 0)
+    
+    let out = `<table><thead style="text-align:center"><tr><td style=" border-bottom: 1px solid #AAA" colspan="${maxSwatchCount + 2}" >${i18n[lang].SimpleSearchColourTable}</td></tr></thead><tbody>`
+ 
+    Object.entries(colourPalette).forEach(kv => {
+        out += `<tr>`
+        out += `<td class="tableFormLabel">${kv[0]}</td>`
+        
+        /*out += `<td>`
+        kv[1].forEach(c => {
+            if (c.startsWith("#"))
+                out += `<span style="font-size:120%; color:${c}">&#x2588;&nbsp;</span>`
+            else
+                out += `<${c}></${c}>`
+        })
+        out += `</td>`*/
+        kv[1].forEach(c => {
+            if (c.startsWith("#")) {
+                out += `<td class="colour_swatch" style="background:${c}">&nbsp;</td>`
+            }
+            else {
+                out += `<td colspan="${maxSwatchCount}" class="${c}">&nbsp;</td>`
+            }
+        })
+        
+        out += `</tr>`
+    })
+ 
+    out += `</tbody></table>`
+ 
+    document.getElementById("colour_palette_showoff").innerHTML = out
 }
 
 function populateSpeciesSelection() {
@@ -318,6 +355,7 @@ function reloadI18n() {
     document.getElementById("simplesearch_header").innerText = i18n[lang].SimpleSearch
     document.getElementById("simplesearch_input_creatorname_string").innerText = i18n[lang].SimpleSearchCreator
     document.getElementById("simplesearch_input_furname_string").innerText = i18n[lang].SimpleSearchName
+    document.getElementById("simplesearch_input_actorname_string").innerText = i18n[lang].SimpleSearchActor
     document.getElementById("simplesearch_input_bday_title_string").innerText = i18n[lang].SimpleSearchBirthday
     document.getElementById("simplesearch_dropdown_species_string").innerText = i18n[lang].SimpleSearchSpecies
     document.getElementById("simplesearch_input_is_partial_string").innerText = i18n[lang].SimpleSearchIsPartial

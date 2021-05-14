@@ -15,109 +15,133 @@
         <section id="simplesearch">
             <h3 id="simplesearch_header"></h3>
             <form onsubmit="return false;" method="post" name="simplesearchform">
+                 <!-- 테이블로 레이아웃질을 하면 안 되는네 난 너를 믿었던 만큼 난 내 친구도 믿었기에 난 아무런 부담없이 널 내 친구에게 소개시켜 줬고 그런 만남이 있은 후부터 우리는 자주 함께 만나며 즐거운 시간을 보내며 함께 어울렸던 것 뿐인데 그런 만남이 어디서부터 잘못됐는지 난 알 수 없는 예감에 조금씩 빠져들고 있을 때쯤 넌 나보다 내 친구에게 관심을 더 보이며 날 조금씩 멀리하던 그 어느날 -->
                 <table>
-                <tr>
-                    <td class="tableFormLabel"><label for="simplesearch_input_creatorname" id="simplesearch_input_creatorname_string"></label></td>
-                    <td><input type="search" id="simplesearch_input_creatorname" name="simplesearch_input_creatorname"></td>
-                </tr>
-                <tr>
-                    <td class="tableFormLabel"><label for="simplesearch_input_furname" id="simplesearch_input_furname_string"></label></td>
-                    <td><input type="search" id="simplesearch_input_furname" name="simplesearch_input_furname"></input>
-                </tr>
-                <tr>
-                    <td class="tableFormLabel"><label for="simplesearch_input_bday_from" id="simplesearch_input_bday_title_string"></label></td>
-                    <td><input type="search" id="simplesearch_input_bday_from" name="simplesearch_input_bday_from">
-                    <label> &mdash; </label>
-                    <input type="search" id="simplesearch_input_bday_to" name="simplesearch_input_bday_to"></input>
-                </tr>
-                <tr>
-                    <td class="tableFormLabel"><label for="simplesearch_dropdown_species" id="simplesearch_dropdown_species_string"></label></td>
-                    <td><select name="simplesearch_dropdown_species" id="simplesearch_dropdown_species">
-                        <!-- TO BE FILLED BY THE COMPUTER LORD -->
-                    </select></td>
-                </tr>
-                <tr>
-                    <td class="tableFormLabel"><label for="simplesearch_input_style" id="simplesearch_input_style_string"></label></td>
-                    <td><select name="simplesearch_input_style" id="simplesearch_input_style">
-                        <!-- TO BE FILLED BY THE COMPUTER LORD -->
-                    </select></td>
-                </tr>
-                <tr>
-                    <td class="tableFormLabel"><label for="simplesearch_input_is_partial" id="simplesearch_input_is_partial_string"></label></td>
-                    <td><select name="simplesearch_input_is_partial" id="simplesearch_input_is_partial">
-                        <option value="dont_care">&mdash;</option>
-                        <option value="TRUE">TRUE</option>
-                        <option value="FALSE">FALSE</option>
-                    </select></td>
-                </tr>
-                
-                <tr>
-                    <td class="tableFormLabel"><label for="simplesearch_colourcombi0" id="simplesearch_colour_string"></label></td>
-                    <td>
-                        <table style="margin-left: -3px">
-                            <tr>
-                                <td id="simplesearch_colourcombi0" style="font-size:80%; text-align:center"></td>
-                                    <td rowspan="2" style=""></td>
-                                    <td rowspan="2" style="width:1px; background: #AAA; padding: 0"></td>
-                                    <td rowspan="2" style=""></td>
-                                <td id="simplesearch_colourcombi1" style="font-size:80%; text-align:center"></td>
-                                <td id="simplesearch_colourcombi2" style="font-size:80%; text-align:center"></td>
-                                <td id="simplesearch_colourcombi3" style="font-size:80%; text-align:center"></td>
-                            </tr>
-                            <tr>
-                                <td><select id="simplesearch_colour_background" name="simplesearch_colour_background"></select><!-- TO BE FILLED BY THE COMPUTER LORD --></td>
-                                <td><select id="simplesearch_colour1" name="simplesearch_colour1"><!-- TO BE FILLED BY THE COMPUTER LORD --></select></td>
-                                <td><select id="simplesearch_colour2" name="simplesearch_colour2"><!-- TO BE FILLED BY THE COMPUTER LORD --></select></td>
-                                <td><select id="simplesearch_colour3" name="simplesearch_colour3"><!-- TO BE FILLED BY THE COMPUTER LORD --></select></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class="tableFormLabel"><label for="simplesearch_eyes" id="simplesearch_input_eyes_string"></label></td>
-                    <td>
-                        <table style="margin-left: -3px">
-                            <tr>
-                                <td id="simplesearch_eyes_sclera_string" style="font-size:80%; text-align:center"></td>
-                                <td id="simplesearch_eyes_string" style="font-size:80%; text-align:center"></td>
-                            </tr>
-                            <tr>
-                                <td><select id="simplesearch_eyes_sclera" name="simplesearch_eyes_sclera"></select><!-- TO BE FILLED BY THE COMPUTER LORD --></td>
-                                <td><select id="simplesearch_eyes" name="simplesearch_eyes"><!-- TO BE FILLED BY THE COMPUTER LORD --></select></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class="tableFormLabel"><label for="simplesearch_hair" id="simplesearch_input_hair_string"></label></td>
-                    <td>
-                        <table style="margin-left: -3px">
-                            <tr>
-                                <td id="simplesearch_hair_dye_string" style="font-size:80%; text-align:center"></td>
-                                <td id="simplesearch_hair_streak_string" style="font-size:80%; text-align:center"></td>
-                            </tr>
-                            <tr>
-                                <td><select id="simplesearch_hair_dye" name="simplesearch_hair_dye"></select><!-- TO BE FILLED BY THE COMPUTER LORD --></td>
-                                <td><select id="simplesearch_hair_streak" name="simplesearch_hair_streak"><!-- TO BE FILLED BY THE COMPUTER LORD --></select></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class="tableFormLabel"><label for="includewip_simple" id="includewip_string2"></label></td>
-                    <td><input type="checkbox" id="includewip_simple" name="includewip_simple"></td>
-                </tr>
-                
-                <tr><td style="line-height: 6px">&nbsp;</td></tr> <!-- some aesthetic gap -->
-                
-                <tr>
-                    <td class="tableFormLabel"><input type="submit" value="Submit" id="simple_submit_button" onclick="simplequery()" /></td>
-                    <td><input type="reset" value="Reset" id="simple_reset_button" onclick="clearResults()" /></td>
-                </tr>
-                
+                    <tr>
+                        <td>
+                            <table id="main_searchform_area">
+                                <tr>
+                                    <td class="tableFormLabel"><label for="simplesearch_input_creatorname" id="simplesearch_input_creatorname_string"></label></td>
+                                    <td><input type="search" size="12" id="simplesearch_input_creatorname" name="simplesearch_input_creatorname"></td>
+                                </tr>
+                                <tr>
+                                    <td class="tableFormLabel"><label for="simplesearch_input_actorname" id="simplesearch_input_actorname_string"></label></td>
+                                    <td><input type="search" size="12" id="simplesearch_input_actorname" name="simplesearch_input_actorname"></input>
+                                </tr>
+                                <tr>
+                                    <td class="tableFormLabel"><label for="simplesearch_input_furname" id="simplesearch_input_furname_string"></label></td>
+                                    <td><input type="search" size="12" id="simplesearch_input_furname" name="simplesearch_input_furname"></input>
+                                </tr>
+                                <tr>
+                                    <td class="tableFormLabel"><label for="simplesearch_input_bday_from" id="simplesearch_input_bday_title_string"></label></td>
+                                    <td><input type="search" size="5" id="simplesearch_input_bday_from" name="simplesearch_input_bday_from">
+                                    <label> &mdash; </label>
+                                    <input type="search" size="5" id="simplesearch_input_bday_to" name="simplesearch_input_bday_to"></input>
+                                </tr>
+                                <tr>
+                                    <td class="tableFormLabel"><label for="simplesearch_dropdown_species" id="simplesearch_dropdown_species_string"></label></td>
+                                    <td><select name="simplesearch_dropdown_species" id="simplesearch_dropdown_species">
+                                        <!-- TO BE FILLED BY THE COMPUTER LORD -->
+                                    </select></td>
+                                </tr>
+                                <tr>
+                                    <td class="tableFormLabel"><label for="simplesearch_input_style" id="simplesearch_input_style_string"></label></td>
+                                    <td><select name="simplesearch_input_style" id="simplesearch_input_style">
+                                        <!-- TO BE FILLED BY THE COMPUTER LORD -->
+                                    </select></td>
+                                </tr>
+                                <tr>
+                                    <td class="tableFormLabel"><label for="simplesearch_input_is_partial" id="simplesearch_input_is_partial_string"></label></td>
+                                    <td><select name="simplesearch_input_is_partial" id="simplesearch_input_is_partial">
+                                        <option value="dont_care">&mdash;</option>
+                                        <option value="TRUE">TRUE</option>
+                                        <option value="FALSE">FALSE</option>
+                                    </select></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="tableFormLabel"><label for="simplesearch_colourcombi0" id="simplesearch_colour_string"></label></td>
+                                    <td>
+                                        <table style="margin-left: -3px">
+                                            <tr>
+                                                <td id="simplesearch_colourcombi0" style="font-size:80%; text-align:center"></td>
+                                                    <td rowspan="2" style=""></td>
+                                                    <td rowspan="2" style="width:1px; background: #AAA; padding: 0"></td>
+                                                    <td rowspan="2" style=""></td>
+                                                <td id="simplesearch_colourcombi1" style="font-size:80%; text-align:center"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><select id="simplesearch_colour_background" name="simplesearch_colour_background"></select><!-- TO BE FILLED BY THE COMPUTER LORD --></td>
+                                                <td><select id="simplesearch_colour1" name="simplesearch_colour1"><!-- TO BE FILLED BY THE COMPUTER LORD --></select></td>
+                                            </tr>
+                                        </table>
+                                        <table style="margin-left: -3px">
+                                            <tr>
+                                                <td id="simplesearch_colourcombi2" style="font-size:80%; text-align:center"></td>
+                                                    <td rowspan="2" style=""></td>
+                                                    <td rowspan="2" style="width:1px; background: rgba(0,0,0,0); padding: 0"></td>
+                                                    <td rowspan="2" style=""></td>
+                                                <td id="simplesearch_colourcombi3" style="font-size:80%; text-align:center"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><select id="simplesearch_colour2" name="simplesearch_colour2"><!-- TO BE FILLED BY THE COMPUTER LORD --></select></td>
+                                                <td><select id="simplesearch_colour3" name="simplesearch_colour3"><!-- TO BE FILLED BY THE COMPUTER LORD --></select></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="tableFormLabel"><label for="simplesearch_eyes" id="simplesearch_input_eyes_string"></label></td>
+                                    <td>
+                                        <table style="margin-left: -3px">
+                                            <tr>
+                                                <td id="simplesearch_eyes_sclera_string" style="font-size:80%; text-align:center"></td>
+                                                <td id="simplesearch_eyes_string" style="font-size:80%; text-align:center"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><select id="simplesearch_eyes_sclera" name="simplesearch_eyes_sclera"></select><!-- TO BE FILLED BY THE COMPUTER LORD --></td>
+                                                <td><select id="simplesearch_eyes" name="simplesearch_eyes"><!-- TO BE FILLED BY THE COMPUTER LORD --></select></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="tableFormLabel"><label for="simplesearch_hair" id="simplesearch_input_hair_string"></label></td>
+                                    <td>
+                                        <table style="margin-left: -3px">
+                                            <tr>
+                                                <td id="simplesearch_hair_dye_string" style="font-size:80%; text-align:center"></td>
+                                                <td id="simplesearch_hair_streak_string" style="font-size:80%; text-align:center"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><select id="simplesearch_hair_dye" name="simplesearch_hair_dye"></select><!-- TO BE FILLED BY THE COMPUTER LORD --></td>
+                                                <td><select id="simplesearch_hair_streak" name="simplesearch_hair_streak"><!-- TO BE FILLED BY THE COMPUTER LORD --></select></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="tableFormLabel"><label for="includewip_simple" id="includewip_string2"></label></td>
+                                    <td><input type="checkbox" id="includewip_simple" name="includewip_simple"></td>
+                                </tr>
+                                
+                                <tr><td style="line-height: 6px">&nbsp;</td></tr> <!-- some aesthetic gap -->
+                                
+                                <tr>
+                                    <td class="tableFormLabel"><input type="submit" value="Submit" id="simple_submit_button" onclick="simplequery()" /></td>
+                                    <td><input type="reset" value="Reset" id="simple_reset_button" onclick="clearResults()" /></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="vertical-align:bottom">
+                            <div id="instruction_area">
+                                <floatbox id="colour_palette_showoff"><!-- TO BE FILLED BY THE COMPUTER LORD --></floatbox>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
                 
                 <p id="will_show_anything_string"><!-- TO BE FILLED BY THE COMPUTER LORD --></p>
