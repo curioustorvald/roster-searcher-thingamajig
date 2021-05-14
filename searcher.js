@@ -42,6 +42,7 @@ function loadJSON(jsonPath, isAsync, callback) {
 
 var furdb = {}
 var creatorThesaurus = {}
+var colourPalette = {}
 
 function forEachFur(action) {
     Object.keys(furdb).filter(i => !isNaN(i)).forEach(v => action(furdb[v]))
@@ -177,16 +178,21 @@ function pageinit() {
     loadJSON("workshopaliases.json", true, response => {
         creatorThesaurus = JSON.parse(response)
         
-        loadJSON("furdb.json", true, response => {
-            furdb = JSON.parse(response)
-            // jobs that need DB to be there
-            populateColourSelection()
-            populateEyesSelection()
-            populateHairSelection()
-            // these are here to just make them pop up in sync with more heavy tasks
-            populateSpeciesSelection()
-            populateStyleSelection()
+        loadJSON("colourpalette.json", true, response => {
+            colourPalette = JSON.parse(response)
+            
+            loadJSON("furdb.json", true, response => {
+                furdb = JSON.parse(response)
+                // jobs that need DB to be there
+                populateColourSelection()
+                populateEyesSelection()
+                populateHairSelection()
+                // these are here to just make them pop up in sync with more heavy tasks
+                populateSpeciesSelection()
+                populateStyleSelection()
+            })
         })
+        
     })
     // 선택된 언어로 문서 출력
     reloadI18n()
@@ -215,8 +221,8 @@ function populateStyleSelection() {
 }
 
 function populateColourSelection() {
-    let bgCols = {}
-    let fgCols = {}
+    let bgCols = {} // for colours that appear on the sheet but not in the colour palette
+    let fgCols = {} // for colours that appear on the sheet but not in the colour palette
     
     forEachFur(prop => {
         let colours = prop.colours
@@ -230,11 +236,16 @@ function populateColourSelection() {
         }
     })
         
-    let bgColList = Object.keys(bgCols).sort()
-    let fgColList = Object.keys(fgCols).sort()
+    let bgColList = Object.keys(bgCols).sort().filter(it => !(it in colourPalette))
+    let fgColList = Object.keys(fgCols).sort().filter(it => !(it in colourPalette))
     
-    let bgSel = nulsel + bgColList.map(s => `<option value="${s}">${s}</option>`).join('')
-    let fgSel = nulsel + fgColList.map(s => `<option value="${s}">${s}</option>`).join('')
+    let commonSel = nulsel + Object.keys(colourPalette).map(s => `<option value="${s}">${s}</option>`).join('')
+    
+    let bgSel = `${commonSel}`
+    if (bgColList.length > 0) bgSel += nulsel + bgColList.map(s => `<option value="${s}">${s}</option>`).join('')
+        
+    let fgSel = `${commonSel}`
+    if (fgColList.length > 0) fgSel += nulsel + fgColList.map(s => `<option value="${s}">${s}</option>`).join('')
     
     document.getElementById("simplesearch_colour_background").innerHTML = bgSel
     document.getElementById("simplesearch_colour1").innerHTML = fgSel
