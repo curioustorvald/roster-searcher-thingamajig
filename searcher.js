@@ -230,7 +230,7 @@ function populateColourChooser(parentname) {
             out += `<label class="container">&zwj;`
             //out += `<label class="container">tsz`
             out += `<input type="checkbox" id="${parentname}_${name}">`
-            out += `<span class="checkmark" luminosity="${subclass}" style="background-color:${colour}"></span>`
+            out += `<span class="checkmark" luminosity="${subclass}" style="background-color:${colour}" title="${name}"></span>`
             out += `</label>`
         }
     })
