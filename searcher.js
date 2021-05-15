@@ -524,13 +524,11 @@ function makeOutput(searchResults) {
         let id = it.id
         let prop = it.prop
         
-        let displayFurName = textOrQos((prop.name_ko + " " + prop.name_en).trim())
-            
+        let displayFurNameKo = (prop.name_ko).trim()
+        let displayFurNameEn = (prop.name_en).trim()
         let displayFurNameJa = (prop.name_ja).trim()
-                            
-        let furAliases = (prop.aliases).trim()
-        if (furAliases == "") furAliases = String.fromCharCode(0x3000)
-                            
+        let nameUnknown = (displayFurNameKo+displayFurNameEn+displayFurNameJa).length == 0
+        
         let actorName = (prop.actor_name).trim()
                             
         let displayActorName = textOrQos(actorName.split("/").shift())
@@ -554,10 +552,17 @@ function makeOutput(searchResults) {
             output += `<img src="${prop.ref_sheet}" />`
         else
             output += `<img src="no-image-available.png" />`
-            
+                        
         output += `</imgbox>`
         output += `<infobox>`
-        output += `<h4 title="${(furAliases.length == 0) ? `${displayFurName} ${displayFurNameJa}`.trim() : `${displayFurName} ${displayFurNameJa} (${furAliases})`}">${displayFurName}</h4>`
+        if (nameUnknown) {
+            output += `<h4 class="name_unknown">???</h4>`
+        }
+        else {
+            output += `<h4 class="name_ko">${displayFurNameKo}</h4>`
+            output += `<h4 class="name_en">${displayFurNameEn}</h4>`
+            output += `<h4 class="name_ja">${displayFurNameJa}</h4>`
+        }
         output += `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a></h5>`
         output += `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorName}</a>`)}</h5>`
         output += `</infobox></furbox>`
