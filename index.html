@@ -170,6 +170,9 @@ document.getElementById('moreinfo_overlay').addEventListener('click', function(e
         hideOverlay();
     }
 });
+
+let qd = {}
+if (location.search) location.search.substr(1).split`&`.forEach(item => {let [k,v] = item.split`=`; v = v && decodeURIComponent(v); (qd[k] = qd[k] || []).push(v)})
     </script>
 </body>
 </html>

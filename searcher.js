@@ -200,6 +200,12 @@ function pageinit() {
             
             loadJSON("furdb.json", true, response => {
                 furdb = JSON.parse(response)
+                // handle the 'show' query string
+                // qd is defined on index.html
+                if (qd.show !== undefined) {
+                    showOverlay(qd.show[0])
+                }
+                
                 // jobs that need DB to be there
                 populateEyesSelection()
                 populateColourChooser("body_colours")
