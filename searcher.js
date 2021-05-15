@@ -567,14 +567,13 @@ function simplequery() {
     let colourCombi = ["_background","1","2","3"].map(s => {
         let t = document.getElementById(`simplesearch_colour${s}`).value
         return (t == "dont_care") ? undefined : t
-    })
-    // special treatment for colourCombi because 0th elem must be nullable, but others must be "collapsed"
-    colourCombi = [colourCombi[0]].concat(colourCombi.tail().filter(it => it != undefined))
+    }).filter(it => it !== undefined)
+
     
     let hairCols = ["_dye","_streak"].map(s => {
         let t = document.getElementById(`simplesearch_hair${s}`).value
         return (t == "dont_care") ? undefined : t
-    }) // there are only two of them, and both must be nullable
+    }).filter(it => it !== undefined)
     
     let eyeCols = ["_sclera",""].map(s => {
         let t = document.getElementById(`simplesearch_eyes${s}`).value
@@ -733,7 +732,8 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                                     let tokens = matching.split(' ')
                                     searchMatches &= tokens.map(tok => searchTerm.map(word => (tok === word))).flat().some(it => it)
                                 }
-                                else if (searchCriterion == "colours") {
+                                // figured that users won't separate base colour from the entire colour set
+                                /*else if (searchCriterion == "colours") {
                                     // index 0 must match the 0th search term; anything goes for 1st or more
                                     let baseColMatches = (searchTerm[0] === undefined) ? true : matching[0] === searchTerm[0]
                                     
@@ -757,7 +757,7 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                                             (streak == matching[1])
 
                                     searchMatches &= baseMatches & streakMatches
-                                }
+                                }*/
                                 else {
                                     let partialMatch = true
                                     searchTerm.forEach(it => {
