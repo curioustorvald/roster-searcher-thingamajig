@@ -65,7 +65,7 @@ object Main {
     @JvmStatic val colourSuffixes = arrayOf("색","포인트")
     @JvmStatic val colourPrefixes = arrayOf("네온","연","진","남")
     @JvmStatic val colourRegex = Regex("""${colourNames.joinToString("|")}|${colourSuffixes.map { "[가-힣]+$it" }.joinToString("|")}|${colourPrefixes.map { "$it[가-힣]+" }.joinToString("|") }""")
-    @JvmStatic val hairRegex = Regex("""(${colourRegex}) 머리카락( (${colourRegex}) 브릿지)?""")
+    @JvmStatic val hairRegex = Regex("""(${colourRegex})(?= (머리카락|브릿지))""") // don't remove parens around (${colourRegex})
     @JvmStatic val eyesRegex = Regex("""[가-힣]안""")
     
     // END OF APPLICATION CONFIGURATION //
@@ -151,6 +151,9 @@ object Main {
             throw IllegalArgumentException(action)
     }
 
+    /**
+     * @return Pair Of <Body Colours, Hair Colours>
+     */
     @JvmStatic fun parseGetColours(descRaw: String): Pair<List<String>, List<String>> {
         val colourWords = colourRegex.findAll(descRaw).map { it.groupValues[0] }.toList().reversed()
         val hairWords = parseGetHairs(descRaw)
@@ -171,20 +174,16 @@ object Main {
         removal.forEach {
             if (it[1] == 1) newWords.add(colourWords[it[0]])
         }
-        
+
         return newWords.toList().reversed() to hairWords
     }
 
-    @JvmStatic fun parseGetHairs(descRaw: String): List<String> {
+    @JvmStatic private fun parseGetHairs(descRaw: String): List<String> {
         try {
-            val groups = hairRegex.findAll(descRaw).map { it.groupValues }.first()
-            if (groups[3].isNotBlank())
-                return listOf(groups[1].trim(), groups[3].trim()) // hair colour, streak colour
-            else
-                return listOf(groups[1].trim())
+            return hairRegex.findAll(descRaw).map { it.groupValues }.map { it.first() }.toList()
         }
         catch (e: java.util.NoSuchElementException) {
-            return listOf()
+            return listOf("")
         }
     }
 
