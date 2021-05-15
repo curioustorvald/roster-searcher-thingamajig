@@ -721,6 +721,27 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
         birthdayTo = searchFilter.birthday_to
     }
     
+    if (birthdayFrom != undefined) {
+        // case of 2017 -> 20170000
+        if (birthdayFrom < 10000) birthdayFrom *= 10000
+        // case of 201712 -> 20171200
+        else if (birthdayFrom < 1000000) birthdayFrom *= 100
+    }
+    
+    if (birthdayTo != undefined) {
+        // case of 2017 -> 20170000
+        if (birthdayTo < 10000) {
+            birthdayTo *= 10000
+            birthdayTo += 9999
+        }
+        // case of 201712 -> 20171200
+        else if (birthdayTo < 1000000) {
+            birthdayTo *= 100
+            birthdayTo += 99
+        }
+    }
+    
+    
         
     for (const furid in furdb) {
         if (isNaN(furid)) continue
