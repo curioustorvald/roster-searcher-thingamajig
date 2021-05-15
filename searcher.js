@@ -106,7 +106,7 @@ const i18n = {
         "SimpleSearchBirthday2": "활동개시일: ",
         "SimpleSearchSpecies": "종: ",
         "SimpleSearchStyle": "스타일: ",
-        "SimpleSearchIsPartial": "파셜 여부: ",
+        "SimpleSearchIsFullSuit": "풀슈트? ",
         "SimpleSearchColourCombi": "색상 조합: ",
         "SimpleSearchEyesSclera": "역안?",
         "SimpleSearchEyesColour": "홍채",
@@ -122,7 +122,9 @@ const i18n = {
         "SimpleSearchFromPre": "",
         "SimpleSearchFromPost": "부터",
         "SimpleSearchToPre": "",
-        "SimpleSearchToPost": "까지"
+        "SimpleSearchToPost": "까지",
+        "ConditionYes": "예",
+        "ConditionNo": "아니오"
     },
     "en": {
         "TagSyntaxError": "Entered tag is malformed: ",
@@ -138,11 +140,11 @@ const i18n = {
         "SimpleSearchActor": "Owner: ",
         "SimpleSearchCreator": "Creator: ",
         "SimpleSearchName": "Name (Korean/English): ",
-        "SimpleSearchBirthday": "Day of Birth (yyyymmdd): ",
+        "SimpleSearchBirthday": "Day of Birth&nbsp;<br />(yyyymmdd): ",
         "SimpleSearchBirthday2": "Day of Birth: ",
         "SimpleSearchSpecies": "Species: ",
         "SimpleSearchStyle": "Style: ",
-        "SimpleSearchIsPartial": "Partial? ",
+        "SimpleSearchIsFullSuit": "Full Suit? ",
         "SimpleSearchColourCombi": "Colour Schemes: ",
         "SimpleSearchEyesSclera": "Sclera",
         "SimpleSearchEyesColour": "Iris",
@@ -158,7 +160,9 @@ const i18n = {
         "SimpleSearchFromPre": "From",
         "SimpleSearchFromPost": "",
         "SimpleSearchToPre": "&nbsp;&nbsp;To",
-        "SimpleSearchToPost": ""
+        "SimpleSearchToPost": "",
+        "ConditionYes": "Yes",
+        "ConditionNo": "No"
     }
 }
 
@@ -376,6 +380,12 @@ function populateHairSelection() {
 }
 
 function reloadI18n() {
+    // is full suit yes/no
+    document.getElementById("simplesearch_input_is_full_suit").innerHTML = nulsel +
+        `<option value="true">${i18n[lang].ConditionYes}</option>` +
+        `<option value="false">${i18n[lang].ConditionNo}</option>`
+    
+    
     document.getElementById("will_show_anything_string").innerHTML = i18n[lang].WillShowAllOnEmptySearch
     
     
@@ -402,7 +412,7 @@ function reloadI18n() {
     document.getElementById("bday_to_post").innerHTML = i18n[lang].SimpleSearchToPost
 
     document.getElementById("simplesearch_dropdown_species_string").innerHTML = i18n[lang].SimpleSearchSpecies
-    document.getElementById("simplesearch_input_is_partial_string").innerHTML = i18n[lang].SimpleSearchIsPartial
+    document.getElementById("simplesearch_input_is_full_suit_string").innerHTML = i18n[lang].SimpleSearchIsFullSuit
     document.getElementById("simplesearch_input_style_string").innerHTML = i18n[lang].SimpleSearchStyle
     document.getElementById("simple_submit_button").setAttribute("value", i18n[lang].Submit)
     document.getElementById("simple_reset_button").setAttribute("value", i18n[lang].Reset)
@@ -586,8 +596,8 @@ function simplequery() {
     if (birthdayTo == "") birthdayTo = undefined
     let species = document.getElementById("simplesearch_dropdown_species").value
     if (species == "dont_care") species = undefined
-    let isPartial = document.getElementById("simplesearch_input_is_partial").value
-    if (isPartial == "dont_care") isPartial = undefined
+    let isFullSuit = document.getElementById("simplesearch_input_is_full_suit").value
+    if (isFullSuit == "dont_care") isFullSuit = undefined
     let style = document.getElementById("simplesearch_input_style").value
     if (style == "dont_care") style = undefined
     
@@ -614,7 +624,7 @@ function simplequery() {
     if (furName !== undefined) searchFilter.name = furName
     if (birthdayFrom !== undefined) searchFilter.birthday_from = birthdayFrom
     if (birthdayTo !== undefined) searchFilter.birthday_to = birthdayTo
-    if (isPartial !== undefined) searchFilter.is_partial = isPartial
+    if (isFullSuit !== undefined) searchFilter.is_partial = (isFullSuit === 'false') // this casts string 'true'/'false' into a boolean value and then negates it
     if (species !== undefined) searchFilter.species_ko = dropdownIdToDBname[species]
     if (style !== undefined) searchFilter.style = style
 
