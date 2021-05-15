@@ -44,6 +44,13 @@ var furdb = {}
 var creatorThesaurus = {}
 var colourPalette = {}
 
+function htmlColToLum(text) {
+    let r = parseInt("0x"+text.substring(1,3)) / 255.0
+    let g = parseInt("0x"+text.substring(3,5)) / 255.0
+    let b = parseInt("0x"+text.substring(5,7)) / 255.0
+    return (3*r + 4*g + b) / 8.0
+}
+
 function forEachFur(action) {
     Object.keys(furdb).filter(i => !isNaN(i)).forEach(v => action(furdb[v]))
 }
@@ -101,15 +108,13 @@ const i18n = {
         "SimpleSearchStyle": "스타일: ",
         "SimpleSearchIsPartial": "파셜 여부: ",
         "SimpleSearchColourCombi": "색상 조합: ",
-        "SimpleSearchColourCombi0": "바탕색",
-        "SimpleSearchColourCombi1": template`염색${0}`,
         "SimpleSearchEyesSclera": "역안?",
         "SimpleSearchEyesColour": "홍채",
         "SimpleSearchHairColour": "염색",
         "SimpleSearchHairStreak": "브릿지",
         "SimpleSearchEyes": "눈 색: ",
         "SimpleSearchHair": "머리카락:",
-        "MadeBy": "제작: ",
+        "MadeBy": "&#x2702;&#xFE0F;&nbsp;", // BLACK SCISSORS+VARIATION SELECTOR-16 because unicode is stupid
         "ThisManySearchResults": template`${0}개의 검색 결과:`,
         "None": "없음",
         "Any": "아무거나",
@@ -139,15 +144,13 @@ const i18n = {
         "SimpleSearchStyle": "Style: ",
         "SimpleSearchIsPartial": "Partial? ",
         "SimpleSearchColourCombi": "Colour Schemes: ",
-        "SimpleSearchColourCombi0": "Background",
-        "SimpleSearchColourCombi1": template`Foreground #${0}`,
         "SimpleSearchEyesSclera": "Sclera",
         "SimpleSearchEyesColour": "Iris",
         "SimpleSearchHairColour": "Dye",
         "SimpleSearchHairStreak": "Streak",
         "SimpleSearchEyes": "Eye Colour: ",
         "SimpleSearchHair": "Hair Colour: ",
-        "MadeBy": "Made by ",
+        "MadeBy": "&#x2702;&#xFE0F;&nbsp;", // BLACK SCISSORS+VARIATION SELECTOR-16 because unicode is stupid
         "ThisManySearchResults": template`Showing ${0} search results:`,
         "None": "None",
         "Any": "Any",
@@ -194,11 +197,12 @@ function pageinit() {
             loadJSON("furdb.json", true, response => {
                 furdb = JSON.parse(response)
                 // jobs that need DB to be there
-                populateColourSelection()
                 populateEyesSelection()
-                populateHairSelection()
+                populateColourChooser("body_colours")
+                populateColourChooser("hair_colours")
+                //populateColourSelection()
+                //populateHairSelection()
                 // these are here to just make them pop up in sync with more heavy tasks
-                populateColourPalette()
                 populateSpeciesSelection()
                 populateStyleSelection()
             })
@@ -211,7 +215,31 @@ function pageinit() {
     clearResults()
 }
 
-function populateColourPalette() {
+function populateColourChooser(parentname) {
+    // expected parentname: "body_colours", "hair_colours"
+    let out = ``
+    
+    Object.entries(colourPalette).forEach(kv => {
+        let name = kv[0]
+        let colour = kv[1][1]
+        
+        if (colour != undefined && colour.startsWith("#")) {
+            let lum = htmlColToLum(colour)
+            let subclass = (lum >= 0.666) ? "light" : "dark"
+
+            out += `<label class="container">&zwj;`
+            //out += `<label class="container">tsz`
+            out += `<input type="checkbox" id="${parentname}_${name}">`
+            out += `<span class="checkmark" luminosity="${subclass}" style="background-color:${colour}"></span>`
+            out += `</label>`
+        }
+    })
+    
+    
+    document.getElementById(`simplesearch_${parentname}`).innerHTML = out
+}
+
+function populateColourPaletteHelpMessage() {
     let maxSwatchCount = Object.values(colourPalette).reduce((acc,arr) => (arr.length > acc) ? arr.length : acc, 0)
     
     let out = `<table><thead style="text-align:center"><tr><td style=" border-bottom:1px solid #AAA;" colspan="${maxSwatchCount + 2}" ><h4>${i18n[lang].SimpleSearchColourTable}</h4></td></tr><tr><td colspan="${maxSwatchCount + 2}" ></td></tr></thead><tbody>`
@@ -265,6 +293,8 @@ function populateStyleSelection() {
     document.getElementById("simplesearch_input_style").innerHTML = output
 }
 
+
+// code for the old dropdown menu which is unused
 function populateColourSelection() {
     let bgCols = {} // for colours that appear on the sheet but not in the colour palette
     let fgCols = {} // for colours that appear on the sheet but not in the colour palette
@@ -378,18 +408,12 @@ function reloadI18n() {
     document.getElementById("simple_reset_button").setAttribute("value", i18n[lang].Reset)
     
     document.getElementById("simplesearch_colour_string").innerHTML = i18n[lang].SimpleSearchColourCombi
-    document.getElementById("simplesearch_colourcombi0").innerHTML = i18n[lang].SimpleSearchColourCombi0
-    document.getElementById("simplesearch_colourcombi1").innerHTML = i18n[lang].SimpleSearchColourCombi1(1)
-    document.getElementById("simplesearch_colourcombi2").innerHTML = i18n[lang].SimpleSearchColourCombi1(2)
-    document.getElementById("simplesearch_colourcombi3").innerHTML = i18n[lang].SimpleSearchColourCombi1(3)
     
     document.getElementById("simplesearch_input_eyes_string").innerHTML = i18n[lang].SimpleSearchEyes
     document.getElementById("simplesearch_eyes_sclera_string").innerHTML = i18n[lang].SimpleSearchEyesSclera
     document.getElementById("simplesearch_eyes_string").innerHTML = i18n[lang].SimpleSearchEyesColour
     
     document.getElementById("simplesearch_input_hair_string").innerHTML = i18n[lang].SimpleSearchHair
-    document.getElementById("simplesearch_hair_dye_string").innerHTML = i18n[lang].SimpleSearchHairColour
-    document.getElementById("simplesearch_hair_streak_string").innerHTML = i18n[lang].SimpleSearchHairStreak
 
     
     document.getElementById("searchform_header").innerHTML = i18n[lang].AdvancedSearch
@@ -564,19 +588,20 @@ function simplequery() {
     
     let searchFilter = {}
     
-    let colourCombi = ["_background","1","2","3"].map(s => {
-        let t = document.getElementById(`simplesearch_colour${s}`).value
-        return (t == "dont_care") ? undefined : t
-    }).filter(it => it !== undefined)
+    
+    let bodyCols = []
+    let hairCols = []
+    
+    Object.keys(colourPalette).forEach(colour => {
+        if (document.getElementById(`body_colours_${colour}`) && document.getElementById(`body_colours_${colour}`).checked)
+            bodyCols.push(colour)
+            
+        if (document.getElementById(`hair_colours_${colour}`) && document.getElementById(`hair_colours_${colour}`).checked)
+            hairCols.push(colour)
+    })
 
-    
-    let hairCols = ["_dye","_streak"].map(s => {
-        let t = document.getElementById(`simplesearch_hair${s}`).value
-        return (t == "dont_care") ? undefined : t
-    }).filter(it => it !== undefined)
-    
     let eyeCols = ["_sclera",""].map(s => {
-        let t = document.getElementById(`simplesearch_eyes${s}`).value
+        let t = "dont_care"//document.getElementById(`simplesearch_eyes${s}`).value
         return (t == "dont_care") ? undefined : t
     }).filter(it => it !== undefined)
         
@@ -588,8 +613,8 @@ function simplequery() {
     if (species !== undefined) searchFilter.species_ko = dropdownIdToDBname[species]
     if (style !== undefined) searchFilter.style = style
 
-    if (colourCombi.length > 0) searchFilter.colours = colourCombi
     if (eyeCols.length > 0) searchFilter.eyes = eyeCols
+    if (bodyCols.length > 0) searchFilter.colours = bodyCols
     if (hairCols.length > 0) searchFilter.hairs = hairCols
         
     let includeWIP = document.getElementById("includewip_simple").checked
@@ -665,7 +690,7 @@ const nameSearchAliases = ["name_ko", "name_en", "name_ja", "aliases"]
 const pseudoCriteria = {"name":1}
 const specialSearchTags = {"birthday_from":1, "birthday_to":1}
 const arraySearchSpecial = {"colours":1, "hairs":1, "eyes":1, "species_ko":1}
-const alwaysExactMatch = {"species_ko":1}
+const alwaysExactMatch = {"species_ko":1,"colours":1,"hairs":1}
 function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
     let isSearchTagEmpty = searchFilter === undefined
     let foundFurs = [] // contains object in {id: (int), prop: (object)}
