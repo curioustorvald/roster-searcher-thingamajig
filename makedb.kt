@@ -27,7 +27,11 @@ object Main {
             "style",
             "is_partial",
             "is_done",
-            "desc_raw",
+            "species_raw",
+            "colour_combi",
+            "hair_colours",
+            "eye_colours",
+            "eye_features",
             "is_34partial",
             "is_hidden", // this line WON'T get into the JSON but don't remove it otherwise the filtering wouldn't work
             "aliases_raw",
@@ -52,6 +56,10 @@ object Main {
             "is_partial",
             "is_done",
             "species_ko",
+            "colour_combi",
+            "hair_colours",
+            "eye_colours",
+            "eye_features",
             "is_34partial",
             "is_hidden", // this line WON'T get into the JSON but don't remove it otherwise the filtering wouldn't work
             "aliases",
@@ -111,6 +119,9 @@ object Main {
         }
     }
 
+    @JvmStatic private val photocopyingActions = arrayOf("photo_copying", "photo_link", "ref_sheet_copying", "ref_sheet")
+    @JvmStatic private val arrayActions = arrayOf("colour_combi", "hair_colours", "eye_colours", "eye_features")
+    
     @JvmStatic fun generateCell(record: List<String>, action: String): String? {
         if (action.startsWith("_")) return null
         
@@ -118,6 +129,13 @@ object Main {
         
         return if ("is_hidden" == action)
             if (value.isNotBlank()) "TRUE" else "FALSE"
+        else if (action in photocopyingActions)
+            value
+        else if (action in arrayActions) {
+            val arr = generateArrayCell(value)
+            if (arr.isEmpty() || arr[0].isBlank()) "[[]]"
+            else "[[" + generateArrayCell(value).map { "\"$it\"" }.joinToString(",") + "]]"
+        }
         else if ("birthday" == action)
             try {
                 value.toInt(); return value
@@ -141,16 +159,19 @@ object Main {
             else generateLink(value, "twitter")
         else if ("aliases_raw" == action)
             value //.split('/') // just return as-is
-        else if ("desc_raw" == action)
+        else if ("species_raw" == action)
             value.substringBefore(',').replace("?", "").substringBefore('(').trim()
-        else if ("photo_copying" == action || "photo_link" == action ||
-            "ref_sheet_copying" == action || "ref_sheet" == action
-        )
-            value
         else
             throw IllegalArgumentException(action)
     }
 
+    // must return empty array if there is no content in the record
+    @JvmStatic fun generateArrayCell(cell: String): Array<String> {
+        val out = ArrayList<String>()
+        cell.split(' ').forEach { out.add(it) }
+        return out.toTypedArray()
+    }
+    
     /**
      * @return Pair Of <Body Colours, Hair Colours>
      */
@@ -215,30 +236,6 @@ object Main {
                 .mapIndexed { i, v -> "\"${outColumns[i]}\":${if (v!!.toLowerCase() == "true" || v.toLowerCase() == "false") v.toLowerCase() else "\"${v.trim()}\""}" }
                 .joinToString(","))
 
-            /*val mainPhotoCopyright = photoTable[id-1][5]
-            val mainPhoto = photoTable[id-1][6]//.replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
-            val refSheetCopyright = photoTable[id-1][7]
-            val refSheet = photoTable[id-1][8]//.replace(Regex("""https://lh[0-9]\.googleusercontent\.com/"""),"")
-
-            line.append(",\"photo\":\"${if (mainPhoto.isNotBlank()) "$mainPhoto" else ""}\"")
-            line.append(",\"photo_copying\":\"${if (mainPhotoCopyright.isNotBlank()) "$mainPhotoCopyright" else ""}\"")
-            line.append(",\"ref_sheet\":\"${if (refSheet.isNotBlank()) "$refSheet" else ""}\"")
-            line.append(",\"ref_sheet_copying\":\"${if (refSheetCopyright.isNotBlank()) "$refSheetCopyright" else ""}\"")*/
-
-            // parse desc_raw separately
-            val descRaw = record[inColumns.linearSearch { it == "desc_raw" }!!]
-            if (descRaw != null) {
-                //val tokens = descRaw.split(Regex(""", *"""))
-                val (colours, hairs) = parseGetColours(descRaw)
-                val eyes = parseGetEyeColour(descRaw)
-
-
-                line.append(",\"colours\":[${colours.map { "\"${it}\"" }.joinToString(",")}]")
-                line.append(",\"hairs\":[${hairs.map { "\"${it}\"" }.joinToString(",")}]")
-                line.append(",\"eyes\":[${eyes.map { "\"${it}\"" }.joinToString(",")}]")
-            }
-
-
             line.append("}")
 
             if (!line.contains("\"is_hidden\":true") || includeHidden) {
@@ -246,13 +243,16 @@ object Main {
                 outJson.append(",\n")
             }
         }
-
+        
         outJson.deleteRange(outJson.lastIndex - 1, outJson.lastIndex) // remove trailing (,\n)
         outJson.append("}") // close the json
 
         var outstr = outJson.toString()
-        outstr = outstr.replace(Regex("""\"is_hidden\":true,"""), "")
-        outstr = outstr.replace(Regex("""\"is_hidden\":false,"""), "")
+            .replace(Regex("""\"is_hidden\":true,"""), "")
+            .replace(Regex("""\"is_hidden\":false,"""), "")
+            // replace "[[ ]]" into [ ]
+            .replace(Regex("""\"\[\["""), "[")
+            .replace(Regex("""\]\]\""""), "]")
                 
         File(outJsonName).writeText(outstr)
         println("Last update: ${lastUpdate}")

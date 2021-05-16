@@ -207,7 +207,8 @@ function pageinit() {
                 }
                 
                 // jobs that need DB to be there
-                populateEyesSelection()
+                //populateEyesSelection()
+                populateColourChooser("eye_colours")
                 populateColourChooser("body_colours")
                 populateColourChooser("hair_colours")
                 //populateColourSelection()
@@ -426,8 +427,6 @@ function reloadI18n() {
     document.getElementById("simplesearch_colour_string").innerHTML = i18n[lang].SimpleSearchColourCombi
     
     document.getElementById("simplesearch_input_eyes_string").innerHTML = i18n[lang].SimpleSearchEyes
-    document.getElementById("simplesearch_eyes_sclera_string").innerHTML = i18n[lang].SimpleSearchEyesSclera
-    document.getElementById("simplesearch_eyes_string").innerHTML = i18n[lang].SimpleSearchEyesColour
     
     document.getElementById("simplesearch_input_hair_string").innerHTML = i18n[lang].SimpleSearchHair
 
@@ -612,6 +611,7 @@ function simplequery() {
     
     let bodyCols = []
     let hairCols = []
+    let eyeCols = []
     
     Object.keys(colourPalette).forEach(colour => {
         if (document.getElementById(`body_colours_${colour}`) && document.getElementById(`body_colours_${colour}`).checked)
@@ -619,13 +619,11 @@ function simplequery() {
             
         if (document.getElementById(`hair_colours_${colour}`) && document.getElementById(`hair_colours_${colour}`).checked)
             hairCols.push(colour)
+            
+        if (document.getElementById(`eye_colours_${colour}`) && document.getElementById(`eye_colours_${colour}`).checked)
+            eyeCols.push(colour)
     })
 
-    let eyeCols = ["_sclera",""].map(s => {
-        let t = document.getElementById(`simplesearch_eyes${s}`).value
-        return (t == "dont_care") ? undefined : t
-    }).filter(it => it !== undefined)
-        
     if (creatorName !== undefined) searchFilter.creator_name = creatorName
     if (furName !== undefined) searchFilter.name = furName
     if (birthdayFrom !== undefined) searchFilter.birthday_from = birthdayFrom
@@ -634,9 +632,9 @@ function simplequery() {
     if (species !== undefined) searchFilter.species_ko = dropdownIdToDBname[species]
     if (style !== undefined) searchFilter.style = style
 
-    if (eyeCols.length > 0) searchFilter.eyes = eyeCols
-    if (bodyCols.length > 0) searchFilter.colours = bodyCols
-    if (hairCols.length > 0) searchFilter.hairs = hairCols
+    if (eyeCols.length > 0) searchFilter.eye_colours = eyeCols
+    if (bodyCols.length > 0) searchFilter.colour_combi = bodyCols
+    if (hairCols.length > 0) searchFilter.hair_colours = hairCols
         
     let includeWIP = document.getElementById("includewip_simple").checked
     
@@ -716,6 +714,7 @@ const nameSearchAliases = ["name_ko", "name_en", "name_ja", "aliases"]
 const pseudoCriteria = {"name":1}
 const specialSearchTags = {"birthday_from":1, "birthday_to":1}
 const alwaysExactMatch = {"species_ko":1,"colours":1,"hairs":1}
+const colourMatch = {"colour_combi":1,"hair_colours":1,"eye_colours":1}
 function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
     let isSearchTagEmpty = searchFilter === undefined
     let foundFurs = [] // contains object in {id: (int), prop: (object)}
@@ -806,9 +805,9 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                                 let tokens = matching.split(' ')
                                 searchMatches &= tokens.map(tok => searchTerm.map(word => (tok === word))).flat().some(it => it)
                             }
-                            else if (searchCriterion == "colours" || searchCriterion == "hairs") {
-                                let rainbow = searchTerm.reduce((acc,it) => { acc += (it=="적색"||it=="주황색"||it=="황색"||it=="연두색"||it=="초록색"||it=="파란색"||it=="남색")*1 }, 0) >= 4 // if there are  4 or more maching colours, it's rainbow
-                                
+                            else if (searchCriterion in colourMatch) {
+                                let rainbow = searchTerm.reduce((acc,it) => acc + (it=="적색"||it=="주황색"||it=="황색"||it=="연두색"||it=="초록색"||it=="파란색"||it=="남색")*1, 0) >= 4 // if there are  4 or more maching colours, it's rainbow
+
                                 if (rainbow && matching.includes("무지개색")) {
                                     searchMatches &= true
                                 }
@@ -819,13 +818,6 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                                     })
                                     searchMatches &= partialMatch
                                 }
-                            }
-                            else if (searchCriterion == "eyes") {                                
-                                let partialMatch = true
-                                searchTerm.forEach(it => {
-                                    partialMatch &= matching.includes(it)
-                                })
-                                searchMatches &= partialMatch
                             }
                             else {
                                 throw Error("unknown array search criterion: "+searchCriterion)

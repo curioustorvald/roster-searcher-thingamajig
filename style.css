@@ -635,7 +635,7 @@ li.columngap > a {
     margin:10px 0 10px 0;
     font-size:16px
 }
-.accordion label {
+.accordion > h3 > label {
 /*     display:block */
     color:var(--site-text-colour);
     cursor:pointer;
