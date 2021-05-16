@@ -90,15 +90,16 @@ const tagDocumentation = {
 const i18n = {
     "ko": {
         "TagSyntaxError": "태그가 올바르지 않게 입력되었습니다: ",
-        "TagOptions": "태그 옵션:",
+        "TagGuide": "태그 가이드",
         "SearchTags": "검색어: ",
         "IsExactMatch": "검색어 정확히 매칭",
         "IsIncludeWip": "미완성 퍼슈트 포함",
         "Submit": "검색",
         "Reset": "초기화",
         "WillShowAllOnEmptySearch": "입력 칸을 비우고 검색하면 모든 퍼슈트를 보여줍니다",
+        "ReplaceSpaceWithUnderscore": "공백은 언더스코어( _ )를 사용해 입력해 주십시오",
         "AdvancedSearch": "태그 검색",
-        "SimpleSearch": "",
+        "SimpleSearch": "쉬운 검색",
         "SimpleSearchActor": "소유자: ",
         "SimpleSearchCreator": "제작자: ",
         "SimpleSearchName": "이름 (한/영): ",
@@ -128,15 +129,16 @@ const i18n = {
     },
     "en": {
         "TagSyntaxError": "Entered tag is malformed: ",
-        "TagOptions": "Tag Options:",
+        "TagGuide": "Tag Guides",
         "SearchTags": "Search Tags: ",
         "IsExactMatch": "Exact Match?",
         "IsIncludeWip": "Include Not Yet Completed?",
         "Submit": "Submit",
         "Reset": "Reset",
-        "WillShowAllOnEmptySearch": "Blank search tag will show all the fursuits",
+        "WillShowAllOnEmptySearch": "Searching with no criteria will show all fursuits",
+        "ReplaceSpaceWithUnderscore": "Use underscore ( _ ) to type in spaces",
         "AdvancedSearch": "Search By Tags",
-        "SimpleSearch": "",
+        "SimpleSearch": "Easy Search",
         "SimpleSearchActor": "Owner: ",
         "SimpleSearchCreator": "Creator: ",
         "SimpleSearchName": "Name (Korean/English): ",
@@ -394,17 +396,19 @@ function reloadI18n() {
     
     
     document.getElementById("will_show_anything_string").innerHTML = i18n[lang].WillShowAllOnEmptySearch
+    document.getElementById("tagsearch_willshowall_string").innerHTML = i18n[lang].WillShowAllOnEmptySearch
     
     
     let tagdocOutput = ""
     
-    tagdocOutput += "<p>"+i18n[lang].TagOptions+"</p><ul>"
+    tagdocOutput += "<ul>"
     Object.keys(tagDocumentation).forEach(it => {
         tagdocOutput += "<li>"+it+" &ndash; "+tagDocumentation[it][lang]+"</li>"
     })
-    tagdocOutput += "</ul><p>"+i18n[lang].WillShowAllOnEmptySearch+"</p>"
+    tagdocOutput += "</ul><p>"+i18n[lang].ReplaceSpaceWithUnderscore+"</p>"
     
     document.getElementById("tagdoc").innerHTML = tagdocOutput
+    document.getElementById("tagdoc_header").innerHTML = i18n[lang].TagGuide
     
     // 검색폼 다국어화
     document.getElementById("simplesearch_header").innerHTML = i18n[lang].SimpleSearch
@@ -431,7 +435,7 @@ function reloadI18n() {
     document.getElementById("simplesearch_input_hair_string").innerHTML = i18n[lang].SimpleSearchHair
 
     
-    document.getElementById("searchform_header").innerHTML = i18n[lang].AdvancedSearch
+    //document.getElementById("searchform_header").innerHTML = i18n[lang].AdvancedSearch
     document.getElementById("searchtags_string").innerHTML = i18n[lang].SearchTags
     document.getElementById("exactmatch_string").innerHTML = i18n[lang].IsExactMatch
     document.getElementById("includewip_string").innerHTML = i18n[lang].IsIncludeWip

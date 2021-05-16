@@ -172,7 +172,7 @@ a {
     color: #888;
 }
 
-h4 {
+infobox h4, parbox h4 {
     text-align: center;
     font-size: 1.1em;
     color: #333;
@@ -181,7 +181,7 @@ h4 {
     margin-bottom: 0.8rem;
 }
 
-h5 {
+infobox h5, parbox h5 {
     text-align: center;
     font-size: 0.9em;
     color: #888;
@@ -605,29 +605,29 @@ li.columngap > a {
 .accordion>input[name=collapse] {
     display:none
 }
-.accordion label, .accordion .content {
+.accordion label, .accordion .accordion_inner {
 /*     max-width:620px; */
     margin:0 auto
 }
-.accordion .content {
+.accordion .accordion_inner {
 /*     background:#fff; */
     overflow:hidden;
     height:0;
     transition:.5s;
 }
-.accordion>input[name=collapse]:checked~.content {
+.accordion>input[name=collapse]:checked~.accordion_inner {
     height:auto;
     transition:height .5s
 }
 /*@media only screen and (min-width:620px) {
-    .accordion>input[name=collapse]:checked~.content {
+    .accordion>input[name=collapse]:checked~.accordion_inner {
         height:220px
     }
 }*/
 .accordion {
     margin-bottom:1em
 }
-.accordion>input[name=collapse]:checked~.content {
+.accordion>input[name=collapse]:checked~.accordion_inner {
     border-top:0;
     transition:.3s
 }
