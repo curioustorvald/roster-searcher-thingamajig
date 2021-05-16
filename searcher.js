@@ -243,8 +243,14 @@ function createColourSwatch(name) {
             
     let lum = htmlColToLum(colour)
     let subclass = (lum >= 0.666) ? "light" : "dark"
-    return `<span class="checkmark colour_swatch" luminosity="${subclass}" style="background:${(colour.startsWith('#') ? colour : `var(--${colour})`)}" title="${name}">&nbsp;</span>`
+    return `<span class="checkmark swatch" luminosity="${subclass}" style="background:${(colour.startsWith('#') ? colour : `var(--${colour})`)}" title="${name}"></span>`
 }
+
+const specialEyeSwatch = {
+    "역안":`<span class="checkmark swatch swatch_black_sclera" luminosity="dark" title="역안"></span>`,
+    "무늬":`<span class="checkmark swatch swatch_shaped_pupil" luminosity="light" title="무늬"></span>`
+}
+
 function populateColourChooser(parentname) {
     // expected parentname: "body_colours", "hair_colours"
     let out = ``
@@ -518,8 +524,12 @@ function showOverlay(id) {
         output += `<copying>&#169; ${prop.photo_copying}</copying>`
     
     let colourCombiPal = prop.colour_combi.map(it => `<label class="container">&zwj;${createColourSwatch(it)}</label>`).join('')
+    
     let hairColourPal = prop.hair_colours.map(it => `<label class="container">&zwj;${createColourSwatch(it)}</label>`).join('')
-    let eyeColourPal = prop.eye_colours.map(it => `<label class="container">&zwj;${createColourSwatch(it)}</label>`).join('') // TODO add icon for eye_features
+    
+    let eyeColourPal = prop.eye_colours.map(it => `<label class="container">&zwj;${createColourSwatch(it)}</label>`).join('') +
+            prop.eye_features.map(it => `<label class="container">&zwj;${specialEyeSwatch[it]}</label>`).join('')
+    
     let copyableLinkHtml = `<span class="underline_on_hover" onclick=copySharelink(${id})>${i18n[lang].ClickToCopyLink}</span>` 
     
     output += `</imgbox>`
@@ -540,9 +550,16 @@ function showOverlay(id) {
         output += tdtemplate(i18n[lang].SimpleSearchCreator, displayCreatorName + `&nbsp; ${creatorLinkFull}`)
         output += tdtemplate(i18n[lang].SimpleSearchBirthday2, prop.birthday)
         output += tdtemplate(i18n[lang].SimpleSearchIsFullSuit, prop.is_34partial ? "&frac34;" : !prop.is_partial ? i18n[lang].ConditionYes : i18n[lang].ConditionNo)
+        
+        if (colourCombiPal.length > 0)
         output += tdtemplate(i18n[lang].SimpleSearchColourCombi, `<colourchooser>${colourCombiPal}</colourchooser>`)
+        
+        if (hairColourPal.length > 0)
         output += tdtemplate(i18n[lang].SimpleSearchHair, `<colourchooser>${hairColourPal}</colourchooser>`)
+        
+        if (eyeColourPal.length > 0)
         output += tdtemplate(i18n[lang].SimpleSearchEyes, `<colourchooser>${eyeColourPal}</colourchooser>`)
+        
         output += tdtemplate(i18n[lang].ShareLink, copyableLinkHtml)
 
         output += `</table>`

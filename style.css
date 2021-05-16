@@ -229,6 +229,21 @@ colourchooser .container {
     user-select: none;
 }
 
+.swatch {
+    height: var(--colour-swatch-size-inner);
+    width: var(--colour-swatch-size-inner);
+    border: 1px solid rgba(0,0,0,0.5);
+    border-radius: 0 0 8px 0;
+}
+
+.swatch_black_sclera {
+    background: no-repeat center/66% url(swatch_black_sclera.png) #333;
+}
+
+.swatch_shaped_pupil {
+    background: no-repeat center/55% url(swatch_shaped_pupil.png) #F9F9F9;
+}
+
 /* Hide the browser's default checkbox */
 colourchooser .container input {
     display: none;
@@ -244,11 +259,6 @@ colourchooser .checkmark {
     position: absolute;
     top: 0;
     left: 0;
-    height: var(--colour-swatch-size-inner);
-    width: var(--colour-swatch-size-inner);
-/*     background-color: #FF0000; */
-    border: 1px solid rgba(0,0,0,0.5);
-    border-radius: 4px;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
