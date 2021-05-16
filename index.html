@@ -57,18 +57,26 @@
                     <tr>
                         <td>
                             <table id="main_searchform_area">
+                            
+                                <!-- 제작자 -->
                                 <tr>
                                     <td class="tableFormLabel"><label for="simplesearch_input_creatorname" id="simplesearch_input_creatorname_string"></label></td>
                                     <td><input type="search" size="12" id="simplesearch_input_creatorname" name="simplesearch_input_creatorname"></td>
                                 </tr>
+                                
+                                <!-- 소유자 -->
                                 <!--<tr>
                                     <td class="tableFormLabel"><label for="simplesearch_input_actorname" id="simplesearch_input_actorname_string"></label></td>
                                     <td><input type="search" size="12" id="simplesearch_input_actorname" name="simplesearch_input_actorname"></input>
                                 </tr>-->
+                                
+                                <!-- 이름 -->
                                 <tr>
                                     <td class="tableFormLabel"><label for="simplesearch_input_furname" id="simplesearch_input_furname_string"></label></td>
                                     <td><input type="search" size="12" id="simplesearch_input_furname" name="simplesearch_input_furname"></input>
                                 </tr>
+                                
+                                <!-- 활동개시일 -->
                                 <tr>
                                     <td class="tableFormLabel"><label for="simplesearch_input_bday_from" id="simplesearch_input_bday_title_string"></label></td>
                                     <td>
@@ -86,18 +94,24 @@
                                         </table>
                                     </td>
                                 </tr>
+                                
+                                <!-- 종 -->
                                 <tr>
                                     <td class="tableFormLabel"><label for="simplesearch_dropdown_species" id="simplesearch_dropdown_species_string"></label></td>
                                     <td><select name="simplesearch_dropdown_species" id="simplesearch_dropdown_species">
                                         <!-- TO BE FILLED BY THE COMPUTER LORD -->
                                     </select></td>
                                 </tr>
+                                
+                                <!-- 스타일 -->
                                 <tr>
                                     <td class="tableFormLabel"><label for="simplesearch_input_style" id="simplesearch_input_style_string"></label></td>
                                     <td><select name="simplesearch_input_style" id="simplesearch_input_style">
                                         <!-- TO BE FILLED BY THE COMPUTER LORD -->
                                     </select></td>
                                 </tr>
+                                
+                                <!-- 풀슈트 -->
                                 <tr>
                                     <td class="tableFormLabel"><label for="simplesearch_input_is_full_suit" id="simplesearch_input_is_full_suit_string"></label></td>
                                     <td><select name="simplesearch_input_is_full_suit" id="simplesearch_input_is_full_suit">
@@ -105,6 +119,7 @@
                                     </select></td>
                                 </tr>
                                 
+                                <!-- 색상 -->
                                 <tr>
                                     <td class="tableFormLabel"><label for="simplesearch_colourcombi" id="simplesearch_colour_string"></label></td>
                                     <td>
@@ -112,6 +127,7 @@
                                     </td>
                                 </tr>
                                 
+                                <!-- 머리카락 -->
                                 <tr>
                                     <td class="tableFormLabel"><label for="simplesearch_hair" id="simplesearch_input_hair_string"></label></td>
                                     <td>
@@ -119,6 +135,7 @@
                                     </td>
                                 </tr>
                                 
+                                <!-- 눈색 -->
                                 <tr>
                                     <td class="tableFormLabel"><label for="simplesearch_eyes" id="simplesearch_input_eyes_string"></label></td>
                                     <td>
@@ -126,6 +143,15 @@
                                     </td>
                                 </tr>
                                 
+                                <!-- 눈특징 -->
+                                <tr>
+                                    <td class="tableFormLabel"><label for="simplesearch_eye_features" id="simplesearch_input_eye_features_string"></label></td>
+                                    <td>
+                                        <colourchooser id="simplesearch_eye_features"><!-- TO BE FILLED BY THE COMPUTER LORD --></colourchooser>
+                                    </td>
+                                </tr>
+                                
+                                <!-- 미완성포함? -->
                                 <tr>
                                     <td class="tableFormLabel"><label for="includewip_simple" id="includewip_string2"></label></td>
                                     <td><input type="checkbox" id="includewip_simple" name="includewip_simple"></td>
@@ -133,6 +159,7 @@
                                 
                                 <tr><td style="line-height: 6px">&nbsp;</td></tr> <!-- some aesthetic gap -->
                                 
+                                <!-- 검색버튼 -->
                                 <tr>
                                     <td class="tableFormLabel"><input type="submit" value="Submit" id="simple_submit_button" onclick="simplequery()" /></td>
                                     <td><input type="reset" value="Reset" id="simple_reset_button" onclick="clearResults()" /></td>

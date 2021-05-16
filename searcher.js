@@ -114,7 +114,8 @@ const i18n = {
         "SimpleSearchEyesColour": "홍채",
         "SimpleSearchHairColour": "염색",
         "SimpleSearchHairStreak": "브릿지",
-        "SimpleSearchEyes": "눈 색: ",
+        "SimpleSearchEyes": "눈 색상: ",
+        "SimpleSearchEyeFeatures": "눈 특징: ",
         "SimpleSearchHair": "머리카락:",
         "MadeBy": "&#x2702;&#xFE0F;&nbsp;", // BLACK SCISSORS+VARIATION SELECTOR-16 because unicode is stupid
         "ThisManySearchResults": template`${0}개의 검색 결과:`,
@@ -157,6 +158,7 @@ const i18n = {
         "SimpleSearchHairColour": "Dye",
         "SimpleSearchHairStreak": "Streak",
         "SimpleSearchEyes": "Eye Colour: ",
+        "SimpleSearchEyeFeatures": "Eye Features: ",
         "SimpleSearchHair": "Hair Colour: ",
         "MadeBy": "&#x2702;&#xFE0F;&nbsp;", // BLACK SCISSORS+VARIATION SELECTOR-16 because unicode is stupid
         "ThisManySearchResults": template`Showing ${0} search results:`,
@@ -220,6 +222,7 @@ function pageinit() {
                 populateColourChooser("eye_colours")
                 populateColourChooser("body_colours")
                 populateColourChooser("hair_colours")
+                populateEyeFeaturesChooser()
                 //populateColourSelection()
                 //populateHairSelection()
                 // these are here to just make them pop up in sync with more heavy tasks
@@ -247,8 +250,8 @@ function createColourSwatch(name) {
 }
 
 const specialEyeSwatch = {
-    "역안":`<span class="checkmark swatch swatch_black_sclera" luminosity="dark" title="역안"></span>`,
-    "무늬":`<span class="checkmark swatch swatch_shaped_pupil" luminosity="light" title="무늬"></span>`
+    "역안":`<span class="checkmark swatch swatch_black_sclera" luminosity="light" title="역안"></span>`,
+    "무늬":`<span class="checkmark swatch swatch_shaped_pupil" luminosity="dark" title="무늬"></span>`
 }
 
 function populateColourChooser(parentname) {
@@ -258,15 +261,26 @@ function populateColourChooser(parentname) {
     Object.keys(colourPalette).forEach(name => {
         if (name != "무지개색") {
             out += `<label class="container">&zwj;`
-            //out += `<label class="container">tsz`
             out += `<input type="checkbox" id="${parentname}_${name}">`
             out += createColourSwatch(name)
             out += `</label>`
         }
     })
     
-    
     document.getElementById(`simplesearch_${parentname}`).innerHTML = out
+}
+
+function populateEyeFeaturesChooser() {
+    let out = ``
+    
+    Object.entries(specialEyeSwatch).forEach(kv => {        
+        out += `<label class="container">&zwj;`
+        out += `<input type="checkbox" id="eye_features_${kv[0]}">`
+        out += kv[1]
+        out += `</label>`
+    })
+    
+    document.getElementById(`simplesearch_eye_features`).innerHTML = out
 }
 
 function populateColourPaletteHelpMessage() {
@@ -358,6 +372,7 @@ function populateColourSelection() {
     document.getElementById("simplesearch_colour3").innerHTML = fgSel
 }
 
+// code for the old dropdown menu which is unused
 function populateEyesSelection() {
     let cols = {}
     
@@ -379,6 +394,7 @@ function populateEyesSelection() {
     document.getElementById("simplesearch_eyes_sclera").innerHTML = sclearSel
 }
 
+// code for the old dropdown menu which is unused
 function populateHairSelection() {
     let bgCols = {}
     let fgCols = {}
@@ -450,6 +466,8 @@ function reloadI18n() {
     document.getElementById("simplesearch_input_eyes_string").innerHTML = i18n[lang].SimpleSearchEyes
     
     document.getElementById("simplesearch_input_hair_string").innerHTML = i18n[lang].SimpleSearchHair
+
+    document.getElementById("simplesearch_input_eye_features_string").innerHTML = i18n[lang].SimpleSearchEyeFeatures
 
     
     //document.getElementById("searchform_header").innerHTML = i18n[lang].AdvancedSearch
@@ -670,6 +688,7 @@ function simplequery() {
     let bodyCols = []
     let hairCols = []
     let eyeCols = []
+    let eyeFeatures = []
     
     Object.keys(colourPalette).forEach(colour => {
         if (document.getElementById(`body_colours_${colour}`) && document.getElementById(`body_colours_${colour}`).checked)
@@ -681,7 +700,14 @@ function simplequery() {
         if (document.getElementById(`eye_colours_${colour}`) && document.getElementById(`eye_colours_${colour}`).checked)
             eyeCols.push(colour)
     })
+    
+    Object.keys(specialEyeSwatch).forEach(feature => {
+        if (document.getElementById(`eye_features_${feature}`) && document.getElementById(`eye_features_${feature}`).checked)
+            eyeFeatures.push(feature)
+    })
 
+    console.log(eyeFeatures)
+    
     if (creatorName !== undefined) searchFilter.creator_name = creatorName
     if (furName !== undefined) searchFilter.name = furName
     if (birthdayFrom !== undefined) searchFilter.birthday_from = birthdayFrom.replaceAll('-','')
@@ -693,6 +719,7 @@ function simplequery() {
     if (eyeCols.length > 0) searchFilter.eye_colours = eyeCols
     if (bodyCols.length > 0) searchFilter.colour_combi = bodyCols
     if (hairCols.length > 0) searchFilter.hair_colours = hairCols
+    if (eyeFeatures.length > 0) searchFilter.eye_features = eyeFeatures
         
     let includeWIP = document.getElementById("includewip_simple").checked
         
@@ -772,7 +799,7 @@ const nameSearchAliases = ["name_ko", "name_en", "name_ja", "aliases"]
 const pseudoCriteria = {"name":1}
 const specialSearchTags = {"birthday_from":1, "birthday_to":1}
 const alwaysExactMatch = {"species_ko":1,"colours":1,"hairs":1}
-const colourMatch = {"colour_combi":1,"hair_colours":1,"eye_colours":1}
+const colourMatch = {"colour_combi":1,"hair_colours":1,"eye_colours":1,"eye_features":1}
 function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
     let isSearchTagEmpty = searchFilter === undefined
     let foundFurs = [] // contains object in {id: (int), prop: (object)}
