@@ -1,7 +1,8 @@
 * {
     --site-background: #E5EDF4;
     --furbox-background: #F9F9F9;
-    --site-text-colour: #3A3A3A;
+    --site-text-colour: #333;
+    --site-subtext-colour: #888;
     --site-font-size: 16px;
     --img-height: 280px;
     --shopbannerimg-height: 50px;
@@ -75,6 +76,11 @@ overlay {
     cursor: pointer; /* Add a pointer on hover */
 }
 
+.underline_on_hover:hover {
+    text-decoration: underline;
+}
+
+
 table.stat {
     width: 100%;
 }
@@ -105,7 +111,7 @@ table.stat {
     display: inline;
     font-size: 90%;
     display: table-cell;
-    color: #888;
+    color: var(--site-subtext-colour);
 }
 
 .tableBarChartArea {
@@ -153,11 +159,6 @@ tablebarchartstack.superlight {
     border-bottom: 1px solid var(--whitegraph-bordercol);
 }
 
-tablebarchartstack:hover {
-    text-decoration: underline;
-    text-decoration-width: 2px;
-}
-
 stacklabel {
     display: table-cell;
     width: 100%;
@@ -169,7 +170,7 @@ stacklabel {
 }
 
 a {
-    color: #888;
+    color: var(--site-subtext-colour);
 }
 
 infobox h4, parbox h4 {
@@ -184,7 +185,7 @@ infobox h4, parbox h4 {
 infobox h5, parbox h5 {
     text-align: center;
     font-size: 0.9em;
-    color: #888;
+    color: var(--site-subtext-colour);
     padding: 0;
     margin: 0.5rem;
     font-weight: 400;
@@ -425,7 +426,7 @@ bigfurbox {
     background-color: var(--furbox-background);
     box-sizing: border-box;
     width: calc(min(900px,80vw));
-    height: 600px;
+    height: calc(min(675px,80vw));
     animation: smooth 1.5s backwards;
     animation-delay: 0.40s;
     padding: var(--gaps);
@@ -448,6 +449,10 @@ bigfurbox parbox {
     float: right;
     width: calc(50% - 0.5 * var(--gaps));
     height: 100%
+}
+
+bigfurbox h4 {
+    margin: 1ex;
 }
 
 refsheetflexwrapper {

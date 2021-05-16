@@ -107,7 +107,7 @@ const i18n = {
         "SimpleSearchBirthday2": "활동개시일: ",
         "SimpleSearchSpecies": "종: ",
         "SimpleSearchStyle": "스타일: ",
-        "SimpleSearchIsFullSuit": "풀슈트? ",
+        "SimpleSearchIsFullSuit": "풀슈트: ",
         "SimpleSearchColourCombi": "색상 조합: ",
         "SimpleSearchEyesSclera": "역안?",
         "SimpleSearchEyesColour": "홍채",
@@ -125,7 +125,10 @@ const i18n = {
         "SimpleSearchToPre": "",
         "SimpleSearchToPost": "까지",
         "ConditionYes": "예",
-        "ConditionNo": "아니오"
+        "ConditionNo": "아니오",
+        "ShareLink": "공유 주소: ",
+        "ClickToCopyLink": "(눌러서 링크 복사)",
+        "LinkCopied": "링크가 복사되었습니다"
     },
     "en": {
         "TagSyntaxError": "Entered tag is malformed: ",
@@ -164,7 +167,10 @@ const i18n = {
         "SimpleSearchToPre": "&nbsp;&nbsp;To",
         "SimpleSearchToPost": "",
         "ConditionYes": "Yes",
-        "ConditionNo": "No"
+        "ConditionNo": "No",
+        "ShareLink": "Share Link: ",
+        "ClickToCopyLink": "(Click to Copy the Link)",
+        "LinkCopied": "Link Copied"
     }
 }
 
@@ -454,9 +460,20 @@ function setLangEn() {
 function textOrQos(s) {
     return (s.trim().length === 0) ? "???" : s
 }
+function obtainShareLink(id) {
+    return `${window.location.href.split('?')[0]}?show=${id}`
+}
+function copySharelink(id) {
+    let temp = document.getElementById("clipboard_dummy")
+    temp.value = obtainShareLink(id)
+    temp.select()
+    temp.setSelectionRange(0,99999)
+    document.execCommand("copy")
+    alert(i18n[lang].LinkCopied)
+}
 function showOverlay(id) {
     let prop = furdb[id]
-    
+        
     let displayFurName = textOrQos((prop.name_ko + " " + prop.name_en).trim())
             
     let displayFurNameJa = (prop.name_ja).trim()
@@ -478,10 +495,10 @@ function showOverlay(id) {
     let displayCreatorLinkHref = prop.creator_link
     let displayCreatorLinkName = (displayCreatorLinkHref == "") ? "" : ((displayCreatorLinkHref.startsWith("https://twitter.com/")) ? `@${displayCreatorLinkHref.split("/").pop()}` : `(링크)`)
     
-    let tdtemplate = template`<tr><td class="tableFormLabel" style="color:#888">${0}</td><td style="color:#333">${1}</td></tr>`
+    let tdtemplate = template`<tr><td class="tableFormLabel" style="color:#888">${0}</td><td>${1}</td></tr>`
     
     let output = `<dummycentre><bigfurbox>`
-    
+        
     let actorLinkFull = `<a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a>`
     let creatorLinkFull = (prop.creator_name == "자작") ? actorLinkFull : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorLinkName}</a>`
     
@@ -494,6 +511,11 @@ function showOverlay(id) {
     
     if (prop.photo_copying)
         output += `<copying>&#169; ${prop.photo_copying}</copying>`
+    
+    let colourCombiPal = ``
+    let hairColourPal = ``
+    let eyeColourPal = ``
+    let copyableLinkHtml = `<span class="underline_on_hover" onclick=copySharelink(${id})>${i18n[lang].ClickToCopyLink}</span>` 
     
     output += `</imgbox>`
     
@@ -512,6 +534,12 @@ function showOverlay(id) {
         output += tdtemplate(i18n[lang].SimpleSearchActor, displayActorName + `&nbsp; ${actorLinkFull}`)
         output += tdtemplate(i18n[lang].SimpleSearchCreator, displayCreatorName + `&nbsp; ${creatorLinkFull}`)
         output += tdtemplate(i18n[lang].SimpleSearchBirthday2, prop.birthday)
+        output += tdtemplate(i18n[lang].SimpleSearchIsFullSuit, prop.is_34partial ? "&frac34;" : !prop.is_partial ? i18n[lang].ConditionYes : i18n[lang].ConditionNo)
+        output += tdtemplate(i18n[lang].SimpleSearchColourCombi, prop.colourCombiPal)
+        output += tdtemplate(i18n[lang].SimpleSearchHair, prop.hairColourPal)
+        output += tdtemplate(i18n[lang].SimpleSearchEyes, prop.eyeColourPal)
+        output += tdtemplate(i18n[lang].ShareLink, copyableLinkHtml)
+
         output += `</table>`
         
         output += `</refselem1>`
