@@ -522,14 +522,27 @@ function obtainShareLink(id) {
     return `${window.location.href.split('?')[0]}?show=${id}`
 }
 function copySharelink(id) {
-    let temp = document.getElementById("clipboard_dummy")
-    temp.value = obtainShareLink(id)
-    temp.select()
-    temp.setSelectionRange(0,99999)
-    document.execCommand("copy")
-    alert(i18n[lang].LinkCopied)
+    let holder = document.getElementById("clipboard_dummy_container")
+    holder.style.display = "block"
+    holder.style.opacity = 0
+    
+    try {
+        let temp = document.getElementById("clipboard_dummy")
+        temp.value = obtainShareLink(id)
+        temp.select()
+        temp.setSelectionRange(0,99999)
+        document.execCommand("copy")
+     
+        alert(i18n[lang].LinkCopied)
+    }
+    catch (e) {
+        // just in case...
+    }
+    finally {
+        holder.style.display = "none" // because this inputbox must be hidden
+    }
 }
-function showOverlay(id) {
+function showOverlay(id) {    
     let prop = furdb[id]
         
     let displayFurName = textOrQos((prop.name_ko + " " + prop.name_en).trim())
