@@ -274,7 +274,7 @@ function populateEyeFeaturesChooser() {
     let out = ``
     
     Object.entries(specialEyeSwatch).forEach(kv => {        
-        out += `<label class="container">&zwj;`
+        out += `<label class="container">${kv[0]}`
         out += `<input type="checkbox" id="eye_features_${kv[0]}">`
         out += kv[1]
         out += `</label>`
