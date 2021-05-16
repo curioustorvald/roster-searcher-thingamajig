@@ -404,7 +404,7 @@ function populateColourScheme() {
     Object.keys(cmds).forEach(title => {
         let out = ''
         out += `<table style="width: 100%">`
-        out += `<thead style="text-align:center"><tr><td style=" border-bottom:1px solid #AAA;" colspan="3" ><h5>${title}</h5></td></tr><tr><td colspan="3" ></td></tr></thead>`
+        //out += `<thead style="text-align:center"><tr><td style=" border-bottom:1px solid #AAA;" colspan="3" ><h5>${title}</h5></td></tr><tr><td colspan="3" ></td></tr></thead>`
         Object.entries(cmds[title].data).forEach(kv => {
             let name = kv[0]
             let count = kv[1]

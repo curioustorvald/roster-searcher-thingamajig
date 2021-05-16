@@ -114,6 +114,7 @@ table.stat {
     font-size: 90%;
     display: table-cell;
     color: var(--site-subtext-colour);
+    width: 1px; /* this is a hack; the label must always contain non-breakables! (e.g. &nbsp;) */
 }
 
 .tableBarChartArea {
@@ -525,11 +526,11 @@ bigfurbox copying {
 }
 
 .chart_container {
-    height: calc(100% - 20px);
     padding: 0.1px 20px 20px 20px;
     border-radius: 0 0 16px 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
     background: rgba(251,251,252,0.94); /* will make the chartbox coloured to be #FAFAFA */
+    height: calc(100% - 2 * var(--gaps));
 }
 
 .chart_bgimg {
