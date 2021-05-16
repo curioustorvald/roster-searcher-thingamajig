@@ -541,6 +541,10 @@ bigfurbox copying {
     flex: 50%;
 }
 
+.flex_thirdcol {
+    flex: 33.333%;
+}
+
 
 div#colour_scheme thead h5 {
     color: var(--site-text-colour);

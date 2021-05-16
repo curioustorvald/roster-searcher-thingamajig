@@ -369,86 +369,60 @@ function populateTopTenSpecies() {
 
 function populateColourScheme() {
     let barHeight = 42
-    let out = ''
     
     let bgstat = {}
-    let fgstat = {}
+    let hairstat = {}
+    let eyestat = {}
     
     // init data
-    Object.keys(colourPalette).forEach(c => { bgstat[c] = 0; fgstat[c] = 0 })
+    Object.keys(colourPalette).forEach(c => { bgstat[c] = 0; hairstat[c] = 0; eyestat[c] = 0 })
     // gather data
     forEachFur(prop => {
-        if (prop.colours.length > 0) {
-            let used = {} // to check dupes
-            for (let i = 0; i < prop.colours.length; i++) {
-                let col = prop.colours[i]
-                
-                if (!(col in bgstat)) continue
-                if (0 == i) {
-                    bgstat[col] += 1
-                }
-                else {
-                    // check for dupes
-                    if (!(col in used)) {
-                        fgstat[col] += 1
-                        used[col] = 1
-                    }
-                }
+        if (prop.colour_combi.length > 0) {
+            prop.colour_combi.forEach(col => {
+                if (col in bgstat) bgstat[col] += 1
+            })
+        }
+        if (prop.hair_colours.length > 0) {
+            prop.hair_colours.forEach(col => {
+                if (col in hairstat) hairstat[col] += 1
+            })
+        }
+        if (prop.eye_colours.length > 0) {
+            prop.eye_colours.forEach(col => {
+                if (col in eyestat) eyestat[col] += 1
+            })
+        }
+    })
+            
+    let cmds = {
+        "색상 조합": {data:bgstat, id:"colour_scheme_table"},
+        "머리카락": {data:hairstat, id:"hair_colours_table"},
+        "눈 색상": {data:eyestat, id:"eye_colours_table"}
+    }
+    
+    Object.keys(cmds).forEach(title => {
+        let out = ''
+        out += `<table style="width: 100%">`
+        out += `<thead style="text-align:center"><tr><td style=" border-bottom:1px solid #AAA;" colspan="3" ><h5>${title}</h5></td></tr><tr><td colspan="3" ></td></tr></thead>`
+        Object.entries(cmds[title].data).forEach(kv => {
+            let name = kv[0]
+            let count = kv[1]
+            let colour = (colourPalette[kv[0]][1]) ? colourPalette[kv[0]][1] : colourPalette[kv[0]][0]
+            if (!colour.startsWith("#")) {
+                colour = `var(--${colour})`
             }
-        }
-    })
+            
+            let perc = 100.0 * count / Object.values(cmds[title].data).max()
+            let barclass = ("백색" == name) ? "tableBarChartWhite" : "tableBarChart"
+            out += `<tr>`
+            out += `<td class="tableChartLabel">${name.unbreakable()}</td>`
+            out += `<td class="tableDataNumber">${count}</td>`
+            out += `<td class="tableBarChartArea"><div class="${barclass}" style="width:${perc}%; background:${colour}">&nbsp;</div></td>`
+            out += `</tr>`
+        })
+        out += `</table>`
         
-    let bgmax = Object.values(bgstat).max()
-    let fgmax = Object.values(fgstat).max()
-    
-    //bgstat["무지개색"]=123;fgstat["무지개색"]=123
-    
-    // bg bar
-    out += `<table style="width: 100%">`
-    out += `<thead style="text-align:center"><tr><td style=" border-bottom:1px solid #AAA;" colspan="3" ><h5>바탕색</h5></td></tr><tr><td colspan="3" ></td></tr></thead>`
-    
-    Object.entries(bgstat).forEach(kv => {
-        let name = kv[0]
-        let count = kv[1]
-        let colour = (colourPalette[kv[0]][1]) ? colourPalette[kv[0]][1] : colourPalette[kv[0]][0]
-        if (!colour.startsWith("#")) {
-            colour = `var(--${colour})`
-        }
-        
-        let perc = 100.0 * count / bgmax
-        let barclass = ("백색" == name) ? "tableBarChartWhite" : "tableBarChart"
-        out += `<tr>`
-        out += `<td class="tableChartLabel">${name.unbreakable()}</td>`
-        out += `<td class="tableDataNumber">${count}</td>`
-        out += `<td class="tableBarChartArea"><div class="${barclass}" style="width:${perc}%; background:${colour}">&nbsp;</div></td>`
-        out += `</tr>`
+        document.getElementById(cmds[title].id).innerHTML = out
     })
-    
-    out += `</table>`
-    document.getElementById("colour_scheme_table_bg").innerHTML = out
-    
-    
-    // fg bar
-    out = ``
-    out += `<table style="width: 100%">`
-    out += `<thead style="text-align:center"><tr><td style=" border-bottom:1px solid #AAA;" colspan="3" ><h5>염색</h5></td></tr><tr><td colspan="3" ></td></tr></thead>`
-    
-    Object.entries(fgstat).forEach(kv => {
-        let name = kv[0]
-        let count = kv[1]
-        let colour = (colourPalette[kv[0]][1]) ? colourPalette[kv[0]][1] : colourPalette[kv[0]][0]
-        if (!colour.startsWith("#")) {
-            colour = `var(--${colour})`
-        }
-        let perc = 100.0 * count / fgmax
-        let barclass = ("백색" == name) ? "tableBarChartWhite" : "tableBarChart"
-        out += `<tr>`
-        out += `<td class="tableChartLabel">${name.unbreakable()}</td>`
-        out += `<td class="tableDataNumber">${count}</td>`
-        out += `<td class="tableBarChartArea"><div class="${barclass}" style="width:${perc}%; background:${colour}">&nbsp;</div></td>`
-        out += `</tr>`
-    })
-    
-    out += `</table>`
-    document.getElementById("colour_scheme_table_fg").innerHTML = out
 }
