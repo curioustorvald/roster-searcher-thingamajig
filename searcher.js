@@ -602,6 +602,8 @@ function makeOutput(searchResults) {
                         
         output += `</imgbox>`
         output += `<infobox>`
+        
+        output += `<center>`
         if (nameUnknown) {
             output += `<h4 class="name_unknown">???</h4>`
         }
@@ -610,6 +612,8 @@ function makeOutput(searchResults) {
             output += `<h4 class="name_en">${displayFurNameEn}</h4>`
             output += `<h4 class="name_ja">${displayFurNameJa}</h4>`
         }
+        output += `</center>`
+        
         output += `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a></h5>`
         output += `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorName}</a>`)}</h5>`
         output += `</infobox></furbox>`

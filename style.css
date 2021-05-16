@@ -331,6 +331,19 @@ furbox imgbox img {
     height: var(--img-height);
 }
 
+infobox h4[class=name_en] { 
+    display:inline; margin: 0 0.18em;
+}
+infobox h4[class=name_ko] {
+    display:inline; margin: 0 0.18em;
+}
+infobox h4[class=name_ja] {
+    display:inline; margin: 0 0.18em;
+}
+infobox h4[class=name_unknown] {
+    display:inline; margin: 0 0.18em;
+}
+
 /* END OF FURBOX */
 
 
@@ -425,8 +438,8 @@ bigfurbox {
     border-radius: 0 0 16px 0;
     background-color: var(--furbox-background);
     box-sizing: border-box;
-    width: calc(min(900px,80vw));
-    height: calc(min(675px,80vw));
+    width: calc(min(960px,80vw));
+    height: calc(min(720px,80vw));
     animation: smooth 1.5s backwards;
     animation-delay: 0.40s;
     padding: var(--gaps);
