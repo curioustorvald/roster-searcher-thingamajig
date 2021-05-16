@@ -55,15 +55,15 @@ var workshops = {}
 var colourPalette = {}
 
 function forEachFur(action) {
-    Object.keys(furdb).filter(i => !isNaN(i)).forEach(v => action(furdb[v]))
+    Object.keys(furdb).filter(i => !isNaN(i)).forEach(v => action(furdb[v], v))
 }
 
 function mapFurs(transformation) {
-    return Object.keys(furdb).filter(i => !isNaN(i)).map(v => transformation(furdb[v]))
+    return Object.keys(furdb).filter(i => !isNaN(i)).map(v => transformation(furdb[v], v))
 }
 
 function filterFurs(predicate) {
-    return Object.keys(furdb).filter(i => !isNaN(i)).filter(v => predicate(furdb[v]))
+    return Object.keys(furdb).filter(i => !isNaN(i)).filter(v => predicate(furdb[v], v))
 }
 
 function statsinit() {

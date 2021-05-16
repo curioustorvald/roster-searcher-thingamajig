@@ -432,23 +432,25 @@ dummycentre {
 }
 
 bigfurbox {
-    display: block;
+    display: flex;
+    flex-flow: row wrap;
     box-shadow: 0px 0px 64px rgba(0, 0, 0, 0.35);
     border-radius: 0 0 16px 0;
     background-color: var(--furbox-background);
     box-sizing: border-box;
-    width: calc(min(960px,80vw));
-    height: calc(min(720px,80vw));
+    height: calc(min(720px,80vh));
+    width: calc((4/3) * min(720px,80vh));
     animation: smooth 1.5s backwards;
     animation-delay: 0.40s;
     padding: var(--gaps);
+    overflow: auto;
 }
 
 bigfurbox imgbox {
-    display: block;
-    float: left;
-    width: calc(50% - var(--gaps)/2);
+    flex: 1 1 50%;
+    width: 50%;
     height: 100%;
+    min-width: 260px;
 }
 
 bigfurbox imgbox img {
@@ -458,9 +460,10 @@ bigfurbox imgbox img {
 }
 
 bigfurbox parbox {
-    float: right;
-    width: calc(50% - 0.5 * var(--gaps));
-    height: 100%
+    flex: 1 1 50%;
+    width: 50%;
+    height: 100%;
+    min-width: 260px;
 }
 
 bigfurbox h4 {
@@ -489,6 +492,7 @@ refselem1 table {
     display: flex;
     width: 100%;
     height: inherit;
+    min-height: 200px;
     flex: 1 1 auto;
     object-fit: contain;
 }

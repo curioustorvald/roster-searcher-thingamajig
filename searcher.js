@@ -53,15 +53,15 @@ function htmlColToLum(text) {
 }
 
 function forEachFur(action) {
-    Object.keys(furdb).filter(i => !isNaN(i)).forEach(v => action(furdb[v]))
+    Object.keys(furdb).filter(i => !isNaN(i)).forEach(v => action(furdb[v], v))
 }
 
 function mapFurs(transformation) {
-    return Object.keys(furdb).filter(i => !isNaN(i)).map(v => transformation(furdb[v]))
+    return Object.keys(furdb).filter(i => !isNaN(i)).map(v => transformation(furdb[v], v))
 }
 
 function filterFurs(predicate) {
-    return Object.keys(furdb).filter(i => !isNaN(i)).filter(v => predicate(furdb[v]))
+    return Object.keys(furdb).filter(i => !isNaN(i)).filter(v => predicate(furdb[v], v))
 }
 
 function template(strings, ...keys) {
@@ -211,6 +211,10 @@ function pageinit() {
             
             loadJSON("furdb.json", true, response => {
                 furdb = JSON.parse(response)
+                
+                checkForDatabaseErrors()
+                
+                
                 // handle the 'show' query string
                 // qd is defined on index.html
                 if (qd.show !== undefined) {
@@ -238,9 +242,34 @@ function pageinit() {
     clearResults()
 }
 
+function checkForDatabaseErrors() {
+    let msg = []
+    
+    forEachFur((prop, id) => {
+        prop.colour_combi.forEach(col => {
+            if (!(col in colourPalette)) msg.push(`Undefined colour_combi '${col}' for id ${id}`)
+        })
+        prop.hair_colours.forEach(col => {
+            if (!(col in colourPalette)) msg.push(`Undefined hair_colours '${col}' for id ${id}`)
+        })
+        prop.eye_colours.forEach(col => {
+            if (!(col in colourPalette)) msg.push(`Undefined eye_colours '${col}' for id ${id}`)
+        })
+        prop.eye_features.forEach(feature => {
+            if (!(feature in specialEyeSwatch)) msg.push(`Undefined eye_colours '${col}' for id ${id}`)
+        })
+    })
+        
+    if (msg.length > 0) {
+        let msgstr = msg.join('\n')
+        alert(`데이터베이스의 무결성 검증에 실패하였습니다:\n${msgstr}`)
+        throw Error(msgstr)
+    }
+}
+
 function createColourSwatch(name) {
     if (name.length == 0) return ``
-    
+            
     let colour = colourPalette[name][1]
     if (!colour) colour = colourPalette[name][0]
             
@@ -705,8 +734,6 @@ function simplequery() {
         if (document.getElementById(`eye_features_${feature}`) && document.getElementById(`eye_features_${feature}`).checked)
             eyeFeatures.push(feature)
     })
-
-    console.log(eyeFeatures)
     
     if (creatorName !== undefined) searchFilter.creator_name = creatorName
     if (furName !== undefined) searchFilter.name = furName
