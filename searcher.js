@@ -103,7 +103,7 @@ const i18n = {
         "SimpleSearchActor": "소유자: ",
         "SimpleSearchCreator": "제작자: ",
         "SimpleSearchName": "이름 (한/영): ",
-        "SimpleSearchBirthday": "활동개시일&nbsp;<br />(yyyymmdd): ",
+        "SimpleSearchBirthday": "활동개시일: ",
         "SimpleSearchBirthday2": "활동개시일: ",
         "SimpleSearchSpecies": "종: ",
         "SimpleSearchStyle": "스타일: ",
@@ -142,7 +142,7 @@ const i18n = {
         "SimpleSearchActor": "Owner: ",
         "SimpleSearchCreator": "Creator: ",
         "SimpleSearchName": "Name (Korean/English): ",
-        "SimpleSearchBirthday": "Day of Birth&nbsp;<br />(yyyymmdd): ",
+        "SimpleSearchBirthday": "Day of Birth: ",
         "SimpleSearchBirthday2": "Day of Birth: ",
         "SimpleSearchSpecies": "Species: ",
         "SimpleSearchStyle": "Style: ",
@@ -630,8 +630,8 @@ function simplequery() {
 
     if (creatorName !== undefined) searchFilter.creator_name = creatorName
     if (furName !== undefined) searchFilter.name = furName
-    if (birthdayFrom !== undefined) searchFilter.birthday_from = birthdayFrom
-    if (birthdayTo !== undefined) searchFilter.birthday_to = birthdayTo
+    if (birthdayFrom !== undefined) searchFilter.birthday_from = birthdayFrom.replaceAll('-','')
+    if (birthdayTo !== undefined) searchFilter.birthday_to = birthdayTo.replaceAll('-','')
     if (isFullSuit !== undefined) searchFilter.is_partial = (isFullSuit === 'false') // this casts string 'true'/'false' into a boolean value and then negates it
     if (species !== undefined) searchFilter.species_ko = dropdownIdToDBname[species]
     if (style !== undefined) searchFilter.style = style
@@ -641,7 +641,7 @@ function simplequery() {
     if (hairCols.length > 0) searchFilter.hair_colours = hairCols
         
     let includeWIP = document.getElementById("includewip_simple").checked
-    
+        
     makeOutput(performSearch(searchFilter, "simple", false, includeWIP))
 }
 
