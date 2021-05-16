@@ -567,6 +567,7 @@ function showOverlay(id) {
     let displayCreatorLinkName = (displayCreatorLinkHref == "") ? "" : ((displayCreatorLinkHref.startsWith("https://twitter.com/")) ? `@${displayCreatorLinkHref.split("/").pop()}` : `(링크)`)
     
     let tdtemplate = template`<tr><td class="tableFormLabel" style="color:#888">${0}</td><td>${1}</td></tr>`
+    let tdtemplCol = template`<tr><td class="tableFormLabel" style="color:#888">${0}</td><td><colourchooser style="height:var(--colour-swatch-size-outer)">${1}</colourchooser></td></tr>`
     
     let output = `<dummycentre><bigfurbox>`
         
@@ -612,13 +613,13 @@ function showOverlay(id) {
         output += tdtemplate(i18n[lang].SimpleSearchIsFullSuit, prop.is_34partial ? "&frac34;" : !prop.is_partial ? i18n[lang].ConditionYes : i18n[lang].ConditionNo)
         
         if (colourCombiPal.length > 0)
-        output += tdtemplate(i18n[lang].SimpleSearchColourCombi, `<colourchooser>${colourCombiPal}</colourchooser>`)
+        output += tdtemplCol(i18n[lang].SimpleSearchColourCombi, colourCombiPal)
         
         if (hairColourPal.length > 0)
-        output += tdtemplate(i18n[lang].SimpleSearchHair, `<colourchooser>${hairColourPal}</colourchooser>`)
+        output += tdtemplCol(i18n[lang].SimpleSearchHair, hairColourPal)
         
         if (eyeColourPal.length > 0)
-        output += tdtemplate(i18n[lang].SimpleSearchEyes, `<colourchooser>${eyeColourPal}</colourchooser>`)
+        output += tdtemplCol(i18n[lang].SimpleSearchEyes, eyeColourPal)
         
         output += tdtemplate(i18n[lang].ShareLink, copyableLinkHtml)
 
