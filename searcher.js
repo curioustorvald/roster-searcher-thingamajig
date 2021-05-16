@@ -45,6 +45,7 @@ var creatorThesaurus = {}
 var colourPalette = {}
 
 function htmlColToLum(text) {
+    if (!text) return 0.5
     let r = parseInt("0x"+text.substring(1,3)) / 255.0
     let g = parseInt("0x"+text.substring(3,5)) / 255.0
     let b = parseInt("0x"+text.substring(5,7)) / 255.0
@@ -234,22 +235,26 @@ function pageinit() {
     clearResults()
 }
 
+function createColourSwatch(name) {
+    if (name.length == 0) return ``
+    
+    let colour = colourPalette[name][1]
+    if (!colour) colour = colourPalette[name][0]
+            
+    let lum = htmlColToLum(colour)
+    let subclass = (lum >= 0.666) ? "light" : "dark"
+    return `<span class="checkmark colour_swatch" luminosity="${subclass}" style="background:${(colour.startsWith('#') ? colour : `var(--${colour})`)}" title="${name}">&nbsp;</span>`
+}
 function populateColourChooser(parentname) {
     // expected parentname: "body_colours", "hair_colours"
     let out = ``
     
-    Object.entries(colourPalette).forEach(kv => {
-        let name = kv[0]
-        let colour = kv[1][1]
-        
-        if (colour != undefined && colour.startsWith("#")) {
-            let lum = htmlColToLum(colour)
-            let subclass = (lum >= 0.666) ? "light" : "dark"
-
+    Object.keys(colourPalette).forEach(name => {
+        if (name != "무지개색") {
             out += `<label class="container">&zwj;`
             //out += `<label class="container">tsz`
             out += `<input type="checkbox" id="${parentname}_${name}">`
-            out += `<span class="checkmark" luminosity="${subclass}" style="background-color:${colour}" title="${name}"></span>`
+            out += createColourSwatch(name)
             out += `</label>`
         }
     })
@@ -512,9 +517,9 @@ function showOverlay(id) {
     if (prop.photo_copying)
         output += `<copying>&#169; ${prop.photo_copying}</copying>`
     
-    let colourCombiPal = ``
-    let hairColourPal = ``
-    let eyeColourPal = ``
+    let colourCombiPal = prop.colour_combi.map(it => `<label class="container">&zwj;${createColourSwatch(it)}</label>`).join('')
+    let hairColourPal = prop.hair_colours.map(it => `<label class="container">&zwj;${createColourSwatch(it)}</label>`).join('')
+    let eyeColourPal = prop.eye_colours.map(it => `<label class="container">&zwj;${createColourSwatch(it)}</label>`).join('') // TODO add icon for eye_features
     let copyableLinkHtml = `<span class="underline_on_hover" onclick=copySharelink(${id})>${i18n[lang].ClickToCopyLink}</span>` 
     
     output += `</imgbox>`
@@ -535,9 +540,9 @@ function showOverlay(id) {
         output += tdtemplate(i18n[lang].SimpleSearchCreator, displayCreatorName + `&nbsp; ${creatorLinkFull}`)
         output += tdtemplate(i18n[lang].SimpleSearchBirthday2, prop.birthday)
         output += tdtemplate(i18n[lang].SimpleSearchIsFullSuit, prop.is_34partial ? "&frac34;" : !prop.is_partial ? i18n[lang].ConditionYes : i18n[lang].ConditionNo)
-        output += tdtemplate(i18n[lang].SimpleSearchColourCombi, prop.colourCombiPal)
-        output += tdtemplate(i18n[lang].SimpleSearchHair, prop.hairColourPal)
-        output += tdtemplate(i18n[lang].SimpleSearchEyes, prop.eyeColourPal)
+        output += tdtemplate(i18n[lang].SimpleSearchColourCombi, `<colourchooser>${colourCombiPal}</colourchooser>`)
+        output += tdtemplate(i18n[lang].SimpleSearchHair, `<colourchooser>${hairColourPal}</colourchooser>`)
+        output += tdtemplate(i18n[lang].SimpleSearchEyes, `<colourchooser>${eyeColourPal}</colourchooser>`)
         output += tdtemplate(i18n[lang].ShareLink, copyableLinkHtml)
 
         output += `</table>`
