@@ -206,7 +206,7 @@ expr = "(" , expr , ")"<br>
 <br>
 literal = ? any string that does not collide with 'op's ? ;<br>
 <br>
-op = "+" | "," | "<" | ">" | "<=" | "=<" | ">=" | "=>" | "IS" | "ISNOT" | "HAS" | "HASNO" | "AND" | "OR" ;<br>
+op = "," | "<" | ">" | "<=" | "=<" | ">=" | "=>" | "IS" | "ISNOT" | "ISONEOF" | "ISNONEOF" | "HASALLOF" | "HASSOMEOf" | "HASNONEOF" | "AND" | "OR" ;<br>
 <br>
 number = digit - "0" , { digit } ;<br>
 <br>
