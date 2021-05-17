@@ -352,8 +352,8 @@ function checkForDatabaseErrors() {
 function createColourSwatch(name) {
     if (name.length == 0) return ``
             
-    let colour = colourPalette[name]
-    if (!colour) colour = colourPalette[name]
+    let colour = colourPalette[name][0]
+    if (!colour) colour = colourPalette[name][0]
             
     let lum = htmlColToLum(colour)
     let subclass = (lum >= 0.666) ? "light" : "dark"

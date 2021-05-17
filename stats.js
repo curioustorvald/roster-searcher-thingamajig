@@ -408,7 +408,7 @@ function populateColourScheme() {
         Object.entries(cmds[title].data).forEach(kv => {
             let name = kv[0]
             let count = kv[1]
-            let colour = colourPalette[kv[0]]
+            let colour = colourPalette[kv[0]][0]
             if (!colour.startsWith("#")) {
                 colour = `var(--${colour})`
             }
