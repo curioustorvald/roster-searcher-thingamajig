@@ -53,6 +53,9 @@ Boolean.prototype.babostr = function() {
 Array.prototype.babostr = function() {
     return this.map(it => it.babostr())
 }
+Array.prototype.sum = function(selector) {
+    return this.reduce((acc,val) => acc + ((selector === undefined) ? val : selector(val)), 0)
+}
 
 let tonum = (t) => t*1.0
 function cloneObject(o) { return JSON.parse(JSON.stringify(o)) }
@@ -162,16 +165,23 @@ Object.freeze(basiclang)
 let twoArgAND = function(prop, args, action) {
     if (args.length != 2) throw lang.syntaxfehler(1, args.length+lang.aG)
     
+    let doubleaction = function(p,q) {
+        return action(p,q) || action(p.split('/')[0],q)
+    }
+        
     let p = prop[args[0].toLowerCase()].babostr()
     if (p.length == 0) return false
             
     let q = args[1].babostr()
+    
+    //console.log(`'${p}' is '${q}'`)
+    
     if (Array.isArray(p)) {
         if (Array.isArray(q)) {
             let ret = true
             for (let x = 0; x < p.length; x++) {
                 for (let y = 0; y < q.length; y++) {
-                    ret &= action(p[x], q[y])
+                    ret &= doubleaction(p[x], q[y])
                 }
             }
             return ret
@@ -179,7 +189,7 @@ let twoArgAND = function(prop, args, action) {
         else {
             let ret = true
             for (let x = 0; x < p.length; x++) {
-                ret &= action(p[x], q)
+                ret &= doubleaction(p[x], q)
             }
             return ret
         }
@@ -188,12 +198,12 @@ let twoArgAND = function(prop, args, action) {
         if (Array.isArray(q)) {
             let ret = true
             for (let y = 0; y < q.length; y++) {
-                ret &= action(p, q[y])
+                ret &= doubleaction(p, q[y])
             }
             return ret
         }
         else {
-            return action(p, q)
+            return doubleaction(p, q)
         }
     }
 }
@@ -248,40 +258,50 @@ bS.builtin = {
     "HASALLOF": function(prop, args) {
         if (args.length != 2) throw lang.syntaxfehler(1, args.length+lang.aG)
     
-        let p = prop[args[0].toLowerCase()].babostr()
-        if (p.length == 0) return false
-        if (typeof p === 'string' || p instanceof String) {
-            p = p.split(' ')
-        }
-        if (!Array.isArray(p)) throw basiclang.illegalType(1, p)
-        let q = args[1].babostr()
-        if (Array.isArray(q)) {
-            let ret = true
-            q.forEach(q1 => ret &= (p.findIndex(it => it == q1)>=0))
-            return !!ret
-        }
-        else {
-            return p.findIndex(it => it == q) >= 0
-        }
+        let xp = prop[args[0].toLowerCase()].babostr()
+        if (xp.length == 0) return false
+        let ps = [xp, xp.split('/')[0]]
+        
+        return (ps.map(_p => {
+            let p = _p
+            if (typeof p === 'string' || p instanceof String) {
+                p = p.split(' ')
+            }
+            if (!Array.isArray(p)) throw basiclang.illegalType(1, p)
+            let q = args[1].babostr()
+            if (Array.isArray(q)) {
+                let ret = true
+                q.forEach(q1 => ret &= (p.findIndex(it => it == q1)>=0))
+                return !!ret
+            }
+            else {
+                return p.findIndex(it => it == q) >= 0
+            }
+        }).sum() > 0)
     },
     "HASSOMEOF": function(prop, args) {
         if (args.length != 2) throw lang.syntaxfehler(1, args.length+lang.aG)
     
-        let p = prop[args[0].toLowerCase()].babostr()
-        if (p.length == 0) return false
-        if (typeof p === 'string' || p instanceof String) {
-            p = p.split(' ')
-        }
-        if (!Array.isArray(p)) throw basiclang.illegalType(1, p)
-        let q = args[1].babostr()
-        if (Array.isArray(q)) {
-            let ret = false
-            q.forEach(q1 => ret |= (p.findIndex(it => it == q1)>=0))
-            return !!ret
-        }
-        else {
-            return p.findIndex(it => it == q) >= 0
-        }
+        let xp = prop[args[0].toLowerCase()].babostr()
+        if (xp.length == 0) return false
+        let ps = [xp, xp.split('/')[0]]
+        
+        return (ps.map(_p => {
+            let p = _p
+            if (typeof p === 'string' || p instanceof String) {
+                p = p.split(' ')
+            }
+            if (!Array.isArray(p)) throw basiclang.illegalType(1, p)
+            let q = args[1].babostr()
+            if (Array.isArray(q)) {
+                let ret = false
+                q.forEach(q1 => ret |= (p.findIndex(it => it == q1)>=0))
+                return !!ret
+            }
+            else {
+                return p.findIndex(it => it == q) >= 0
+            }
+        }).sum() > 0)
     },
     "HASNONEOF": function(prop, args) {
         return !bS.builtin["HASSOMEOF"](prop, args)

@@ -881,6 +881,8 @@ function performTagSearch(searchstrr, includeWip) {
             tns = bF._parserElaboration(tns.tokens, tns.states)    
             let tree = bF._parseExpr(1, tns.tokens, tns.states, 0)
                         
+            console.log(astToString(tree))
+            
             forEachFur((prop, id) => {
                 if (bF._executeSyntaxTree(prop, tree, 0) && wipfun(prop))
                     foundFurs.push({id: id, prop: prop})
