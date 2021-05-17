@@ -463,11 +463,11 @@ function reloadI18n() {
     
     let tagdocOutput = ""
     
-    tagdocOutput += "<ul>"
+    tagdocOutput += `<ul>`
     Object.keys(tagDocumentation).forEach(it => {
-        tagdocOutput += "<li>"+it+" &ndash; "+tagDocumentation[it][lang]+"</li>"
+        tagdocOutput += `<li><span class="tagdoc1">${it} </span><span class="tagdoc2"> ${tagDocumentation[it][lang]}</span></li>`
     })
-    tagdocOutput += "</ul><p>"+i18n[lang].ReplaceSpaceWithUnderscore+"</p>"
+    tagdocOutput += `</ul><p>${i18n[lang].ReplaceSpaceWithUnderscore}</p>`
     
     document.getElementById("tagdoc").innerHTML = tagdocOutput
     document.getElementById("tagdoc_header").innerHTML = i18n[lang].TagGuide
@@ -476,7 +476,7 @@ function reloadI18n() {
     document.getElementById("simplesearch_header").innerHTML = i18n[lang].SimpleSearch
     document.getElementById("simplesearch_input_creatorname_string").innerHTML = i18n[lang].SimpleSearchCreator
     document.getElementById("simplesearch_input_furname_string").innerHTML = i18n[lang].SimpleSearchName
-//     document.getElementById("simplesearch_input_actorname_string").innerHTML = i18n[lang].SimpleSearchActor
+    document.getElementById("simplesearch_input_actorname_string").innerHTML = i18n[lang].SimpleSearchActor
     document.getElementById("simplesearch_input_bday_title_string").innerHTML = i18n[lang].SimpleSearchBirthday
      
     document.getElementById("bday_from_pre").innerHTML = i18n[lang].SimpleSearchFromPre
@@ -582,7 +582,7 @@ function showOverlay(id) {
         output += `<img src="no-image-available.png" />`
     
     if (prop.photo_copying)
-        output += `<copying>&#169; ${prop.photo_copying}</copying>`
+        output += `<copying>${prop.photo_copying}</copying>`
     
     let colourCombiPal = prop.colour_combi.map(it => `<label class="container">&zwj;${createColourSwatch(it)}</label>`).join('')
     
@@ -630,7 +630,7 @@ function showOverlay(id) {
         if (prop.ref_sheet) {
             output += `<img class="refsElem2" src="${prop.ref_sheet}" />`
             if (prop.ref_sheet_copying)
-                output += `<copying>&#169; ${prop.ref_sheet_copying}</copying>`
+                output += `<copying>${prop.ref_sheet_copying}</copying>`
         }
         else
             output += `<p style="color:#AAA; text-align:center">(레퍼런스 시트가 없어요)</p>`
@@ -712,6 +712,8 @@ function clearResults() {
 function simplequery() {
     let creatorName = document.getElementById("simplesearch_input_creatorname").value
     if (creatorName == "") creatorName = undefined
+    let actorName = document.getElementById("simplesearch_input_actorname").value
+    if (actorName == "") actorName = undefined  
     let furName = document.getElementById("simplesearch_input_furname").value
     if (furName == "") furName = undefined
     let birthdayFrom = document.getElementById("simplesearch_input_bday_from").value
@@ -750,6 +752,7 @@ function simplequery() {
     })
     
     if (creatorName !== undefined) searchFilter.creator_name = creatorName
+    if (actorName !== undefined) searchFilter.actor_name = actorName
     if (furName !== undefined) searchFilter.name = furName
     if (birthdayFrom !== undefined) searchFilter.birthday_from = birthdayFrom.replaceAll('-','')
     if (birthdayTo !== undefined) searchFilter.birthday_to = birthdayTo.replaceAll('-','')

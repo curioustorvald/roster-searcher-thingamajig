@@ -21,10 +21,6 @@ form table td {
     border: 1px solid red;
 }*/
 
-thoushaltnotobservestthisblock {
-    display: none;
-}
-
 idiv {
     display: inline-block;
 }
@@ -60,7 +56,7 @@ panelnavwrapper {
 }
 
 contents {
-    margin: 0 1em 0 1em;
+    margin: 1em;
     display: block;
 }
 
@@ -489,6 +485,10 @@ refselem1 table {
     min-width: 330px;
 }
 
+refselem1 td {
+    line-height: 133%;
+}
+
 .refsElem2 {
     display: flex;
     width: 100%;
@@ -510,6 +510,10 @@ bigfurbox copying {
         1px -1px 0 var(--textborder),
         -1px -1px 0 var(--textborder);
     text-align: center;
+}
+
+bigfurbox copying::before {
+    content: "© ";
 }
 
 /* END OF SEARCHRESULTS */
@@ -689,3 +693,39 @@ li.columngap > a {
 .accordion p:last-child {
     margin-bottom:0
 }
+
+/* BEGIN OF FOOTER STYLING */
+
+footer {
+    clear: both;
+    text-align: center;
+    display: block; 
+    width: 100%;  
+    padding: .5em 0;
+    margin-top: 5em;
+}
+mailat, maildot {
+    margin: 0 0.1em;
+}
+mailat::after { content: "@"; }
+maildot::after { content: "."; }
+footer p.p1{
+    font-size: .7em;
+    padding-top: 1em;
+    font-weight: 700;
+}
+footer p.p2{
+    font-size: .8em;
+    padding-bottom: 1em;
+    font-weight: 900;
+}
+footer a{
+    color: unset;
+}
+
+/* END OF FOOTER STYLING */
+
+
+
+/* LO, CUSTOM CSS BE BELOW THIS LINE! */
+
