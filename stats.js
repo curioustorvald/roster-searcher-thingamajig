@@ -163,15 +163,24 @@ let marketShareDetailsShown = false
 
 function toggleMarketShareDetails(key) {
     let p = key.split('¤')
-
+    
     if (marketShareDetailsShown)
         hideMarketShareDetails()
-    else showMarketShareDetails(filterFurs(prop => prop.birthday.startsWith(p[0]) && prop.creator_name == p[1]).map(i => furdb[i]))
+    else
+        showMarketShareDetails(p)
 }
 
 function showMarketShareDetails(dict) {
-    //marketShareDetailsShown = true
-    console.log(dict.map(p => `${p.name_ko} ${p.name_en}`))
+    let year = dict[0]
+    let name = dict[1]
+        
+    let rootpage = window.location.href.split('?')[0]
+    while (rootpage.endsWith("/")) rootpage = rootpage.substring(0, rootpage.length - 1)
+    rootpage = rootpage.substring(0, rootpage.lastIndexOf("/"))
+    
+    let tag = `creator_name startswith ${name} and birthday > ${year-1}9999 and birthday < ${(year*1)+1}0000`
+    
+    window.location.replace(`${rootpage}/index.html?tags=${tag}&showwip=true`)
 }
 
 function hideMarketShareDetails() {
@@ -201,7 +210,7 @@ function populateMarketshareTable() {
             }
         }
     })
-    
+        
     // make chart area
     for (let year = 2016; year <= new Date().getFullYear(); year++) {
         out += `<tr>`

@@ -204,6 +204,12 @@ bS.builtin = {
     "IS": function(prop, args) {
         return !!twoArgAND(prop, args, (p,q) => p == q)
     },
+    "STARTSWITH": function(prop, args) {
+        return !!twoArgAND(prop, args, (p,q) => p.startsWith(q))
+    },
+    "NOTSTARTSWITH": function(prop, args) {
+        return !bS.builtin["STARTSWITH"](prop, args)
+    },
     "ISNOT": function(prop, args) {
         return !!twoArgAND(prop, args, (p,q) => p != q)
     },
@@ -346,6 +352,7 @@ bF._opPrc = {
     "<":80,">":80,"<=":80,"=<":80,">=":80,"=>":80,
     "IS":90,"ISNOT":90,"ISONEOF":90,"ISNONEOF":90,
     "HASALLOF":90,"HASSOMEOF":90,"HASNONEOF":90,
+    "STARTSWITH":90,
     "AND":300,
     "OR":301
 }

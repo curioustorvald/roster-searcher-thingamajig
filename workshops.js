@@ -52,8 +52,6 @@ function makeWorkshopsList() {
     let rootpage = window.location.href.split('?')[0]
     while (rootpage.endsWith("/")) rootpage = rootpage.substring(0, rootpage.length - 1)
     rootpage = rootpage.substring(0, rootpage.lastIndexOf("/"))
-        
-    console.log(rootpage)
     
     forEachShop(prop => {
         let bgstyle = (prop.bg) ? `background:${prop.bg}` : ``

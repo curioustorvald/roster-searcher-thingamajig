@@ -138,7 +138,10 @@ object Main {
         }
         else if ("birthday" == action)
             try {
-                value.toInt(); return value
+                val i = value.toInt()
+                return if (i >= 10000000) i.toString()
+                    else if (i >= 100000) (i * 100).toString()
+                    else (i * 10000).toString()
             } catch (e: NumberFormatException) {
                 return ""
             }

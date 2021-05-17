@@ -222,6 +222,8 @@ ${tagdocrow(`ISNONEOF`,`우변에 좌변의 일부가 포함되어 있지 않음
 ${tagdocrow(`HASALLOF`,`좌변에 우변의 전체가 포함되어 있음`)}
 ${tagdocrow(`HASSOMEOF`,`좌변에 우변의 일부가 포함되어 있음`)}
 ${tagdocrow(`HASNONEOF`,`좌변에 우변의 전체가 포함되어 있지 않음`)}
+${tagdocrow(`STARTSWITH`,`좌변이 우변의 문자열로 시작함`)}
+${tagdocrow(`NOTSTARTSWITH`,`좌변이 우변의 문자열로 시작하지 않음`)}
 ${tagdocrow(`&gt;= &middot; =&gt;`,`좌변이 우변에 비해 크거나 같음`)}
 ${tagdocrow(`&lt;= &middot; =&lt;`,`좌변이 우변에 비해 작거나 같음`)}
 ${tagdocrow(`&gt;`,`좌변이 우변에 비해 더 큼`)}
