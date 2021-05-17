@@ -302,6 +302,10 @@ function pageinit() {
                 if (qd.show !== undefined) {
                     showOverlay(qd.show[0])
                 }
+                // handle the 'tags' query string
+                if (qd.tags !== undefined) {
+                    makeOutput(performTagSearch(qd.tags[0], false))
+                }
                 
                 // jobs that need DB to be there
                 //populateEyesSelection()

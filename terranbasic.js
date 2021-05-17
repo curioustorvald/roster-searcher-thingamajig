@@ -29,7 +29,22 @@ let PROD = true;
 String.prototype.babostr = function() {
     if (this === true) return "true"
     else if (this === false) return "false"
-    else return this.toLowerCase().replaceAll(" ","").replaceAll("_","").replaceAll(".","").replaceAll('"',"").replaceAll("'","")
+    else {
+        let s = this.trim().toLowerCase()
+        // filter web url
+        if (s.startsWith("https://")) {
+            while (s.endsWith("/")) {
+                s = s.substring(0, s.length - 1)
+            }
+            s = s.split('/').pop()
+        }
+        
+        return s.replaceAll(" ","")
+            .replaceAll("_","")
+            .replaceAll(".","")
+            .replaceAll('"',"")
+            .replaceAll("'","")
+    }
 }
 Number.prototype.babostr = function() { return ''+this }
 Boolean.prototype.babostr = function() {
@@ -148,6 +163,8 @@ let twoArgAND = function(prop, args, action) {
     if (args.length != 2) throw lang.syntaxfehler(1, args.length+lang.aG)
     
     let p = prop[args[0].toLowerCase()].babostr()
+    if (p.length == 0) return false
+            
     let q = args[1].babostr()
     if (Array.isArray(p)) {
         if (Array.isArray(q)) {
@@ -194,6 +211,7 @@ bS.builtin = {
         if (args.length != 2) throw lang.syntaxfehler(1, args.length+lang.aG)
     
         let p = prop[args[0].toLowerCase()].babostr()
+        if (p.length == 0) return false
         if (Array.isArray(p)) throw basiclang.illegalType(1, p)
         if (!Array.isArray(args[1])) throw basiclang.illegalType(1, args[1])
         let q = args[1].babostr()
@@ -225,6 +243,7 @@ bS.builtin = {
         if (args.length != 2) throw lang.syntaxfehler(1, args.length+lang.aG)
     
         let p = prop[args[0].toLowerCase()].babostr()
+        if (p.length == 0) return false
         if (typeof p === 'string' || p instanceof String) {
             p = p.split(' ')
         }
@@ -243,6 +262,7 @@ bS.builtin = {
         if (args.length != 2) throw lang.syntaxfehler(1, args.length+lang.aG)
     
         let p = prop[args[0].toLowerCase()].babostr()
+        if (p.length == 0) return false
         if (typeof p === 'string' || p instanceof String) {
             p = p.split(' ')
         }
