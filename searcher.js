@@ -304,7 +304,8 @@ function pageinit() {
                 }
                 // handle the 'tags' query string
                 if (qd.tags !== undefined) {
-                    makeOutput(performTagSearch(qd.tags[0], false))
+                    let showwip = (qd.showwip && qd.showwip[0] == "true")
+                    makeOutput(performTagSearch(qd.tags[0], showwip))
                 }
                 
                 // jobs that need DB to be there

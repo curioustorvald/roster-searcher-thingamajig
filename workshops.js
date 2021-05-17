@@ -49,6 +49,12 @@ function workshopsinit() {
 function makeWorkshopsList() {
     let out = ``
     
+    let rootpage = window.location.href.split('?')[0]
+    while (rootpage.endsWith("/")) rootpage = rootpage.substring(0, rootpage.length - 1)
+    rootpage = rootpage.substring(0, rootpage.lastIndexOf("/"))
+        
+    console.log(rootpage)
+    
     forEachShop(prop => {
         let bgstyle = (prop.bg) ? `background:${prop.bg}` : ``
         let fgstyle = (prop.fg) ? `color:${prop.fg}` : ``
@@ -68,6 +74,8 @@ function makeWorkshopsList() {
             out += `&nbsp;|&nbsp;`
             out += `<a style="${fgstyle}" href="${prop.web}" target="_blank" rel="noopener noreferrer">${'홈페이지'.nonbreakable()}</a>`
         }
+        out += `&nbsp;|&nbsp;`
+        out += `<a style="${fgstyle}" href="${rootpage}/index.html?tags=creator_link is ${prop.twitter}&showwip=true">${'로스터'.nonbreakable()}</a>`
         out += `</shopinfo>`
         
         out += `</div>`
