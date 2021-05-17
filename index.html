@@ -6,6 +6,7 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>퍼슈트검색체계</title>
+    <script src="terranbasic.js"></script>
     <script src="searcher.js"></script>
     <script src="panelnav.js"></script>
 </head>
@@ -16,14 +17,10 @@
             <!--<h3 id="searchform_header"></h3>-->
             <form onsubmit="return false;" method="post" name="searchtagsform">
                 <label for="searchtags" id="searchtags_string" class="tableFormLabel"></label>
-                <input type="search" id="searchtags" name="searchtags">
+                <input type="search" id="searchtags" name="searchtags" size="40">
                 <input type="submit" value="Submit" id="submit_button" onclick="query()" />
                 <br />
                 <table><tr>
-                <td id="searchform_option_column1">
-                    <input type="checkbox" id="exactmatch" name="exactmatch">
-                    <label for="exactmatch" id="exactmatch_string"></label>
-                </td>
                 <td id="searchform_option_column2">
                     <input type="checkbox" id="includewip" name="includewip">
                     <label for="includewip" id="includewip_string"></label>
@@ -46,7 +43,7 @@
         <hr>
     
         <section id="simplesearch" class="accordion">
-            <input type="checkbox" name="collapse" id="handle4">
+            <input type="checkbox" name="collapse" id="handle4" checked="checked">
             <!--<h3 id="simplesearch_header"></h3>-->
             <h3 class="handle">
                 <label id="simplesearch_header" for="handle4"></label>

@@ -74,10 +74,57 @@ overlay {
     cursor: pointer; /* Add a pointer on hover */
 }
 
+code {
+    font-family: monospace;
+    padding: 2px 4px;
+    font-size: 96%;
+    color: #C7254E;
+    background-color: #FFF;
+    border: 1px solid #C7254E40;
+    border-radius: 4px;
+    display: inline;
+}
+
+codeblock {
+    font-family: monospace;
+    font-size: 96%;
+    display: block;
+    border: 1px solid #78A9FF;
+    border-radius: 4px;
+    background: #FAFCFF;
+    padding: 0;
+    font-size: 90%;
+    padding: 0.5em 1em;
+}
+
+.tagdoctable {
+    border: 1px solid #78A9FF;
+    border-radius: 4px;
+    background: #FAFCFF;
+    padding: 0;
+    font-size: 90%;
+    border-spacing: 0;
+}
+
+.tagdoctable tr:nth-child(even) {
+    background: #B7C7F33C;
+}
+
+.tagdoctable tr td {
+    padding: 0.14em 0.6em;
+}
+
 .underline_on_hover:hover {
     text-decoration: underline;
 }
 
+.tagdoc1 {
+    font-family: monospace;
+    font-weight: 600;
+    color: #111;
+    text-align: right;
+    border-right: 2px solid #90ABF6AA;
+}
 
 table.stat {
     width: 100%;

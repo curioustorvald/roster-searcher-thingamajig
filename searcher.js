@@ -40,6 +40,7 @@ function loadJSON(jsonPath, isAsync, callback) {
     xobj.send(null)
 }
 
+var lang = "ko"
 var furdb = {}
 var creatorThesaurus = {}
 var colourPalette = {}
@@ -60,6 +61,7 @@ function mapFurs(transformation) {
     return Object.keys(furdb).filter(i => !isNaN(i)).map(v => transformation(furdb[v], v))
 }
 
+// return: ids of furs
 function filterFurs(predicate) {
     return Object.keys(furdb).filter(i => !isNaN(i)).filter(v => predicate(furdb[v], v))
 }
@@ -114,7 +116,7 @@ const i18n = {
         "SimpleSearchEyesColour": "홍채",
         "SimpleSearchHairColour": "염색",
         "SimpleSearchHairStreak": "브릿지",
-        "SimpleSearchEyes": "눈 색상: ",
+        "SimpleSearchEyes": "눈 색깔: ",
         "SimpleSearchEyeFeatures": "눈 특징: ",
         "SimpleSearchHair": "머리카락:",
         "MadeBy": "&#x2702;&#xFE0F;&nbsp;", // BLACK SCISSORS+VARIATION SELECTOR-16 because unicode is stupid
@@ -130,7 +132,8 @@ const i18n = {
         "ConditionNo": "아니오",
         "ShareLink": "공유 주소: ",
         "ClickToCopyLink": "(눌러서 링크 복사)",
-        "LinkCopied": "링크가 복사되었습니다"
+        "LinkCopied": "링크가 복사되었습니다",
+        "TagParserError": "태그에 문법 오류가 있습니다:"
     },
     "en": {
         "TagSyntaxError": "Entered tag is malformed: ",
@@ -173,8 +176,89 @@ const i18n = {
         "ConditionNo": "No",
         "ShareLink": "Share Link: ",
         "ClickToCopyLink": "(Click to Copy the Link)",
-        "LinkCopied": "Link Copied"
+        "LinkCopied": "Link Copied",
+        "TagParserError": "Parsing Error on the tags:"
     }
+}
+
+const openqot = "&#x2018;"
+const closeqot = "&#x2019;"
+const openqot2 = "&#x201C;"
+const closeqot2 = "&#x201D;"
+
+const tagdocrow = template`<tr><td class="tagdoc1">${0}</td><td class="tagdoc2">${1}</td></tr>`
+
+const tagdoc = {
+    "ko":`
+<p style="color: #111">전방 위험지대! 태그 검색은 고급 사용자를 위한 기능입니다. 아래의 설명서를 이해할 자신이 없다면 ${openqot}쉬운 검색${closeqot}을 사용해 주십시오!</p>
+    
+<h4>문법</h4>
+<codeblock>
+(* quick reference to EBNF *)<br>
+(* { word } = word is repeated 0 or more times *)<br>
+(* [ word ] = word is optional (repeated 0 or 1 times) *)<br>
+<br>
+expr = "(" , expr , ")"<br>
+ &nbsp; &nbsp; &nbsp;| "'" , literal , "'"<br>
+ &nbsp; &nbsp; &nbsp;| literal<br>
+ &nbsp; &nbsp; &nbsp;| number<br>
+ &nbsp; &nbsp; &nbsp;| expr , op , expr ;<br>
+<br>
+literal = ? any string that does not collide with 'op's ? ;<br>
+<br>
+op = "+" | "," | "<" | ">" | "<=" | "=<" | ">=" | "=>" | "IS" | "ISNOT" | "HAS" | "HASNO" | "AND" | "OR" ;<br>
+<br>
+number = digit - "0" , { digit } ;<br>
+<br>
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+</codeblock>
+
+<h4>연산자</h4>
+<table class="tagdoctable">
+${tagdocrow(`IS`,`좌변과 우변이 일치함`)}
+${tagdocrow(`ISNOT`,`좌변과 우변이 일치하지 않음`)}
+${tagdocrow(`ISONEOF`,`우변에 좌변의 일부가 포함되어 있음`)}
+${tagdocrow(`ISNONEOF`,`우변에 좌변의 일부가 포함되어 있지 않음`)}
+${tagdocrow(`HASALLOF`,`좌변에 우변의 전체가 포함되어 있음`)}
+${tagdocrow(`HASSOMEOF`,`좌변에 우변의 일부가 포함되어 있음`)}
+${tagdocrow(`HASNONEOF`,`좌변에 우변의 전체가 포함되어 있지 않음`)}
+${tagdocrow(`&gt;= &middot; =&gt;`,`좌변이 우변에 비해 크거나 같음`)}
+${tagdocrow(`&lt;= &middot; =&lt;`,`좌변이 우변에 비해 작거나 같음`)}
+${tagdocrow(`&gt;`,`좌변이 우변에 비해 더 큼`)}
+${tagdocrow(`&lt;`,`좌변이 우변에 비해 더 작음`)}
+${tagdocrow(`,`,`두 개 이상의 검색어를 모아 배열을 만듦`)}
+${tagdocrow(`AND`,`좌변과 우변의 조건이 모두 일치함`)}
+${tagdocrow(`OR`,`좌변과 우변의 조건이 한 개 이상 일치함`)}
+</table>
+<p>&bullet; 각 항은 괄호로 감쌀 수 있습니다. (예: <code>(creator_name is 블루폭스 or creator_name is 아토아마) and species_ko is 고양이</code>)
+<br>&bullet; 공백이 포함된 이름은 작은따옴표로 감쌀 수 있습니다. (예: <code>name is '공백이 포함된 이름!'</code>)</p>
+
+<h4>검색 조건</h4>
+<table class="tagdoctable">
+${tagdocrow(`name_ko`,`캐릭터의 이름 (한)`)}
+${tagdocrow(`name_en`,`캐릭터의 이름 (영)`)}
+${tagdocrow(`name_ja`,`캐릭터의 이름 (일)`)}
+${tagdocrow(`creator_name`,`제작자의 이름`)}
+${tagdocrow(`creator_link`,`제작자의 트위터 주소`)}
+${tagdocrow(`actor_name`,`소유자의 이름`)}
+${tagdocrow(`actor_link`,`소유자의 트위터 주소`)}
+${tagdocrow(`birthday`,`yyyymmdd 꼴로 입력한 생일 (예: 2020년 2월 8일 → <code>20200208</code>)`)}
+${tagdocrow(`species_ko`,`캐릭터의 종 (한국어)`)}
+${tagdocrow(`style`,`캐릭터의 스타일`)}
+${tagdocrow(`is_partial`,`파셜 여부 (<code>true</code> 혹은 <code>false</code>)`)}
+${tagdocrow(`is_34partial`,`준풀슈트(풀슈트에서 상체 혹은 하체가 없는 것) 여부 (<code>true</code> 혹은 <code>false</code>)`)}
+${tagdocrow(`colour_combi`,`바디와 헤드의 색상 조합`)}
+${tagdocrow(`hair_colours`,`머리카락 색상`)}
+${tagdocrow(`eye_colours`,`눈 색깔`)}
+${tagdocrow(`eye_features`,`눈 특징 (<code>역안</code>, <code>무늬</code>)`)}
+</table>
+`,
+
+    "en":`
+<p style="color: #111">Here be Dragons! Tag Search is made for advanced users. If you have no confidence understanding the fine manual below, please be kind to yourself and use ${openqot}Easy Search${closeqot} instead!</p>
+
+<h4>TODO</h4>
+`
 }
 
 const nulsel = `<option value="dont_care">&mdash;</option>`
@@ -198,8 +282,6 @@ Array.prototype.tail = function() {
 Array.prototype.init = function() {
     return this.slice(0, this.length - 1)
 }
-
-var lang = "ko"
 
 function pageinit() {
     // DB 로드
@@ -270,8 +352,8 @@ function checkForDatabaseErrors() {
 function createColourSwatch(name) {
     if (name.length == 0) return ``
             
-    let colour = colourPalette[name][1]
-    if (!colour) colour = colourPalette[name][0]
+    let colour = colourPalette[name]
+    if (!colour) colour = colourPalette[name]
             
     let lum = htmlColToLum(colour)
     let subclass = (lum >= 0.666) ? "light" : "dark"
@@ -461,15 +543,7 @@ function reloadI18n() {
     document.getElementById("tagsearch_willshowall_string").innerHTML = i18n[lang].WillShowAllOnEmptySearch
     
     
-    let tagdocOutput = ""
-    
-    tagdocOutput += `<ul>`
-    Object.keys(tagDocumentation).forEach(it => {
-        tagdocOutput += `<li><span class="tagdoc1">${it} </span><span class="tagdoc2"> ${tagDocumentation[it][lang]}</span></li>`
-    })
-    tagdocOutput += `</ul><p>${i18n[lang].ReplaceSpaceWithUnderscore}</p>`
-    
-    document.getElementById("tagdoc").innerHTML = tagdocOutput
+    document.getElementById("tagdoc").innerHTML = tagdoc[lang]
     document.getElementById("tagdoc_header").innerHTML = i18n[lang].TagGuide
     
     // 검색폼 다국어화
@@ -501,7 +575,7 @@ function reloadI18n() {
     
     //document.getElementById("searchform_header").innerHTML = i18n[lang].AdvancedSearch
     document.getElementById("searchtags_string").innerHTML = i18n[lang].SearchTags
-    document.getElementById("exactmatch_string").innerHTML = i18n[lang].IsExactMatch
+    //document.getElementById("exactmatch_string").innerHTML = i18n[lang].IsExactMatch
     document.getElementById("includewip_string").innerHTML = i18n[lang].IsIncludeWip
     document.getElementById("includewip_string2").innerHTML = i18n[lang].IsIncludeWip
     document.getElementById("submit_button").setAttribute("value", i18n[lang].Submit)
@@ -772,45 +846,45 @@ function simplequery() {
 
 function query() {
     let query = document.getElementById("searchtags").value
-    let exactMatch = document.getElementById("exactmatch").checked
-    let includeWIP = document.getElementById("includewip").checked
+    let includeWip = document.getElementById("includewip").checked
     
-    makeOutput(performSearch(parseSearchTags(query), "tags", exactMatch, includeWIP))
+    makeOutput(performTagSearch(query, includeWip))
 }
+
 
 /*
 Composes searchFilter by obtaining key-value pair from Danbooru tagging syntax
 단부루식 태그 문법에서 key와 value를 분리해 searchFilter를 만듦
  */
-function parseSearchTags(searchstrr) {
+function performTagSearch(searchstrr, includeWip) {    
+    let foundFurs = [] // contains object in {id: (int), prop: (object)}
+
+    let wipfun = (prop) => includeWip || prop.is_done
+    
     let searchstr = searchstrr.trim()
+    if (searchstr.length == 0) {
+        forEachFur((prop, id) => {
+            if (wipfun(prop))
+                foundFurs.push({id: id, prop: prop})
+        })
+    }
+    else {
+        try {        
+            let tns = bF._tokenise(searchstrr)
+            tns = bF._parserElaboration(tns.tokens, tns.states)    
+            let tree = bF._parseExpr(1, tns.tokens, tns.states, 0)
+                        
+            forEachFur((prop, id) => {
+                if (bF._executeSyntaxTree(prop, tree, 0) && wipfun(prop))
+                    foundFurs.push({id: id, prop: prop})
+            })
+        }
+        catch (e) {
+            alert(i18n[lang].TagParserError+'\n'+e+'\n'+e.stack)
+        }
+    }
     
-    if (searchstr.length == 0) return undefined
-    
-    let tokens = searchstr.split(' ')
-    let searchFilter = new Object()
-    // populate searchfilter object
-    tokens.forEach(v => {
-        // example tag: "creator:DIY"
-        // split key-value
-        let kvpair = v.split(':')
-        
-        if (kvpair[0].startsWith("name_")) kvpair[0] = "name" // 이름 언어 구분 제거
-        
-        searchFilter[kvpair[0]] = kvpair[1]
-    })
-
-    return searchFilter
-}
-
-// 문자열을 검색하기 좋게 소문자로 바꾸고 띄어쓰기와 언더스코어를 없앰 (언더스코어는 사용자가 검색어에 띄어쓰기 대신 집어넣을 가능성 있음)
-String.prototype.babostr = function() {
-    if (this === true) return "true"
-    else if (this === false) return "false"
-    else return this.toLowerCase().replaceAll(" ","").replaceAll("_","")
-}
-Boolean.prototype.babostr = function() {
-    return ''+this
+    return foundFurs;
 }
 
 /*
@@ -876,11 +950,8 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
     }
     
     
-        
-    for (const furid in furdb) {
-        if (isNaN(furid)) continue
-        
-        let birthday = furdb[furid].birthday * 1 // cast to Int
+    forEachFur((prop, furid) => {
+        let birthday = prop.birthday * 1 // cast to Int
         // case of 2017 -> 20170000
         if (birthday < 10000) birthday *= 10000
         // case of 201712 -> 20171200
@@ -897,7 +968,7 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                     //console.log(`searchCriterion = ${searchCriterion}`)
                     // check if the tag is valid
                     // 태그가 올바른지 검사
-                    if (searchCriterion in furdb[furid] || searchCriterion in pseudoCriteria) {
+                    if (searchCriterion in prop || searchCriterion in pseudoCriteria) {
                         const arraySearchMode = Array.isArray(searchFilter[searchCriterion])
                         
                         //console.log(`arraySearchMode = ${arraySearchMode}`)
@@ -925,7 +996,7 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                             }
                         }
                            
-                        let matching = furdb[furid][searchCriterion]
+                        let matching = prop[searchCriterion]
                                                       
                         if (arraySearchMode) {
                             // some tags want AND match, not OR
@@ -957,7 +1028,7 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                             if (searchCriterion == "name") {
                                 let partialMatch = false
                                 nameSearchAliases.forEach(it => {
-                                    partialMatch |= furdb[furid][it].babostr().includes(searchTerm)
+                                    partialMatch |= prop[it].babostr().includes(searchTerm)
                                 })
                                 searchMatches &= partialMatch
                             }
@@ -997,10 +1068,10 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
 
         // check for is_done
         // 제작 완성 여부 검사
-        if (searchMatches && (includeWIP || furdb[furid].is_done)) {
-            foundFurs.push({id: furid, prop: furdb[furid]})
+        if (searchMatches && (includeWIP || prop.is_done)) {
+            foundFurs.push({id: furid, prop: prop})
         }
-    }
+    })
 
     return foundFurs
 }
