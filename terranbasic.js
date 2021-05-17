@@ -29,7 +29,7 @@ let PROD = true;
 String.prototype.babostr = function() {
     if (this === true) return "true"
     else if (this === false) return "false"
-    else return this.toLowerCase().replaceAll(" ","").replaceAll("_","").replaceAll(".","")
+    else return this.toLowerCase().replaceAll(" ","").replaceAll("_","").replaceAll(".","").replaceAll('"',"").replaceAll("'","")
 }
 Boolean.prototype.babostr = function() {
     return ''+this

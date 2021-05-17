@@ -231,7 +231,7 @@ ${tagdocrow(`AND`,`좌변과 우변의 조건이 모두 일치함`)}
 ${tagdocrow(`OR`,`좌변과 우변의 조건이 한 개 이상 일치함`)}
 </table>
 <p>&bullet; 각 항은 괄호로 감쌀 수 있습니다. (예: <code>(creator_name is 블루폭스 or creator_name is 아토아마) and species_ko is 고양이</code>)
-<br>&bullet; 공백이 포함된 이름은 작은따옴표로 감쌀 수 있습니다. (예: <code>name is '공백이 포함된 이름!'</code>)</p>
+<br>&bullet; 공백이 포함된 이름은 작은따옴표로 감쌀 수 있습니다. (예: <code>creator_name is '공백이 포함된 이름!'</code>)</p>
 
 <h4>검색 조건</h4>
 <table class="tagdoctable">
