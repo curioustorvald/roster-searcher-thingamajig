@@ -44,6 +44,7 @@ var lang = "ko"
 var furdb = {}
 var creatorThesaurus = {}
 var colourPalette = {}
+var workshops = {}
 
 function htmlColToLum(text) {
     if (!text) return 0.5
@@ -293,34 +294,38 @@ function pageinit() {
         loadJSON("colourpalette.json", true, response => {
             colourPalette = JSON.parse(response)
             
-            loadJSON("furdb.json", true, response => {
-                furdb = JSON.parse(response)
-                
-                checkForDatabaseErrors()
-                
-                
-                // handle the 'show' query string
-                // qd is defined on index.html
-                if (qd.show !== undefined) {
-                    showOverlay(qd.show[0])
-                }
-                // handle the 'tags' query string
-                if (qd.tags !== undefined) {
-                    let showwip = (qd.showwip && qd.showwip[0] == "true")
-                    makeOutput(performTagSearch(qd.tags[0], showwip))
-                }
-                
-                // jobs that need DB to be there
-                //populateEyesSelection()
-                populateColourChooser("eye_colours")
-                populateColourChooser("body_colours")
-                populateColourChooser("hair_colours")
-                populateEyeFeaturesChooser()
-                //populateColourSelection()
-                //populateHairSelection()
-                // these are here to just make them pop up in sync with more heavy tasks
-                populateSpeciesSelection()
-                populateStyleSelection()
+            loadJSON("workshops.json", true, response => {
+                workshops = JSON.parse(response)
+            
+                loadJSON("furdb.json", true, response => {
+                    furdb = JSON.parse(response)
+                    
+                    checkForDatabaseErrors()
+                    
+                    
+                    // handle the 'show' query string
+                    // qd is defined on index.html
+                    if (qd.show !== undefined) {
+                        showOverlay(qd.show[0])
+                    }
+                    // handle the 'tags' query string
+                    if (qd.tags !== undefined) {
+                        let showwip = (qd.showwip && qd.showwip[0] == "true")
+                        makeOutput(performTagSearch(qd.tags[0], showwip))
+                    }
+                    
+                    // jobs that need DB to be there
+                    //populateEyesSelection()
+                    populateColourChooser("eye_colours")
+                    populateColourChooser("body_colours")
+                    populateColourChooser("hair_colours")
+                    populateEyeFeaturesChooser()
+                    //populateColourSelection()
+                    //populateHairSelection()
+                    // these are here to just make them pop up in sync with more heavy tasks
+                    populateSpeciesSelection()
+                    populateStyleSelection()
+                })
             })
         })
         
@@ -347,6 +352,16 @@ function checkForDatabaseErrors() {
         prop.eye_features.forEach(feature => {
             if (!(feature in specialEyeSwatch)) msg.push(`Undefined eye_colours '${col}' for id ${id}`)
         })
+        
+        let creator = prop.creator_name.split('/')[0]
+        if (workshops[creator] != undefined) {    
+            let twitterFromWorkshops = workshops[creator].twitter.toLowerCase()
+            let twitterFromProp = prop.creator_link.split('/').pop().toLowerCase()
+            
+            if (twitterFromWorkshops != twitterFromProp && twitterFromProp != "love_tail_kr") {
+                msg.push(`'${prop.creator_name}' != '${prop.creator_link}' for id ${id}`)
+            }
+        }
     })
         
     if (msg.length > 0) {
