@@ -31,6 +31,7 @@ String.prototype.babostr = function() {
     else if (this === false) return "false"
     else return this.toLowerCase().replaceAll(" ","").replaceAll("_","").replaceAll(".","").replaceAll('"',"").replaceAll("'","")
 }
+Number.prototype.babostr = function() { return ''+this }
 Boolean.prototype.babostr = function() {
     return ''+this
 }
@@ -590,7 +591,7 @@ bF._tokenise = function(cmd) {
     return { "tokens": tokens, "states": states }
 }
 
-let _debugprintElaboration = true
+let _debugprintElaboration = !PROD
 bF._parserElaboration = function(ltokens, lstates) {
     let lnum = 1
     let tokens = cloneObject(ltokens)
