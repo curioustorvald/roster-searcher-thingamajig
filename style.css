@@ -30,7 +30,6 @@ html {
     font-family: Open Sans, Arial;
     color: var(--site-text-colour);
     font-size: var(--site-font-size);
-    text-align: justify;
 }
 
 header {
@@ -589,11 +588,11 @@ bigfurbox copying::before {
 }
 
 .flex_halfcol {
-    flex: 50%;
+    flex: 1 1 50%;
 }
 
 .flex_thirdcol {
-    flex: 33.333%;
+    flex: 1 1 33.333%;
 }
 
 

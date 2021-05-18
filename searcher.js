@@ -195,25 +195,27 @@ const tagdoc = {
     
 <h4>문법</h4>
 <codeblock>
-(* quick reference to EBNF *)<br>
-(* { word } = word is repeated 0 or more times *)<br>
-(* [ word ] = word is optional (repeated 0 or 1 times) *)<br>
+(* EBNF 일러두기 *)<br>
+(* { 단어 } = 괄호 안 내용물이 0회 이상 반복됨을 나타냄 *)<br>
+(* 구문 - "문자" = 특정 문자가 빠진 구문 *)<br>
 <br>
-expr = "(" , expr , ")"<br>
- &nbsp; &nbsp; &nbsp;| "'" , literal , "'"<br>
- &nbsp; &nbsp; &nbsp;| literal - " "<br>
- &nbsp; &nbsp; &nbsp;| number<br>
- &nbsp; &nbsp; &nbsp;| expr , op , expr ;<br>
+수식 = "(" , 수식 , ")"<br>
+ &nbsp; &nbsp; | "'" , 문자열 , "'"<br>
+ &nbsp; &nbsp; | 검색조건<br>
+ &nbsp; &nbsp; | 수<br>
+ &nbsp; &nbsp; | 수식 , 연산자 , 수식 ;<br>
 <br>
-literal = ? any string that does not collide with 'op's ? ;<br>
+문자열 = ? 연산자와 충돌하지 않는 적절한 문자의 집합 ? ;<br>
 <br>
-op = "," | "<" | ">" | "<=" | "=<" | ">=" | "=>" | "IS" | "ISNOT" | "ISONEOF" | "ISNONEOF" | "HASALLOF" | "HASSOMEOf" | "HASNONEOF" | "STARTSWITH" | "NOTSTARTSWITH" | "AND" | "OR" ;<br>
+연산자 = "," | "<" | ">" | "<=" | "=<" | ">=" | "=>" | "IS" | "ISNOT" | "ISONEOF" | "ISNONEOF" | "HASALLOF" | "HASSOMEOf" | "HASNONEOF" | "STARTSWITH" | "NOTSTARTSWITH" | "AND" | "OR" ;<br>
 <br>
-number = digit - "0" , { digit } ;<br>
+수 = 숫자 - "0" , { 숫자 } ;<br>
 <br>
-digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+숫자 = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
 </codeblock>
 
+<div style="display:flex; flex-flow: row wrap;">
+<div class="flex_halfcol" style="min-width: 300px">
 <h4>연산자</h4>
 <table class="tagdoctable">
 ${tagdocrow(`IS`,`좌변과 우변이 일치함`)}
@@ -233,9 +235,8 @@ ${tagdocrow(`,`,`두 개 이상의 검색어를 모아 배열을 만듦`)}
 ${tagdocrow(`AND`,`좌변과 우변의 조건이 모두 일치함`)}
 ${tagdocrow(`OR`,`좌변과 우변의 조건이 한 개 이상 일치함`)}
 </table>
-<p>&bullet; 각 항은 괄호로 감쌀 수 있습니다. (예: <code>(creator_name is 블루폭스 or creator_name is 아토아마) and species_ko is 고양이</code>)
-<br>&bullet; 공백이 포함된 이름은 작은따옴표로 감쌀 수 있습니다. (예: <code>creator_name is '공백이 포함된 이름!'</code>)</p>
-
+</div>
+<div class="flex_halfcol" style="min-width: 300px">
 <h4>검색 조건</h4>
 <table class="tagdoctable">
 ${tagdocrow(`name_ko`,`캐릭터의 이름 (한)`)}
@@ -255,6 +256,12 @@ ${tagdocrow(`hair_colours`,`머리카락 색상`)}
 ${tagdocrow(`eye_colours`,`눈 색깔`)}
 ${tagdocrow(`eye_features`,`눈 특징 (<code>역안</code>, <code>무늬</code>)`)}
 </table>
+</div>
+</div>
+<p>
+&bullet; 검색어는 대소문자를 구분하지 않습니다.<br>
+&bullet; 각 항은 괄호로 감쌀 수 있습니다. (예: <code>(creator_name is 블루폭스 or creator_name is 아토아마) and species_ko is 고양이</code>)<br>
+&bullet; 공백이 포함된 이름은 작은따옴표로 감쌀 수 있습니다. (예: <code>creator_name is '공백이 포함된 이름!'</code>)</p>
 `,
 
     "en":`
