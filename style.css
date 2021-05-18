@@ -774,3 +774,28 @@ footer a{
 
 /* LO, CUSTOM CSS BE BELOW THIS LINE! */
 
+#simplesearch_eye_colours .checkmark,
+#simplesearch_eye_features .checkmark,
+#details_eye .checkmark{
+    transform: skew(-10deg,0deg);
+    border-radius:100%;
+    width: 32px;
+    height: 29px;
+    box-shadow: inset #ffffffbb -2px 2px 0 4px;
+}
+#simplesearch_eye_colours .container{
+    height: 33px;
+}
+
+colourchooser .container{
+    padding-left:36px;
+    height: 28px;
+}
+colourchooser .checkmark{
+    transform:skew(-10deg,0deg);
+    border-radius: 5px;
+    height: 24px;
+}
+colourchooser .container input:checked ~ .checkmark:after{
+    margin-top: -4px;
+}

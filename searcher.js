@@ -672,6 +672,7 @@ function showOverlay(id) {
     
     let tdtemplate = template`<tr><td class="tableFormLabel" style="color:#888">${0}</td><td>${1}</td></tr>`
     let tdtemplCol = template`<tr><td class="tableFormLabel" style="color:#888">${0}</td><td><colourchooser style="height:var(--colour-swatch-size-outer)">${1}</colourchooser></td></tr>`
+    let tdtemplCol2 = template`<tr><td class="tableFormLabel" style="color:#888">${0}</td><td><colourchooser id="details_eye" style="height:var(--colour-swatch-size-outer)">${1}</colourchooser></td></tr>`
     
     let output = `<dummycentre><bigfurbox>`
         
@@ -728,7 +729,7 @@ function showOverlay(id) {
         output += tdtemplCol(i18n[lang].SimpleSearchHair, hairColourPal)
         
         if (eyeColourPal.length > 0)
-        output += tdtemplCol(i18n[lang].SimpleSearchEyes, eyeColourPal)
+        output += tdtemplCol2(i18n[lang].SimpleSearchEyes, eyeColourPal)
         
         output += tdtemplate(i18n[lang].ShareLink, copyableLinkHtml)
 
