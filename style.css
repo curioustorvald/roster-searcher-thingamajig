@@ -87,6 +87,7 @@ code {
 
 codeblock {
     font-family: monospace;
+    text-align: left;
     font-size: 96%;
     display: block;
     border: 1px solid #78A9FF;
@@ -374,18 +375,16 @@ furbox imgbox img {
     height: var(--img-height);
 }
 
-infobox h4[class=name_en] { 
-    display:inline; margin: 0 0.18em;
-}
-infobox h4[class=name_ko] {
-    display:inline; margin: 0 0.18em;
-}
-infobox h4[class=name_ja] {
-    display:inline; margin: 0 0.18em;
-}
-infobox h4[class=name_unknown] {
-    display:inline; margin: 0 0.18em;
-}
+furbox infobox center h4{display:inline; margin: 0 0.18em;}
+furbox infobox center .name_unknown{display: block;}
+furbox infobox center .name_ko{display: block;}
+furbox infobox center .name_en{font-size: .8em;}
+furbox infobox center .name_separator{font-size: .8em; padding:0 0.1em;}
+furbox infobox center .name_separator::after{content: "·"}
+furbox infobox center .name_ja{font-size: .8em;letter-spacing: -0.10em;}
+
+bigfurbox refselem1 h4{font-size: 120%}
+bigfurbox refselem1 .name_ezselect{display:inline-block; padding: 0 0.2em;}
 
 /* END OF FURBOX */
 

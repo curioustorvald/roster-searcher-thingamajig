@@ -201,13 +201,13 @@ const tagdoc = {
 <br>
 expr = "(" , expr , ")"<br>
  &nbsp; &nbsp; &nbsp;| "'" , literal , "'"<br>
- &nbsp; &nbsp; &nbsp;| literal<br>
+ &nbsp; &nbsp; &nbsp;| literal - " "<br>
  &nbsp; &nbsp; &nbsp;| number<br>
  &nbsp; &nbsp; &nbsp;| expr , op , expr ;<br>
 <br>
 literal = ? any string that does not collide with 'op's ? ;<br>
 <br>
-op = "," | "<" | ">" | "<=" | "=<" | ">=" | "=>" | "IS" | "ISNOT" | "ISONEOF" | "ISNONEOF" | "HASALLOF" | "HASSOMEOf" | "HASNONEOF" | "AND" | "OR" ;<br>
+op = "," | "<" | ">" | "<=" | "=<" | ">=" | "=>" | "IS" | "ISNOT" | "ISONEOF" | "ISNONEOF" | "HASALLOF" | "HASSOMEOf" | "HASNONEOF" | "STARTSWITH" | "NOTSTARTSWITH" | "AND" | "OR" ;<br>
 <br>
 number = digit - "0" , { digit } ;<br>
 <br>
@@ -641,9 +641,10 @@ function copySharelink(id) {
 function showOverlay(id) {    
     let prop = furdb[id]
         
-    let displayFurName = textOrQos((prop.name_ko + " " + prop.name_en).trim())
-            
+    let displayFurNameKo = (prop.name_ko).trim()
+    let displayFurNameEn = (prop.name_en).trim()
     let displayFurNameJa = (prop.name_ja).trim()
+    let nameUnknown = (displayFurNameKo+displayFurNameEn+displayFurNameJa).length == 0
                         
     let furAliases = (prop.aliases).trim()
                         
@@ -697,7 +698,12 @@ function showOverlay(id) {
         output += `<refselem1>`
         output += `<table>`
         output += `<thead><tr><th colspan="2">`
-        output += `<h4 style="font-size: 20px">${displayFurName} ${displayFurNameJa}</h4>`
+        output += `<h4>`
+        if (nameUnknown) output += `<span class="name_ezselect">???</span>`
+        if (displayFurNameKo.length > 0) output += `<span class="name_ezselect">${displayFurNameKo}</span>`
+        if (displayFurNameEn.length > 0) output += `<span class="name_ezselect">${displayFurNameEn}</span>`
+        if (displayFurNameJa.length > 0) output += `<span class="name_ezselect">${displayFurNameJa}</span>`
+        output += `</h4>`
         if (furAliases.length > 0)
             output += `<h5>${furAliases.replaceAll('/', '<br />')}</h5>`
         output += `</th></tr></thead>`
@@ -753,7 +759,6 @@ function makeOutput(searchResults) {
         let displayFurNameKo = (prop.name_ko).trim()
         let displayFurNameEn = (prop.name_en).trim()
         let displayFurNameJa = (prop.name_ja).trim()
-        let nameUnknown = (displayFurNameKo+displayFurNameEn+displayFurNameJa).length == 0
         
         let actorName = (prop.actor_name).trim()
                             
@@ -783,14 +788,44 @@ function makeOutput(searchResults) {
         output += `<infobox>`
         
         output += `<center>`
-        if (nameUnknown) {
-            output += `<h4 class="name_unknown">???</h4>`
+
+        // 0b k e j
+        // e.g. 7 if it has all korean & english & japanese name,
+        //      2 if it has only english name
+        let caseNumber = ((displayFurNameKo.length > 0) << 2) | ((displayFurNameEn.length > 0) << 1) | ((displayFurNameJa.length > 0) << 0)
+            
+        if (caseNumber >= 4) {
+            output += `<h4 class="name_ko">${displayFurNameKo}</h4>`
+            
+            if (caseNumber % 4 == 0)
+                output += `<h4 class="name_en"></h4>`
+            else if (caseNumber % 4 == 1)
+                output += `<h4 class="name_ja">${displayFurNameJa}</h4>`
+            else if (caseNumber % 4 == 2)
+                output += `<h4 class="name_en">${displayFurNameEn}</h4>`
+            else if (caseNumber % 4 == 3) {
+                output += `<h4 class="name_en">${displayFurNameEn}</h4>`
+                output += `<h4 class="name_separator"></h4>`
+                output += `<h4 class="name_ja">${displayFurNameJa}</h4>`
+            }
+        }
+        else if (caseNumber >= 2) {
+            output += `<h4 class="name_ko">${displayFurNameEn}</h4>`
+            
+            if (caseNumber % 2 == 1)
+                output += `<h4 class="name_ja">${displayFurNameJa}</h4>`
+            else
+                output += `<h4 class="name_en"></h4>`
+        }
+        else if (caseNumber >= 1) {
+            output += `<h4 class="name_ko">${displayFurNameJa}</h4>`
+            output += `<h4 class="name_en"></h4>`
         }
         else {
-            output += `<h4 class="name_ko">${displayFurNameKo}</h4>`
-            output += `<h4 class="name_en">${displayFurNameEn}</h4>`
-            output += `<h4 class="name_ja">${displayFurNameJa}</h4>`
+            output += `<h4 class="name_ko">???</h4>`
+            output += `<h4 class="name_en"></h4>`
         }
+        
         output += `</center>`
         
         output += `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a></h5>`
