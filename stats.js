@@ -224,7 +224,7 @@ function populateMarketshareTable() {
         Object.keys(workshops).forEach(shop => {
             let col = workshops[shop].colour
             let lum = htmlColToLum(col)
-            let barclass = (lum > 0.93) ? "superlight" : (lum >= 0.6215) ? "light" : "dark"
+            let barclass = (lum > 0.93) ? "superlight" : (lum >= 0.675) ? "light" : "dark"
             let count = record[shop] || 0
             let percentage = count * 100.0 / total
             

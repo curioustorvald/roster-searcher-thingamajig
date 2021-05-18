@@ -365,7 +365,7 @@ function checkForDatabaseErrors() {
             let twitterFromWorkshops = workshops[creator].twitter.toLowerCase()
             let twitterFromProp = prop.creator_link.split('/').pop().toLowerCase()
             
-            if (twitterFromWorkshops != twitterFromProp && twitterFromProp != "love_tail_kr") {
+            if (twitterFromWorkshops != twitterFromProp) {
                 msg.push(`'${prop.creator_name}' != '${prop.creator_link}' for id ${id}`)
             }
         }
@@ -385,7 +385,7 @@ function createColourSwatch(name) {
     if (!colour) colour = colourPalette[name][0]
             
     let lum = htmlColToLum(colour)
-    let subclass = (lum >= 0.666) ? "light" : "dark"
+    let subclass = (lum >= 0.675) ? "light" : "dark"
     return `<span class="checkmark swatch" luminosity="${subclass}" style="background:${(colour.startsWith('#') ? colour : `var(--${colour})`)}" title="${name}"></span>`
 }
 
