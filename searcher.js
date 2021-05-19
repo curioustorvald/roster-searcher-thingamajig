@@ -134,7 +134,9 @@ const i18n = {
         "ShareLink": "공유 주소: ",
         "ClickToCopyLink": "(눌러서 링크 복사)",
         "LinkCopied": "링크가 복사되었습니다",
-        "TagParserError": "태그에 문법 오류가 있습니다:"
+        "TagParserError": "태그에 문법 오류가 있습니다:",
+        "BirthdayValueUnknown": "???",
+        "BirthdayValueStillMaking": "제작중&hellip;"
     },
     "en": {
         "TagSyntaxError": "Entered tag is malformed: ",
@@ -178,7 +180,9 @@ const i18n = {
         "ShareLink": "Share Link: ",
         "ClickToCopyLink": "(Click to Copy the Link)",
         "LinkCopied": "Link Copied",
-        "TagParserError": "Parsing Error on the tags:"
+        "TagParserError": "Parsing Error on the tags:",
+        "BirthdayValueUnknown": "???",
+        "BirthdayValueStillMaking": "Still being made&hellip;"
     }
 }
 
@@ -706,6 +710,9 @@ function showOverlay(id) {
     
     let copyableLinkHtml = `<span class="underline_on_hover" onclick=copySharelink(${id})>${i18n[lang].ClickToCopyLink}</span>` 
     
+    let birthdayOutput = (!prop.is_done) ? i18n[lang].BirthdayValueStillMaking : ((''+prop.birthday).trim().length == 0) ? i18n[lang].BirthdayValueUnknown : prop.birthday
+    let partialnessOutput = prop.is_34partial ? "&frac34;" : !prop.is_partial ? i18n[lang].ConditionYes : i18n[lang].ConditionNo
+    
     output += `</imgbox>`
     
     output += `<parbox>`
@@ -727,8 +734,8 @@ function showOverlay(id) {
         output += tdtemplate(i18n[lang].SimpleSearchStyle, prop.style.replaceAll('?',''))
         output += tdtemplate(i18n[lang].SimpleSearchActor, displayActorName + `&nbsp; ${actorLinkFull}`)
         output += tdtemplate(i18n[lang].SimpleSearchCreator, displayCreatorName + `&nbsp; ${creatorLinkFull}`)
-        output += tdtemplate(i18n[lang].SimpleSearchBirthday2, prop.birthday)
-        output += tdtemplate(i18n[lang].SimpleSearchIsFullSuit, prop.is_34partial ? "&frac34;" : !prop.is_partial ? i18n[lang].ConditionYes : i18n[lang].ConditionNo)
+        output += tdtemplate(i18n[lang].SimpleSearchBirthday2, birthdayOutput)
+        output += tdtemplate(i18n[lang].SimpleSearchIsFullSuit, partialnessOutput)
         
         if (colourCombiPal.length > 0)
         output += tdtemplCol(i18n[lang].SimpleSearchColourCombi, colourCombiPal)
