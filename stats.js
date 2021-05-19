@@ -311,9 +311,8 @@ function populateTopTenSpecies() {
     let records = {}
     let unknowns = 0
     forEachFur(prop => {
-        if (prop.species_ko) {
-            let tokens = prop.species_ko.split(' ')
-            tokens.forEach(tok => {
+        if (prop.species_ko.length > 0) {
+            prop.species_ko.forEach(tok => {
                 if (records[tok] === undefined)
                     records[tok] = 0
                     
