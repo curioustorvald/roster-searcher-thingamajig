@@ -264,6 +264,13 @@ bS.builtin = {
         let a = (!Array.isArray(args[1])) ? [args[1]] : args[1]
         return a.map(it => bS.builtin["IS"](prop, [args[0], it])).sum() == 0
     },
+    "INCLUDES": function(prop, args) {
+        if (Array.isArray(args[1])) throw new basiclang.illegalType(1, args[1])
+        return !!twoArgAND(prop, args, (p,q) => p.includes(q))
+    },
+    "NOTINCLUDES": function(prop, args) {
+        return !bS.builtin["INCLUDES"](prop, args)
+    },
     ">=": function(prop, args) {
         return !!twoArgAND(prop, args, (p,q) => p >= q)
     },
@@ -357,7 +364,8 @@ bF._opPrc = {
     "<":80,">":80,"<=":80,"=<":80,">=":80,"=>":80,
     "IS":90,"ISNOT":90,"ISONEOF":90,"ISNONEOF":90,
     "HASALLOF":90,"HASSOMEOF":90,"HASNONEOF":90,
-    "STARTSWITH":90,
+    "STARTSWITH":90,"NOTSTARTSWITH":90,
+    "INCLUDES":90,"NOTINCLUDES":90,
     "AND":300,
     "OR":301
 }
