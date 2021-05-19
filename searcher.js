@@ -851,7 +851,12 @@ function makeOutput(searchResults) {
         
         output += `</center>`
         
-        output += `<h5 title="${actorName}">${displayActorName}<br /><a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a></h5>`
+        output += `<h5 title="${actorName}">${displayActorName}<br />`
+        if (displayActorLinkHref != "???")
+            output += `<a href="${displayActorLinkHref}" target="_blank" rel="noopener noreferrer">${displayActorLinkName}</a>`
+        else
+            output += displayActorLinkName
+        output += `</h5>`
         output += `<h5>${i18n[lang].MadeBy + ((displayCreatorLinkHref.length == 0) ? displayCreatorName : `<a href="${displayCreatorLinkHref}" target="_blank" rel="noopener noreferrer">${displayCreatorName}</a>`)}</h5>`
         output += `</infobox></furbox>`
     })
