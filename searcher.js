@@ -947,7 +947,8 @@ function performTagSearch(searchstrr, includeWip) {
             })
         }
         catch (e) {
-            alert(i18n[lang].TagParserError+'\n'+e+'\n'+e.stack)
+            console.log(e)
+            alert(i18n[lang].TagParserError+'\n'+e)
         }
     }
     

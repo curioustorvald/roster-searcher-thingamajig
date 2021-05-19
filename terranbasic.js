@@ -23,7 +23,7 @@ SOFTWARE.
  */
 "use strict";
 
-let PROD = true;
+let PROD = true
 
 // 문자열을 검색하기 좋게 소문자로 바꾸고 띄어쓰기와 언더스코어를 없앰 (언더스코어는 사용자가 검색어에 띄어쓰기 대신 집어넣을 가능성 있음)
 String.prototype.babostr = function() {
@@ -40,7 +40,6 @@ String.prototype.babostr = function() {
         }
         
         return s.replaceAll(" ","")
-            .replaceAll("_","")
             .replaceAll(".","")
             .replaceAll('"',"")
             .replaceAll("'","")
@@ -327,10 +326,10 @@ let bF = {} // BASIC functions
 bF._1os = {"<":1,"=":1,">":1,"+":1,",":1}
 bF._uos = {"NOT":1}
 bF._isNum = function(code) {
-    return (code >= 0x30 && code <= 0x39) || code == 0x5F
+    return (code >= 0x30 && code <= 0x39)
 }
 bF._isNum2 = function(code) {
-    return (code >= 0x30 && code <= 0x39) || code == 0x5F
+    return (code >= 0x30 && code <= 0x39)
 }
 bF._isNumSep = function(code) {
     return code == 0x2E
