@@ -69,7 +69,7 @@ overlay {
     right: 0;
     bottom: 0;
     background-color: rgba(0,0,0,0.5); /* Black background with opacity */
-    z-index: 0; /* Specify a stack order in case you're using a different order for other elements */
+    z-index: 900; /* Specify a stack order in case you're using a different order for other elements */
     cursor: pointer; /* Add a pointer on hover */
 }
 
@@ -774,28 +774,3 @@ footer a{
 
 /* LO, CUSTOM CSS BE BELOW THIS LINE! */
 
-#simplesearch_eye_colours .checkmark,
-#simplesearch_eye_features .checkmark,
-#details_eye .checkmark{
-    transform: skew(-10deg,0deg);
-    border-radius:100%;
-    width: 32px;
-    height: 29px;
-    box-shadow: inset #ffffffbb -2px 2px 0 4px;
-}
-#simplesearch_eye_colours .container{
-    height: 33px;
-}
-
-colourchooser .container{
-    padding-left:36px;
-    height: 28px;
-}
-colourchooser .checkmark{
-    transform:skew(-10deg,0deg);
-    border-radius: 5px;
-    height: 24px;
-}
-colourchooser .container input:checked ~ .checkmark:after{
-    margin-top: -4px;
-}
