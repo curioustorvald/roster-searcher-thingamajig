@@ -161,18 +161,11 @@ function populateStyleStatTable() {
 
 let marketShareDetailsShown = false
 
-function toggleMarketShareDetails(key) {
+function showMarketShareDetails(key) {
     let p = key.split('¤')
     
-    if (marketShareDetailsShown)
-        hideMarketShareDetails()
-    else
-        showMarketShareDetails(p)
-}
-
-function showMarketShareDetails(dict) {
-    let year = dict[0]
-    let name = dict[1]
+    let year = p[0]
+    let name = p[1]
         
     let rootpage = window.location.href.split('?')[0]
     while (rootpage.endsWith("/")) rootpage = rootpage.substring(0, rootpage.length - 1)
@@ -181,10 +174,6 @@ function showMarketShareDetails(dict) {
     let tag = `creator_name startswith ${name} and birthday > ${year-1}9999 and birthday < ${(year*1)+1}0000`
     
     window.location.replace(`${rootpage}/index.html?tags=${tag}&showwip=true`)
-}
-
-function hideMarketShareDetails() {
-    //marketShareDetailsShown = false
 }
 
 function populateMarketshareTable() {
@@ -229,7 +218,7 @@ function populateMarketshareTable() {
             let percentage = count * 100.0 / total
             
             if (count > 0) {
-                out += `<tablebarchartstack class="${barclass}" style="width:${percentage}%; background:${col}; height:${barHeight}px; line-height:${barHeight}px" title="${shop} (${Math.round(percentage * 10) / 10}%)" onclick="toggleMarketShareDetails('${year}¤${shop}')">`
+                out += `<tablebarchartstack class="${barclass}" style="width:${percentage}%; background:${col}; height:${barHeight}px; line-height:${barHeight}px" title="${shop} (${Math.round(percentage * 10) / 10}%)" onclick="showMarketShareDetails('${year}¤${shop}')">`
                 out += count
                 out += `</tablebarchartstack>`
             }

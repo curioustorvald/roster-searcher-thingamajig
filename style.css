@@ -205,6 +205,10 @@ tablebarchartstack.superlight {
     border-bottom: 1px solid var(--whitegraph-bordercol);
 }
 
+tablebarchartstack:hover {
+    text-decoration: underline;
+}
+
 stacklabel {
     display: table-cell;
     width: 100%;
