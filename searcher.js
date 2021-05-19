@@ -345,6 +345,7 @@ function pageinit() {
 
 function checkForDatabaseErrors() {
     let msg = []
+    let outdatedSpeciesFormatWarned = false
     
     forEachFur((prop, id) => {
         prop.colour_combi.forEach(col => {
@@ -368,6 +369,11 @@ function checkForDatabaseErrors() {
             if (twitterFromWorkshops != twitterFromProp) {
                 msg.push(`'${prop.creator_name}' != '${prop.creator_link}' for id ${id}`)
             }
+        }
+        
+        if (!outdatedSpeciesFormatWarned && !Array.isArray(prop.species_ko)) {
+            outdatedSpeciesFormatWarned = true
+            msg.push(`Species_ko is NOT an array; please re-build the database.`)
         }
     })
         
@@ -984,7 +990,6 @@ exactMatch가 참일 경우 문자열이 정확히 일치하는지를 검사, �
 const nameSearchAliases = ["name_ko", "name_en", "name_ja", "aliases"]
 const pseudoCriteria = {"name":1}
 const specialSearchTags = {"birthday_from":1, "birthday_to":1}
-const alwaysExactMatch = {"species_ko":1,"colours":1,"hairs":1}
 const colourMatch = {"colour_combi":1,"hair_colours":1,"eye_colours":1,"eye_features":1}
 function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
     let isSearchTagEmpty = searchFilter === undefined
@@ -1067,12 +1072,15 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                         let matching = prop[searchCriterion]
                                                       
                         if (arraySearchMode) {
-                            // some tags want AND match, not OR
+                            // matching mode: HASSOMEOF
                             if (searchCriterion == "species_ko") {
-                                // tokenise using space, and OR-match each token by checking if (token === one of the searchword)
-                                let tokens = matching.split(' ')
-                                searchMatches &= tokens.map(tok => searchTerm.map(word => (tok === word))).flat().some(it => it)
+                                let partialMatch = false
+                                searchTerm.forEach(it => {
+                                    partialMatch |= matching.includes(it)
+                                })
+                                searchMatches &= partialMatch
                             }
+                            // matching mode: HASALLOF
                             else if (searchCriterion in colourMatch) {
                                 let rainbow = searchTerm.reduce((acc,it) => acc + (it=="적색"||it=="주황색"||it=="황색"||it=="연두색"||it=="초록색"||it=="파란색"||it=="남색")*1, 0) >= 4 // if there are  4 or more maching colours, it's rainbow
 
@@ -1101,7 +1109,7 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                                 searchMatches &= partialMatch
                             }
                             else {
-                                searchMatches &= (searchCriterion in alwaysExactMatch || exactMatch) ? (matching.babostr() == searchTerm.babostr()) : matching.babostr().includes(searchTerm.babostr())
+                                searchMatches &= (exactMatch) ? (matching.babostr() == searchTerm.babostr()) : matching.babostr().includes(searchTerm.babostr())
                             }
                         }
                         

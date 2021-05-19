@@ -257,12 +257,12 @@ bS.builtin = {
         return !!twoArgAND(prop, args, (p,q) => p != q)
     },
     "ISONEOF": function(prop, args) {
-        if (!Array.isArray(args[1])) throw basiclang.illegalType(1, args[1])
-        return args[1].map(it => bS.builtin["IS"](prop, [args[0], it])).sum() > 0
+        let a = (!Array.isArray(args[1])) ? [args[1]] : args[1]
+        return a.map(it => bS.builtin["IS"](prop, [args[0], it])).sum() > 0
     },
     "ISNONEOF": function(prop, args) {
-        if (!Array.isArray(args[1])) throw basiclang.illegalType(1, args[1])
-        return args[1].map(it => bS.builtin["IS"](prop, [args[0], it])).sum() == 0
+        let a = (!Array.isArray(args[1])) ? [args[1]] : args[1]
+        return a.map(it => bS.builtin["IS"](prop, [args[0], it])).sum() == 0
     },
     ">=": function(prop, args) {
         return !!twoArgAND(prop, args, (p,q) => p >= q)

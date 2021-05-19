@@ -136,6 +136,11 @@ object Main {
             if (arr.isEmpty() || arr[0].isBlank()) "[[]]"
             else "[[" + generateArrayCell(value).map { "\"$it\"" }.joinToString(",") + "]]"
         }
+        else if ("species_raw" == action) {
+            var arr = generateArrayCell(value.substringBefore(',').substringBefore('(').trim())
+            if (arr.isEmpty() || arr[0].isBlank()) "[[]]"
+            else "[[" + generateArrayCell(value).map { "\"$it\"" }.joinToString(",") + "]]"
+        }
         else if ("birthday" == action)
             try {
                 val i = value.toInt()
@@ -162,8 +167,6 @@ object Main {
             else generateLink(value, "twitter")
         else if ("aliases_raw" == action)
             value //.split('/') // just return as-is
-        else if ("species_raw" == action)
-            value.substringBefore(',').replace("?", "").substringBefore('(').trim()
         else
             throw IllegalArgumentException(action)
     }
@@ -171,8 +174,8 @@ object Main {
     // must return empty array if there is no content in the record
     @JvmStatic fun generateArrayCell(cell: String): Array<String> {
         val out = ArrayList<String>()
-        cell.split(' ').forEach { out.add(it) }
-        return out.toTypedArray()
+        cell.split(' ').forEach { out.add(it.trim().replace(Regex("""\?"""),"")) }
+        return out.filter { it.isNotBlank() }.toTypedArray()
     }
     
     /**
