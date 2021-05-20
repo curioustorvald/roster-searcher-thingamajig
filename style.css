@@ -394,30 +394,37 @@ bigfurbox refselem1 .name_ezselect{display:inline-block; padding: 0 0.2em;}
 
 /* BEGIN OF WORSHOPBOX */
 
+#workshops_roster {
+    display: flex;
+    flex-flow: row wrap;
+    padding: 0 calc(0.5*var(--gaps));
+    width: calc(100% - var(--gaps));
+}
+
 workshopbox {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     display: block;
-    float: left;
+    flex: 1 1 100%;
     margin: 10px;
     background-color: var(--furbox-background);
     position: relative;
     box-sizing: border-box;
-    width: calc(50% - 2*var(--gaps));
+    max-width: calc(50% - 2*var(--gaps));
     animation: smooth 1.5s backwards;
     animation-delay: 0.40s;
     min-width: 240px;
 }
 
-@media (min-width: 1308px) {
+@media (min-width: 1278px) {
     workshopbox {
-        width: calc(33% - 2 * var(--gaps));
+        max-width: calc(33% - 1.667 * var(--gaps));
     }
 }
 
-@media (max-width: 880px) {
+@media (max-width: 798px) {
     workshopbox {
-        width: calc(100% - var(--gaps));
+        max-width: calc(100% - 2*var(--gaps))
     }
 }
 
