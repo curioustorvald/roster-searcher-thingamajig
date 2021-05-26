@@ -910,8 +910,8 @@ function simplequery() {
             eyeFeatures.push(feature)
     })
     
-    if (creatorName !== undefined) searchFilter.creator_name = creatorName
-    if (actorName !== undefined) searchFilter.actor_name = actorName
+    if (creatorName !== undefined) searchFilter.creator = creatorName
+    if (actorName !== undefined) searchFilter.actor = actorName
     if (furName !== undefined) searchFilter.name = furName
     if (birthdayFrom !== undefined) searchFilter.birthday_from = birthdayFrom.replaceAll('-','')
     if (birthdayTo !== undefined) searchFilter.birthday_to = birthdayTo.replaceAll('-','')
@@ -1002,7 +1002,7 @@ exactMatch가 참일 경우 문자열이 정확히 일치하는지를 검사, �
 
  */
 const nameSearchAliases = ["name_ko", "name_en", "name_ja", "aliases"]
-const pseudoCriteria = {"name":1}
+const pseudoCriteria = {"name":1,"actor":1,"creator":1}
 const specialSearchTags = {"birthday_from":1, "birthday_to":1}
 const colourMatch = {"colour_combi":1,"hair_colours":1,"eye_colours":1,"eye_features":1}
 function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
@@ -1115,12 +1115,19 @@ function performSearch(searchFilter, referrer, exactMatch, includeWIP) {
                         }
                         else {
                             // 이름은 한/영/일/이명에 대해서도 검색해야 함
-                            if (searchCriterion == "name") {
+                            if ("name" == searchCriterion) {
                                 let partialMatch = false
                                 nameSearchAliases.forEach(it => {
                                     partialMatch |= prop[it].babostr().includes(searchTerm)
                                 })
                                 searchMatches &= partialMatch
+                            }
+                            // 소유자와 제작자는 닉네임과 트위터아이디에 대해서도 검색
+                            else if ("actor" == searchCriterion) {
+                                searchMatches &= prop.actor_name.babostr().includes(searchTerm) || prop.actor_link.babostr().includes(searchTerm)
+                            }
+                            else if ("creator" == searchCriterion) {
+                                searchMatches &= prop.creator_name.babostr().includes(searchTerm) || prop.creator_link.babostr().includes(searchTerm)
                             }
                             else {
                                 searchMatches &= (exactMatch) ? (matching.babostr() == searchTerm.babostr()) : matching.babostr().includes(searchTerm.babostr())
