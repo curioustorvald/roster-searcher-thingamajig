@@ -1,5 +1,12 @@
 "use strict";
 
+const plotColset = [
+/*0*/"#E41A1C","#377EB8","#4DAF4A","#984EA3","#FF7F00","#FFF000","#A65628","#F781BF","#999999",
+/*9*/"#66C2A5","#FC8D62","#8DA0CB","#E78AC3","#A6D854","#FFD92F","#E5C494","#B3B3B3",
+/*17*/"#8DD3C7","#FFFFB3","#BEBADA","#FB8072","#80B1D3","#FDB462","#B3DE69","#FCCDE5","#D9D9D9","#BC80BD","#CCEBC5","#FFED6F",
+/*29*/"#1B9E77","#D95F02","#7570B3","#E7298A","#66A61E","#E6AB02","#A6761D","#666666"
+]
+
 function loadJSON(jsonPath, isAsync, callback) {   
     let xobj = new XMLHttpRequest()
         xobj.overrideMimeType("application/json")
@@ -28,7 +35,7 @@ function htmlColToLum(text) {
     let r = parseInt("0x"+text.substring(1,3)) / 255.0
     let g = parseInt("0x"+text.substring(3,5)) / 255.0
     let b = parseInt("0x"+text.substring(5,7)) / 255.0
-    return (3*r + 4*g + b) / 8.0
+    return Math.pow(0.299*Math.pow(r,2.2) + 0.587*Math.pow(g,2.2) + 0.114*Math.pow(b,2.2),1/2.2)
 }
 
 function range(start, stop, step) {
@@ -48,6 +55,118 @@ function range(start, stop, step) {
         result.push(i)
     }
     return result;
+}
+
+function toStrokeSize(percentage, radius) {
+    let r = radius || 10.0
+    let f = 2.0 * r * Math.PI
+    return `${percentage * f} ${(1.0 - percentage) * f + 1}`
+}
+
+function toStrokeOffset(percentage, radius) {
+    let r = radius || 10.0
+    let f = 2.0 * r * Math.PI
+    return `${(1.0 - percentage) * f + 1}`
+}
+
+function toMidPoint(start, end, datasetOrd, datasetSize, reverseOrd, boxsize, radius, strokeSize) {
+    let r = radius || 10.0
+    let d = boxsize || 30.0
+    let o = d / 2
+    let theta = ((start + end) / 2.0) * 2 * Math.PI
+    let l = strokeSize || 10.0
+    let lw = l * 0.5
+    let halfl = lw / 2.0
+    let realOrd = (reverseOrd) ? datasetSize - datasetOrd + 1 : datasetOrd
+    let zigzagOrd = (realOrd % 2 == 0) ? realOrd / 2 : (datasetSize-1) - (realOrd-1) / 2
+    let r2 = r + halfl - (zigzagOrd / datasetSize) * lw
+
+    let x = o + r2 * Math.sin(theta)
+    let y = o - r2 * Math.cos(theta)
+        
+    return [x,y]
+}
+
+const pieSize3 = 320
+
+/*
+dataset = {
+    keys: [2014,2015,2016,...],
+    values: [1,2,18,...],
+    coloff: 3
+}
+
+legendType: "label", "percentage", "label+percentage"
+ */
+function toPieChart(height, dataset, labelType, legendType, colourset, reverseOrd) {
+    let boxsize = 30
+    let radius = 10
+    
+    let colours = colourset || plotColset
+    
+    let commands = []
+    let commands2 = []
+    
+    let out = `<svg height="${height}px" width="100%" viewBox="0 0 ${boxsize} ${boxsize}" xmlns="http://www.w3.org/2000/svg">`
+    out += `<style>
+    .label{font-size:1.2px;font-weight:600}
+    .dark{fill:#FAFAFA}
+    .light{fill:#333}
+</style>`
+    
+    let countsum = dataset.values.sum()
+    let acc = 0
+    
+    Object.keys(dataset.keys).forEach((key,i) => {
+        let count = dataset.values[i]
+        
+        if (count > 0) {
+            let perc = count / countsum
+            let colour = colours[(i+dataset.coloff)%colours.length]
+            let theme = htmlColToLum(colour) > 0.5 ? "light" : "dark"
+            let label = ("label+percentage" == labelType) ?
+                    (dataset.keys[i] + ' ' + ((((perc * 1000)|0) / 10) + '%')) :
+                ("label" == labelType) ?
+                    dataset.keys[i] :
+                ("percentage" == labelType) ?
+                    ((((perc * 1000)|0) / 10) + '%') : ''
+
+            commands.push(`<circle r="10" cx="15" cy="15" fill="transparent" stroke="${colour}" stroke-width="10" stroke-dasharray="${toStrokeSize(perc, radius)}" stroke-dashoffset="${toStrokeOffset(acc, radius)}" transform="rotate(-90) translate(-30)"/>`)
+            
+            let [tx,ty] = toMidPoint(acc, acc+perc, i, dataset.keys.length, reverseOrd, boxsize, radius)
+            
+            commands2.push(`<text text-anchor="middle" x="${tx}" y="${ty}" class="label ${theme}">${label}</text>`)
+            
+            acc += perc
+        }
+    })
+    
+    commands.reverse().forEach(s => { out += s })
+    commands2.reverse().forEach(s => { out += s })
+    
+    out += `</svg>`
+    
+    // legend
+    if (legendType) {
+        out += `<idiv style="text-align:center; font-size: 90%; margin-top: 10px; line-height: 200%">`
+        Object.keys(dataset.keys).forEach((key,i) => {
+            let count = dataset.values[i]
+            let perc = count / countsum
+            let colour = colours[(i+dataset.coloff)%colours.length]
+            let label = ("label+percentage" == legendType) ?
+                    (dataset.keys[i] + ': ' + ((((perc * 1000)|0) / 10) + '%')) :
+                ("label" == legendType) ?
+                    dataset.keys[i] :
+                ("percentage" == legendType) ?
+                    ((((perc * 1000)|0) / 10) + '%') : ''
+
+            out += `<idiv><span style="font-size:120%; color:${colour}">&#x2588;</span>`
+            out += `<span style="color:#444; margin: 0 1em 0 0.25em">&nbsp;${label}</span></idiv>`
+        })
+        out += `</idiv>`
+    }
+        
+    return out
 }
 
 var furdb = {}
@@ -108,9 +227,8 @@ function populateStatsText() {
 }
 
 function populateBirthdayStatTable() {
-    let out = ''
-    
     let counts = []
+    
     forEachFur(prop => {
         if (prop.birthday !== undefined) {
             let year = prop.birthday.substring(0,4)
@@ -120,19 +238,19 @@ function populateBirthdayStatTable() {
             }
         }
     })
-    let countmax = counts.max()
-    Object.keys(counts).forEach(year => {
-        let count = counts[year]
-        let perc = 100.0 * count / countmax
-        out += `<tr>`
-        out += `<td class="tableChartLabel">${year}</td>`
-        out += `<td class="tableDataNumber">${count}</td>`
-        out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${perc}%">&nbsp;</div></td>`
-        out += `</tr>`
+        
+    let datasetYears = []
+    let datasetValues = []
+    Object.keys(counts).forEach((year,i) => {
+        datasetYears.push(year)
+        datasetValues.push(counts[year])
     })
         
-        
-    document.getElementById("birthday_stat_table").innerHTML = out
+    document.getElementById("birthday_stat_table").innerHTML = toPieChart(pieSize3, {
+        keys: datasetYears,
+        values: datasetValues,
+        coloff: 0
+    }, "percentage", "label+percentage")
 }
 
 function populateStyleStatTable() {
@@ -145,18 +263,14 @@ function populateStyleStatTable() {
             counts[prop.style] += 1
         }
     })
-    let countmax = Object.values(counts).max()
-    dropdownStyle.forEach(style => {
-        let count = counts[style]
-        let perc = 100.0 * count / countmax
-        out += `<tr>`
-        out += `<td class="tableChartLabel">${style.unbreakable()}</td>`
-        out += `<td class="tableDataNumber">${count}</td>`
-        out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${perc}%">&nbsp;</div></td>`
-        out += `</tr>`
-    })
     
-    document.getElementById("style_stat_table").innerHTML = out
+    let sorted = Object.entries(counts).sort((one,other) => other[1] - one[1])
+        
+    document.getElementById("style_stat_table").innerHTML = toPieChart(pieSize3, {
+        keys: sorted.map(it => it[0]),
+        values: sorted.map(it => it[1]),
+        coloff: 13
+    }, "label", "label+percentage", plotColset, true)
 }
 
 let marketShareDetailsShown = false
@@ -244,9 +358,7 @@ function populateMarketshareTable() {
 
 function populateDiyTable() {
     let barHeight = 36    
-    
-    let out = ``
-    
+        
     let diy = 0
     let bought = 0
     let partial = 0
@@ -263,36 +375,26 @@ function populateDiyTable() {
         }
     })
         
-    let diyperc = 100.0 * diy / (diy + bought)
-    let partialperc = 100.0 * partial / (partial + full)
+    let diyperc = diy / (diy + bought)
+    let partialperc = partial / (partial + full)
     
-    out += `<tr>`
-    out += `<td class="tableBarChartArea" style="width:100vw">`
-    out += `<tablebarchartstack style="width:${diyperc}%; background:#8AF; height:${barHeight}; line-height:${barHeight}px" title="${diy}/${diy+bought}">`
-    out += `자작&nbsp;${Math.round(diyperc * 10) / 10}%`
-    out += `</tablebarchartstack>`
-    out += `<tablebarchartstack style="width:${100 - diyperc}%; background:#FA8; height:${barHeight}; line-height:${barHeight}px" title="${bought}/${diy+bought}">`
-    out += `수주&nbsp;${100 - Math.round(diyperc * 10) / 10}%`
-    out += `</tablebarchartstack>`
-    // total number
-    out += `<td class="stackDataNumber">${diy+bought}</td>`
-    out += `</td>`
-    out += `</tr>`
+    let diyDataset = {
+        keys: ["자작","수주"],
+        values: [diyperc, 1.0-diyperc],
+        coloff: 22
+    }
     
-    out += `<tr>`
-    out += `<td class="tableBarChartArea" style="width:100vw">`
-    out += `<tablebarchartstack class="dark" style="width:${partialperc}%; background:#ED7D31; height:${barHeight}; line-height:${barHeight}px" title="${partial}/${partial+full}">`
-    out += `파셜&nbsp;${Math.round(partialperc * 10) / 10}%`
-    out += `</tablebarchartstack>`
-    out += `<tablebarchartstack class="dark" style="width:${100 - partialperc}%; background:#0563C1; height:${barHeight}; line-height:${barHeight}px" title="${full}/${partial+full}">`
-    out += `풀&nbsp;${100 - Math.round(partialperc * 10) / 10}%`
-    out += `</tablebarchartstack>`
-    // total number
-    out += `<td class="stackDataNumber">${partial+full}</td>`
-    out += `</td>`
-    out += `</tr>`
+    let fullsuitDataset = {
+        keys: ["파셜","풀"],
+        values: [partialperc, 1.0-partialperc],
+        coloff: 26
+    }
+    
+    let out1 = `<div class="flex_halfcol">${toPieChart(pieSize3, diyDataset, "label+percentage", "")}</div>`
+    
+    let out2 = `<div class="flex_halfcol">${toPieChart(pieSize3, fullsuitDataset, "label+percentage", "")}</div>`
         
-    document.getElementById("diy_stat_table").innerHTML = out
+    document.getElementById("diy_stat_table").innerHTML = `<tr><td>${out1}</td><td>${out2}</td></tr>`
 }
 
 function populateTopTenSpecies() {
@@ -313,55 +415,12 @@ function populateTopTenSpecies() {
     })
     
     let sorted = Object.entries(records).sort((one,other) => other[1] - one[1]).slice(0, showCount)
-    const namedTotal = Object.values(records).sum()
-    const total = namedTotal + unknowns
-    const sortedTotal = sorted.sum(p=>p[1])
-    const sortedMax = sorted.max(p=>p[1])
         
-    const altstyle = `style="color:#888; font-style:italic"`
-    
-    let out = ``
-    sorted.forEach((v,i) => {
-        let copyrighted = (v[0] == "저작권")
-        let name = v[0].unbreakable()
-        let count = v[1]
-        let perc = 100.0 * count / total
-        let graphPerc = 100.0 * count / sortedMax
-        out += `<tr>`
-        out += `<td class="tableDataNumber">${`${i+1}. `.unbreakable()}</td>`
-        if (copyrighted)
-            out += `<td class="tableChartLabel" ${altstyle}>${name}</td>`
-        else
-            out += `<td class="tableChartLabel">${name}</td>`
-        out += `<td class="tableDataNumber">${`${Math.round(perc * 10) / 10} %`.unbreakable()}</td>`
-        out += `<td class="tableDataNumber">${`(${count})`.unbreakable()}</td>`
-        out += `<td class="tableBarChartArea"><div class="tableBarChart" style="width:${graphPerc}%">&nbsp;</div></td>`
-        out += `</tr>`
-    })
-    
-    let etcCount = namedTotal - sortedTotal
-    let etcPerc = 100.0 * etcCount / total
-    let etcPerc2 = 100.0 * etcCount / sortedMax
-    out += `<tr>`
-    out += `<td colspan="2" class="tableChartLabel" ${altstyle}>${"기타".unbreakable()}</td>`
-    out += `<td class="tableDataNumber" style="color:#888">${`${Math.round(etcPerc * 10) / 10} %`.unbreakable()}</td>`
-    out += `<td class="tableDataNumber" style="color:#888">${`(${etcCount})`.unbreakable()}</td>`
-    out += `<td class="tableBarChartArea"><div class="tableBarChart" style="background:#AAA; width:${etcPerc2}%">&nbsp;</div></td>`
-    out += `</tr>`
-    
-    let unkCount = total - namedTotal
-    let unkPerc = 100.0 * unkCount / total
-    let unkPerc2 = 100.0 * unkCount / sortedMax
-    out += `<tr>`
-    out += `<td colspan="2" class="tableChartLabel" ${altstyle}>${"알수없음".unbreakable()}</td>`
-    out += `<td class="tableDataNumber" style="color:#888">${`${Math.round(unkPerc * 10) / 10} %`.unbreakable()}</td>`
-    out += `<td class="tableDataNumber" style="color:#888">${`(${unkCount})`.unbreakable()}</td>`
-    out += `<td class="tableBarChartArea"><div class="tableBarChart" style="background:#AAA; width:${unkPerc2}%">&nbsp;</div></td>`
-    out += `</tr>`
-    
-    out += `<tr><td colspan="2" class="tableChartLabel">${"전체".unbreakable()}</td><td colspan="2" class="tableDataNumber">${`${Object.keys(records).length}종 ${total}개`.unbreakable()}</td></tr>`
-    
-    document.getElementById("top_ten_species_table").innerHTML = out
+    document.getElementById("top_ten_species_table").innerHTML = toPieChart(pieSize3, {
+        keys: sorted.map(it => it[0]),
+        values: sorted.map(it => it[1]),
+        coloff: 8
+    }, "label", "label+percentage", plotColset, true)
 }
 
 function populateColourScheme() {
@@ -399,26 +458,12 @@ function populateColourScheme() {
     }
     
     Object.keys(cmds).forEach(title => {
-        let out = ''
-        out += `<table style="width: 100%">`
-        //out += `<thead style="text-align:center"><tr><td style=" border-bottom:1px solid #AAA;" colspan="3" ><h5>${title}</h5></td></tr><tr><td colspan="3" ></td></tr></thead>`
-        Object.entries(cmds[title].data).forEach(kv => {
-            let name = kv[0]
-            let count = kv[1]
-            let colour = colourPalette[kv[0]][0]
-            if (!colour.startsWith("#")) {
-                colour = `var(--${colour})`
-            }
-            
-            let perc = 100.0 * count / Object.values(cmds[title].data).max()
-            let barclass = ("백색" == name) ? "tableBarChartWhite" : "tableBarChart"
-            out += `<tr>`
-            out += `<td class="tableChartLabel">${name.unbreakable()}</td>`
-            out += `<td class="tableDataNumber">${count}</td>`
-            out += `<td class="tableBarChartArea"><div class="${barclass}" style="width:${perc}%; background:${colour}">&nbsp;</div></td>`
-            out += `</tr>`
-        })
-        out += `</table>`
+        let out = toPieChart(pieSize3, {
+            keys: Object.keys(colourPalette),
+            values: Object.values(cmds[title].data),
+            coloff: 0
+        }, "", "label+percentage", Object.values(colourPalette).map(it => it[0]).slice(0, 16).concat(["#FBFBFC"]))
+        
         
         document.getElementById(cmds[title].id).innerHTML = out
     })
