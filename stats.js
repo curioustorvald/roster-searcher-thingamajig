@@ -407,23 +407,29 @@ function populateTopTenSpecies() {
     forEachFur(prop => {
         if (prop.species_ko.length > 0) {
             prop.species_ko.forEach(tok => {
-                if (records[tok] === undefined)
-                    records[tok] = 0
-                    
-                records[tok] += 1
+                if (tok.charCodeAt(0) != 40) {
+                    if (records[tok] === undefined)
+                        records[tok] = 0
+                        
+                    records[tok] += 1
+                }
             })
         }
         else
             unknowns += 1
     })
-    
+        
+    let total = Object.values(records).sum()
     let sorted = Object.entries(records).sort((one,other) => other[1] - one[1]).slice(0, showCount)
+    let topTenKeys = sorted.map(it => it[0])
+    let topTenValues = sorted.map(it => it[1])
+    let remainder = total - topTenValues.sum()
         
     document.getElementById("top_ten_species_table").innerHTML = toPieChart(pieSize3, {
-        keys: sorted.map(it => it[0]),
-        values: sorted.map(it => it[1]),
-        coloff: 8
-    }, "label", "label+percentage", plotColset, true)
+        keys: topTenKeys.concat(["기타"]),
+        values: topTenValues.concat([remainder]),
+        coloff: 18
+    }, "label", "label+percentage", plotColset.reverse(), true)
 }
 
 function populateColourScheme() {
