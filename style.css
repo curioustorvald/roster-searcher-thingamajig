@@ -590,7 +590,7 @@ bigfurbox copying::before {
     border-radius: 0 0 16px 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
     background: rgba(251,251,252,0.94); /* will make the chartbox coloured to be #FAFAFA */
-    height: calc(100% - 2 * var(--gaps));
+    box-sizing: border-box;
 }
 
 .chart_bgimg {
