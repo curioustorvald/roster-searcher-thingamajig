@@ -32,6 +32,7 @@ Array.prototype.max = function(selector) {
 
 const dropdownStyle = ["Cyber","Kemo","Kemo Toon","Toon","Semi","Real","Real Toon"]
 function htmlColToLum(text) {
+    if (!text) return 0.5
     let r = parseInt("0x"+text.substring(1,3)) / 255.0
     let g = parseInt("0x"+text.substring(3,5)) / 255.0
     let b = parseInt("0x"+text.substring(5,7)) / 255.0
@@ -69,7 +70,7 @@ function toStrokeOffset(percentage, radius) {
     return `${(1.0 - percentage) * f + 1}`
 }
 
-function toMidPoint(start, end, datasetOrd, datasetSize, reverseOrd, boxsize, radius, strokeSize) {
+function toMidPoint(start, end, datasetOrd, datasetSize, reverseOrd, normalLabelPosition, boxsize, radius, strokeSize) {
     let r = radius || 10.0
     let d = boxsize || 30.0
     let o = d / 2
@@ -80,7 +81,8 @@ function toMidPoint(start, end, datasetOrd, datasetSize, reverseOrd, boxsize, ra
     let realOrd = (reverseOrd) ? datasetSize - datasetOrd + 1 : datasetOrd
     let zigzagOrd = (realOrd % 2 == 0) ? realOrd / 2 : (datasetSize-1) - (realOrd-1) / 2
     let r2 = r + halfl - (zigzagOrd / datasetSize) * lw
-
+    if (normalLabelPosition) r2 = r
+    
     let x = o + r2 * Math.sin(theta)
     let y = o - r2 * Math.cos(theta)
         
@@ -98,7 +100,7 @@ dataset = {
 
 legendType: "label", "percentage", "label+percentage"
  */
-function toPieChart(height, dataset, labelType, legendType, colourset, reverseOrd) {
+function toPieChart(height, dataset, labelType, legendType, colourset, reverseOrd, normalLabelPosition) {
     let boxsize = 30
     let radius = 10
     
@@ -133,7 +135,7 @@ function toPieChart(height, dataset, labelType, legendType, colourset, reverseOr
 
             commands.push(`<circle r="10" cx="15" cy="15" fill="transparent" stroke="${colour}" stroke-width="10" stroke-dasharray="${toStrokeSize(perc, radius)}" stroke-dashoffset="${toStrokeOffset(acc, radius)}" transform="rotate(-90) translate(-30)"/>`)
             
-            let [tx,ty] = toMidPoint(acc, acc+perc, i, dataset.keys.length, reverseOrd, boxsize, radius)
+            let [tx,ty] = toMidPoint(acc, acc+perc, i, dataset.keys.length, reverseOrd, normalLabelPosition, boxsize, radius, radius)
             
             commands2.push(`<text text-anchor="middle" x="${tx}" y="${ty}" class="label ${theme}">${label}</text>`)
             
@@ -141,8 +143,8 @@ function toPieChart(height, dataset, labelType, legendType, colourset, reverseOr
         }
     })
     
-    commands.reverse().forEach(s => { out += s })
-    commands2.reverse().forEach(s => { out += s })
+    commands.forEach(s => { out += s })
+    commands2.forEach(s => { out += s })
     
     out += `</svg>`
     
@@ -250,7 +252,7 @@ function populateBirthdayStatTable() {
         keys: datasetYears,
         values: datasetValues,
         coloff: 0
-    }, "percentage", "label+percentage")
+    }, "label", "label+percentage")
 }
 
 function populateStyleStatTable() {
@@ -390,11 +392,12 @@ function populateDiyTable() {
         coloff: 26
     }
     
-    let out1 = `<div class="flex_halfcol">${toPieChart(pieSize3, diyDataset, "label+percentage", "")}</div>`
+    let out1 = `<div class="flex_halfcol">${toPieChart(pieSize3, diyDataset, "label+percentage", "", plotColset, false, true)}</div>`
     
-    let out2 = `<div class="flex_halfcol">${toPieChart(pieSize3, fullsuitDataset, "label+percentage", "")}</div>`
+    let out2 = `<div class="flex_halfcol">${toPieChart(pieSize3, fullsuitDataset, "label+percentage", "", plotColset, false, true)}</div>`
         
-    document.getElementById("diy_stat_table").innerHTML = `<tr><td>${out1}</td><td>${out2}</td></tr>`
+    document.getElementById("diy_stat_table_diy").innerHTML = out1
+    document.getElementById("diy_stat_table_full").innerHTML = out2
 }
 
 function populateTopTenSpecies() {

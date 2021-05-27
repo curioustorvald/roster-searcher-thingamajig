@@ -11,7 +11,7 @@
 </head>
 <body onload="panelnavinit(), statsinit();">
     <header><bannerimage></bannerimage><panelnavwrapper></panelnavwrapper></header>
-    <contents>
+    <contents class="stat">
         <section class="accordion">
             <input type="checkbox" name="collapse" id="handle1">
             <h3 class="handle">
@@ -77,16 +77,21 @@
         
         <h3>통계 그래프</h3>
         
-        <div id="flex_container" style="display:flex; flex-direction: row;">
-            <div class="chart_bgimg" style="flex: 1 1; min-width: 330px"><div id="diy_stats" class="chart_container">
+        <div id="flex_container0">
+            <div class="chart_bgimg"><div id="diy_stats" class="chart_container">
                 <h3 style="padding-left:0.5em">제작정보</h3>
-                <table class="stat" id="diy_stat_table">
-                    <!-- TO BE FILLED BY THE COMPUTER LORD -->
-                </table>
+                <div style="display:flex; flex-flow: row wrap;">
+                    <div class="stat" id="diy_stat_table_diy" style="flex: 1 1; min-width: 260px">
+                        <!-- TO BE FILLED BY THE COMPUTER LORD -->
+                    </div>
+                    <div class="stat" id="diy_stat_table_full" style="flex: 1 1; min-width: 260px">
+                        <!-- TO BE FILLED BY THE COMPUTER LORD -->
+                    </div>
+                </div>
             </div></div>
         </div>
         
-        <div id="flex_container" style="display:flex; flex-direction: row;">
+        <div id="flex_container1" style="display:flex; flex-flow: row wrap;">
             <div class="chart_bgimg" style="flex: 1 1; min-width: 260px"><div id="birthday_stats" class="chart_container">
                 <h3 style="padding-left:0.5em">활동개시일</h3>
                 <table class="stat" id="birthday_stat_table">
@@ -109,7 +114,7 @@
             </div></div>
         </div>
             
-        <div id="flex_container" style="display:flex; flex-direction: row;">
+        <div id="flex_container2" style="display:flex; flex-flow: row wrap;">
             
             <div class="chart_bgimg" style="flex: 1 1; min-width: 260px"><div id="colour_scheme1" class="chart_container">
                 <h3 style="padding-left:0.5em">색상 조합</h3>
@@ -133,8 +138,8 @@
             </div></div>
             
         </div>
-        <div id="flex_container" style="display:flex; flex-direction: row;">
-            <div class="chart_bgimg" style="flex: 1 1; min-width: 720px"><div id="market_share_selected" class="chart_container">
+        <div id="flex_container3" style="display:flex; flex-flow: row wrap; overflow: auto;">
+            <div class="chart_bgimg" style="flex: 1 1; min-width: 600px"><div id="market_share_selected" class="chart_container">
                 <h3 style="padding-left:0.5em">연도벌 메이커 데뷔</h3>
                 <table class="stat" id="market_share_stat_table">
                     <!-- TO BE FILLED BY THE COMPUTER LORD -->
