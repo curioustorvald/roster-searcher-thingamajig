@@ -334,7 +334,7 @@ function populateMarketshareTable() {
             let percentage = count * 100.0 / total
             
             if (count > 0) {
-                out += `<tablebarchartstack class="${barclass}" style="width:${percentage}%; background:${col}; height:${barHeight}px; line-height:${barHeight}px" title="${shop} (${Math.round(percentage * 10) / 10}%)" onclick="showMarketShareDetails('${year}¤${shop}')">`
+                out += `<tablebarchartstack class="underline_on_hover ${barclass}" style="width:${percentage}%; background:${col}; height:${barHeight}px; line-height:${barHeight}px" title="${shop} (${Math.round(percentage * 10) / 10}%)" onclick="showMarketShareDetails('${year}¤${shop}')">`
                 out += count
                 out += `</tablebarchartstack>`
             }
