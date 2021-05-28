@@ -38,7 +38,8 @@ object Main {
             "photo_copying",
             "photo_link",
             "ref_sheet_copying",
-            "ref_sheet"
+            "ref_sheet",
+            "active_area"
     )
     @JvmStatic val outColumns = arrayOf( // name of the property that goes directy onto the JSON
             "name_ko",
@@ -66,7 +67,8 @@ object Main {
             "photo_copying",
             "photo",
             "ref_sheet_copying",
-            "ref_sheet"
+            "ref_sheet",
+            "active_area"
     )
 
     @JvmStatic val colourNames = arrayOf("베이지","블론드","골든","골드")
@@ -125,11 +127,11 @@ object Main {
     @JvmStatic fun generateCell(record: List<String>, action: String): String? {
         if (action.startsWith("_")) return null
         
-        val value = record[inColsIndices[action]!!]
+        val value = record[inColsIndices[action]!!].trim()
         
         return if ("is_hidden" == action)
             if (value.isNotBlank()) "TRUE" else "FALSE"
-        else if (action in photocopyingActions)
+        else if (action in photocopyingActions || "active_area" == action)
             value
         else if (action in arrayActions) {
             val arr = generateArrayCell(value)
@@ -237,16 +239,20 @@ object Main {
 
             val line = StringBuilder()
 
-            line.append("\"${id}\":{")
-            line.append(inColumns.map { generateCell(record, it) }.filter { it != null }
-                .mapIndexed { i, v -> "\"${outColumns[i]}\":${if (v!!.toLowerCase() == "true" || v.toLowerCase() == "false") v.toLowerCase() else "\"${v.trim()}\""}" }
-                .joinToString(","))
+            val generatedCells = inColumns.map { generateCell(record, it) }.filter { it != null }
 
-            line.append("}")
+            if (generatedCells.joinToString("").replace(Regex("""\[|\]|TRUE|FALSE"""),"").trim().length > 0) {
+                line.append("\"${id}\":{")
+                
+                line.append(generatedCells.mapIndexed { i, v -> "\"${outColumns[i]}\":${if (v!!.toLowerCase() == "true" || v.toLowerCase() == "false") v.toLowerCase() else "\"${v.trim()}\""}" }
+                    .joinToString(","))
 
-            if (!line.contains("\"is_hidden\":true") || includeHidden) {
-                outJson.append(line.toString())
-                outJson.append(",\n")
+                line.append("}")
+
+                if (!line.contains("\"is_hidden\":true") || includeHidden) {
+                    outJson.append(line.toString())
+                    outJson.append(",\n")
+                }
             }
         }
         
