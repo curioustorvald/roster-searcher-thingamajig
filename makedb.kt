@@ -86,6 +86,7 @@ object Main {
             Regex("""</td>""") to "¤",
             Regex("""</tr></tbody></table>""") to "", // footer
             Regex("""</?(td|p)>""") to "", // crap
+            Regex("""<br>""") to "", // br
             Regex("""\n[0-9]+¤{21,}\n""") to "\n", // null entries
             Regex("""\n[0-9]+¤{17,}FALSE¤{4,}""") to "" // null entries
     )
@@ -120,7 +121,7 @@ object Main {
         }"
         val kv = ArrayList<Pair<String, String>>()
         if (value.endsWith("/자작")) {
-            kv.add("_isdiy" to "1")
+            kv.add("_isdiy" to "자작")
             value = value0.replace(Regex("""/자작"""), "")
         }
         
