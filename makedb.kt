@@ -70,13 +70,6 @@ object Main {
             "ref_sheet",
             "active_area"
     )
-
-    @JvmStatic val colourNames = arrayOf("베이지","블론드","골든","골드")
-    @JvmStatic val colourSuffixes = arrayOf("색","포인트")
-    @JvmStatic val colourPrefixes = arrayOf("네온","연","진","남")
-    @JvmStatic val colourRegex = Regex("""${colourNames.joinToString("|")}|${colourSuffixes.map { "[가-힣]+$it" }.joinToString("|")}|${colourPrefixes.map { "$it[가-힣]+" }.joinToString("|") }""")
-    @JvmStatic val hairRegex = Regex("""(${colourRegex})(?= (머리카락|브릿지))""") // don't remove parens around (${colourRegex})
-    @JvmStatic val eyesRegex = Regex("""[가-힣]안""")
     
     // END OF APPLICATION CONFIGURATION //
 
@@ -120,6 +113,32 @@ object Main {
             else -> throw IllegalArgumentException(action)
         }
     }
+    
+    @JvmStatic fun parseCreatorTerms(value0: String): String {
+        var value = "${value0.trim()
+            .replace(Regex("""&amp;"""), "&")
+        }"
+        val kv = ArrayList<Pair<String, String>>()
+        if (value.endsWith("/자작")) {
+            kv.add("_isdiy" to "1")
+            value = value0.replace(Regex("""/자작"""), "")
+        }
+        
+        if (value.contains('&')) {
+            value.split("&").forEachIndexed { index, word -> kv.add("$index" to word.trim()) }
+        }
+        else if (value.contains(':')) {
+            value.split("/").forEach { str ->
+                val kv1 = str.split(":")
+                kv.add("${kv1[0].trim().lowercase()}" to "${kv1[1].trim()}")
+            }
+        }
+        else {
+            kv.add("0" to value.trim())
+        }
+        
+        return "{{${kv.map { (key, value) -> "\"${key}\":\"${value}\"" }.joinToString(",")}}}"
+    }
 
     @JvmStatic private val photocopyingActions = arrayOf("photo_copying", "photo_link", "ref_sheet_copying", "ref_sheet")
     @JvmStatic private val arrayActions = arrayOf("colour_combi", "hair_colours", "eye_colours", "eye_features")
@@ -138,6 +157,8 @@ object Main {
             if (arr.isEmpty() || arr[0].isBlank()) "[[]]"
             else "[[" + generateArrayCell(value).map { "\"$it\"" }.joinToString(",") + "]]"
         }
+        else if ("creator_name" == action)
+            parseCreatorTerms(value)
         else if ("species_raw" == action) {
             var arr = generateArrayCell(value.substringBefore(',').substringBefore('(').trim())
             if (arr.isEmpty() || arr[0].isBlank()) "[[]]"
@@ -157,8 +178,6 @@ object Main {
         else if ("actor_name_raw" == action)
             if (value.startsWith("(갤럼)")) ""
             else value
-        else if ("creator_name_raw" == action)
-            value.substringBefore("/자작")
         else if ("actor_link_raw" == action)
             if (value.startsWith("DC:") ||
                 value.startsWith("DCA:")) "" // TODO: deal with non-twitter links
@@ -178,47 +197,6 @@ object Main {
         val out = ArrayList<String>()
         cell.split(' ').forEach { out.add(it.trim().replace(Regex("""\?"""),"")) }
         return out.filter { it.isNotBlank() }.toTypedArray()
-    }
-    
-    /**
-     * @return Pair Of <Body Colours, Hair Colours>
-     */
-    @JvmStatic fun parseGetColours(descRaw: String): Pair<List<String>, List<String>> {
-        val colourWords = colourRegex.findAll(descRaw).map { it.groupValues[0] }.toList().reversed()
-        val hairWords = parseGetHairs(descRaw)
-        val removal = colourWords.indices.map { intArrayOf(it, 1) }
-        // remove hairWords from colourWords and return it;
-        // mark words for removal
-        hairWords.reversed().forEach { hairword ->
-            for (index in colourWords.indices) {
-                val colourword = colourWords[index]
-                if (hairword == colourword) {
-                    removal[index][1] = 0
-                    break
-                }
-            }
-        }
-        // create list of words that are not marked for removal
-        val newWords = ArrayList<String>()
-        removal.forEach {
-            if (it[1] == 1) newWords.add(colourWords[it[0]])
-        }
-
-        return newWords.toList().reversed() to hairWords
-    }
-
-    @JvmStatic private fun parseGetHairs(descRaw: String): List<String> {
-        try {
-            return hairRegex.findAll(descRaw).map { it.groupValues }.map { it.first() }.toList()
-        }
-        catch (e: java.util.NoSuchElementException) {
-            return listOf("")
-        }
-    }
-
-    @JvmStatic fun parseGetEyeColour(descRaw: String): List<String> {
-        val matches = eyesRegex.findAll(descRaw).map { it.groupValues[0] }.toList().filter { !colourNames.contains(it) } // will contain one or more eye colours and zero or one '역안'
-        return matches
     }
 
     @JvmStatic fun main(args: Array<String>) {
@@ -244,7 +222,7 @@ object Main {
             if (generatedCells.joinToString("").replace(Regex("""\[|\]|TRUE|FALSE"""),"").trim().length > 0) {
                 line.append("\"${id}\":{")
                 
-                line.append(generatedCells.mapIndexed { i, v -> "\"${outColumns[i]}\":${if (v!!.toLowerCase() == "true" || v.toLowerCase() == "false") v.toLowerCase() else "\"${v.trim()}\""}" }
+                line.append(generatedCells.mapIndexed { i, v -> "\"${outColumns[i]}\":${if (v!!.lowercase() == "true" || v.lowercase() == "false") v.lowercase() else "\"${v.trim()}\""}" }
                     .joinToString(","))
 
                 line.append("}")
@@ -265,6 +243,8 @@ object Main {
             // replace "[[ ]]" into [ ]
             .replace(Regex("""\"\[\["""), "[")
             .replace(Regex("""\]\]\""""), "]")
+            .replace(Regex("""\"\{\{"""), "{")
+            .replace(Regex("""\}\}\""""), "}")
                 
         File(outJsonName).writeText(outstr)
         println("Last update: ${lastUpdate}")
